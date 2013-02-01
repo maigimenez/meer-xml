@@ -34,6 +34,8 @@ class DicomParser(handler.ContentHandler):
         xml_strings.write("<resources>\n")
 
     def startElement(self, name, attrs, strings_xml_filename=STRINGS_XML):
+        if (name == "DICOM_SR"):
+            self.report.report_type = attrs['reportType']
         if (name == "CONTAINER"):
             # Begin of a container tag, so we are in a new (deeper) tree level 
             self.tree_level += 1

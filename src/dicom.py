@@ -16,10 +16,12 @@ class Concept(object):
         self.concept_value = concept_value
 
     def __str__(self):
-        return u"Concept name: {0} - Concept value: {1}".format(self.concept_name, self.concept_value).encode('utf-8')
+        return u"Concept name: {0} - Concept value: {1}".format(
+            self.concept_name, self.concept_value).encode('utf-8')
 
     def __repr__(self):
-        return u"Concept name: {0} - Concept value: {1}".format(self.concept_name, self.concept_value).encode('utf-8')
+        return u"Concept name: {0} - Concept value: {1}".format(
+            self.concept_name, self.concept_value).encode('utf-8')
 
 
 class Data_type(object):
@@ -129,6 +131,7 @@ class Report(object):
 
     """ Pretty print of a report """
     def imprime(self):
+        print u"\n ------ {0} ---------- \n".format(self.report_type)
         for container in self.containers:
             print u"(L{0}) {1} ({2}):".format(
                 container.tree_level,
