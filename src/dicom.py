@@ -142,3 +142,47 @@ class Report(object):
                     attr.concept.concept_name,
                     attr.type).encode('utf-8')
             print
+
+
+class Childs(object):
+    def __init__(self):
+        self.attributes = []
+        self.containers = []
+
+
+class DictReport(object):
+    def __init__(self, report_type=""):
+        self.report_type = report_type
+        #{(level,concept):[attributes][container_childs]}
+        self.tree = {}
+
+    def find_parent(self,level):
+        for k in self.tree.keys():
+            if (k[0]==level): 
+                return k[1]
+        return None
+
+    """ Pretty print of a report """
+    def imprime(self):
+        print u"\n ------ {0} ---------- \n".format(self.report_type)
+        
+        for level,concept in self.tree:
+            num_childs = len(self.tree[(level,concept)].containers)
+            num_attrs = len(self.tree[(level,concept)].attributes)
+            print u"(L{0}) {1} (no.att: {2} - no.child:{3}):".format(
+                level,
+                concept,
+                num_attrs,
+                num_childs).encode('utf-8')
+            if(num_attrs > 0):
+                print u"  * Attributes"
+                for attr in self.tree[(level,concept)].attributes:
+                    print u"    - {0} ({1})".format(
+                        attr.concept.concept_name,
+                        attr.type).encode('utf-8')
+            if (num_childs > 0):
+                print u"  - Childs"
+                for child in self.tree[(level,concept)].containers:
+                    print u"    - {0}".format(child.concept_name).encode('utf-8')
+                    
+            print

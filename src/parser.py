@@ -1,4 +1,4 @@
- #  -*- coding: utf-8 -*-
+#  -*- coding: utf-8 -*-
 import sys
 import logging
 import codecs
@@ -12,17 +12,21 @@ class DicomParser(handler.ContentHandler):
 
     def __init__(self):
         # Internal variables
+        self.deepest_level = 0
         self.tree_level = 0
         self.child_level = 0
         self.buffer = ''
+        #Boolean variables to know where we are
         self.inData = False
         self.inType = False
         self.inConcept = False
         self.inLevel = False
+        #Store information read from xml
         self.current_attribute = None
+        self.concept = None
         # Report-related variables
         self.report = Report()
-        self.concept = None
+        self.fast_report = None
         # XML files 
         self.xml_files = {}
 
@@ -39,6 +43,8 @@ class DicomParser(handler.ContentHandler):
         if (name == "CONTAINER"):
             # Begin of a container tag, so we are in a new (deeper) tree level 
             self.tree_level += 1
+            if (self.tree_level > self.deepest_level):
+                self.deepest_level = self.tree_level 
             self.inLevel = True
             logging.info('* Tree level {0}'.format(self.tree_level))
             #Report level
@@ -142,15 +148,40 @@ class DicomParser(handler.ContentHandler):
         if (self.inData):
             self.buffer += chars
 
+
+    def build_tree(self):
+        self.fast_report = DictReport(self.report.report_type)
+        logging.info("Dictionary report  type: {0}".format(self.fast_report.report_type))
+        for container in self.report.containers:
+            key = (container.tree_level,container.concept)
+            #Add the container key
+            if(key not in self.fast_report.tree):
+                self.fast_report.tree[key]=Childs()
+            #Add the attributes
+            self.fast_report.tree[key].attributes = container.attributes
+            #Add the childs
+            #if it's the deepest levet it hasn't got any children 
+            if(container.tree_level<self.deepest_level):
+                for child in self.report.containers:
+                    if(child.tree_level-1 == container.tree_level and child.parent == container.concept):
+                        self.fast_report.tree[key].containers.append(child.concept)
+        self.fast_report.imprime()
+#       for level,concept in self.fast_report.tree:
+ #          print level,concept,len(self.fast_report.tree[level,concept].containers)
+            
+
+    def writeLayouts(report):
+        pass
+
+
     def endDocument(self,strings_xml_filename=STRINGS_XML):
         self.xml_files[strings_xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(english))
         self.xml_files[strings_xml_filename].write("\n</resources>")
         for xml_file in self.xml_files.values():
             xml_file.close()
         self.report.imprime()
+        self.build_tree()
 
-def writeLayouts(report):
-    pass
 
 parser = make_parser()
 parser.setContentHandler(DicomParser())
