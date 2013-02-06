@@ -144,13 +144,50 @@ class Report(object):
             print
 
 
-class Childs(object):
+class DictContainer(object):
+    """This class stores a container tag from xml"""
+    def __init__(self,concept=Concept(),level=-1,open_level=True, parent=Concept()):
+        #Container's concept_name is the key and the values are its children (attributes and other containers)
+        self.containers = {}
+
+class Children(object):
     def __init__(self):
         self.attributes = []
-        self.containers = []
-
+        self.children = []
 
 class DictReport(object):
+    def __init__(self, report_type=""):
+        self.report_type = report_type
+        self.tree = {}
+
+    """ Pretty print of a report """
+    def imprime(self):
+        print u"\n ------ {0} ---------- \n".format(self.report_type)
+        
+        for level,dict_containers in self.tree.iteritems():
+            for concept,children in dict_containers.containers.iteritems():
+                num_childs = len(self.tree[level].containers[concept].children)
+                num_attrs = len(self.tree[level].containers[concept].attributes)
+                print u"(L{0}) {1} (no.att: {2} - no.child:{3}):".format(
+                    level,
+                    concept.concept_name,
+                    num_attrs,
+                    num_childs).encode('utf-8')
+            if(num_attrs > 0):
+                print u"  * Attributes"
+                for attr in self.tree[level].containers[concept].attributes:
+                    print u"    - {0} ({1})".format(
+                        attr.concept.concept_name,
+                        attr.type).encode('utf-8')
+            if (num_childs > 0):
+                print u"  * Childs"
+                for child in self.tree[level].containers[concept].children:
+                    print u"    - {0}".format(child.concept_name).encode('utf-8')
+                    
+            print
+
+
+class Dict_Report(object):
     def __init__(self, report_type=""):
         self.report_type = report_type
         #{(level,concept):[attributes][container_childs]}
@@ -161,6 +198,11 @@ class DictReport(object):
             if (k[0]==level): 
                 return k[1]
         return None
+
+    def return_containers(level):
+        containers = [key for key in self.tree if level in key]
+        print containers
+        pass
 
     """ Pretty print of a report """
     def imprime(self):
@@ -181,7 +223,7 @@ class DictReport(object):
                         attr.concept.concept_name,
                         attr.type).encode('utf-8')
             if (num_childs > 0):
-                print u"  - Childs"
+                print u"  * Childs"
                 for child in self.tree[(level,concept)].containers:
                     print u"    - {0}".format(child.concept_name).encode('utf-8')
                     
