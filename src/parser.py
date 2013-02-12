@@ -6,7 +6,29 @@ from dicom import *
 from xml.sax import make_parser, handler
 from settings import *
 from string import Template
-        
+
+class XMLFiles(object):
+    def __init__(self):
+        self.layouts = {}
+        self.strings = {}
+        self.model = {}
+        self.actities = {}
+        # This variable handles the internazionalization as it is
+        # CODE_MEANING - CODE_MEANING2
+        self.language_match = {}
+
+class AndroidFiles(XMLFiles):
+    def __init__(self):
+        XMLFiles.__init__(self)
+
+    def set_odontology(self,id_odontology):
+        self.layouts = LAYOUTS_DICTIONARY[int(id_odontology)]
+    
+    def set_languages(self,languages=""):
+        self.strings = STRINGS_DICTIONARY[languages]
+        self.language_match = LANGUAGE_DICTIONARY[languages]
+
+
 class DicomParser(handler.ContentHandler):
     logging.basicConfig(filename='info.log',level=logging.INFO)
 
@@ -27,22 +49,28 @@ class DicomParser(handler.ContentHandler):
         # Report-related variables
         self.report = Report()
         self.dict_report = None
-        # XML files 
-        self.xml_files = {}
+        # XML files {filename(key):file(value)}
+        self.xml_filenames = AndroidFiles()
+        self.xml_files = XMLFiles()
 
-    def startDocument(self, strings_xml_filename=STRINGS_XML):
-        xml_strings = open(strings_xml_filename, 'w')
-        self.xml_files[strings_xml_filename]=xml_strings
-        for xml_file in self.xml_files.values():
+    def startDocument(self):
+        #Set which files are going to be used as output in this parser
+        #Strings
+        self.xml_filenames.set_languages(sys.argv[2])
+        for strings_filename in self.xml_filenames.strings.values():
+            self.xml_files.strings[strings_filename]= open(strings_filename, 'w')
+        for xml_file in self.xml_files.strings.values():
             xml_file.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
-        xml_strings.write("<resources>\n")
+            xml_file.write("<resources>\n")
 
     def startElement(self, name, attrs, strings_xml_filename=STRINGS_XML):
         if (name == "DICOM_SR"):
             try:
-                self.report.report_type = attrs['reportType']
-            except KeyError:
                 self.report.report_type = attrs['Description']
+                self.report.id_odontology = attrs['IDOntology']
+            except KeyError:
+                #report_type it's an old specification
+                self.report.report_type = attrs['reportType']
         if (name == "CONTAINER"):
             # Begin of a container tag, so we are in a new (deeper) tree level 
             self.tree_level += 1
@@ -50,35 +78,31 @@ class DicomParser(handler.ContentHandler):
                 self.deepest_level = self.tree_level 
             self.inLevel = True
             logging.info('* Tree level {0}'.format(self.tree_level))
-            #Report level
-            if (self.tree_level==1):
-                self.xml_files[strings_xml_filename].write(
-                    "\n\t<!-- Report -->\n")
-            #Organs level
-            elif (self.tree_level==2):
-                self.xml_files[strings_xml_filename].write(
-                    "\n\n\t<!-- Organ -->\n")
-            #Lesions level
-            elif (self.tree_level==3):
-                self.xml_files[strings_xml_filename].write(
-                    "\n\n\t<!-- Lesions -->\n")
+            for xml_file in self.xml_files.strings.values():
+                #Report level
+                if (self.tree_level==1):
+                    xml_file.write("\n\t<!-- Report -->\n")
+                #Organs level
+                elif (self.tree_level==2):
+                    xml_file.write("\n\n\t<!-- Organ -->\n")
+                #Lesions level
+                elif (self.tree_level==3):
+                    xml_file.write("\n\n\t<!-- Lesions -->\n")
         if (name == "CHILDS"): 
             # Begin of childs tag, so we are in a new (deeper) child level
             self.child_level += 1
             self.inLevel = False
             logging.info('* Child level {0}'.format(self.child_level))
-            #Report level
-            if (self.tree_level==1):
-                self.xml_files[strings_xml_filename].write(
-                    "\n\t<!-- Report attributes-->\n")
-            #Organs level
-            if (self.tree_level==2):
-                self.xml_files[strings_xml_filename].write(
-                    "\n\t<!-- Organ attributes-->\n")
-            #Lesions level
-            if (self.tree_level==3):
-                self.xml_files[strings_xml_filename].write(
-                    "\n\t<!-- Lesion attributes-->\n")
+            for xml_file in self.xml_files.strings.values():
+                #Report level
+                if (self.tree_level==1):
+                    xml_file.write("\n\t<!-- Report attributes-->\n")
+                #Organs level
+                elif (self.tree_level==2):
+                    xml_file.write("\n\t<!-- Organ attributes-->\n")
+                #Lesions level
+                elif (self.tree_level==3):
+                    xml_file.write("\n\t<!-- Lesion attributes-->\n")
         if (name == "CONCEPT_NAME"):
             self.inConcept = True
             self.concept = Concept()
@@ -91,23 +115,33 @@ class DicomParser(handler.ContentHandler):
         if (name == "NUM"):
             self.inType = True
             self.current_attribute = Num()
-        if (name == "CODE_VALUE" or "CODE_MEANING"):
+        if (name == "CODE_VALUE" or "CODE_MEANING" or "CODE_MEANING2"):
             self.inData = True
             self.buffer = ""
     
     def endElement(self,name,strings_xml_filename=STRINGS_XML):
-        if (name == "CODE_VALUE" or name=="CODE_MEANING"):
+        if (name == "CODE_VALUE" or name=="CODE_MEANING" or "CODE_MEANING2"):
             self.inData = False
             if (name == "CODE_VALUE"):
                 self.concept.concept_value = self.buffer
-            else:
+                for xml_string in self.xml_files.strings.values():
+                    xml_string.write(u"\t<string name=\"{0}\">".
+                                     format(self.concept.concept_value).encode('utf-8'))
+            elif (name == "CODE_MEANING"):
                 self.concept.concept_name = self.buffer
+                #TODO: Comprobar que esto es verdad
+                # si la codificación es default "en" es el CODE_MEANING
+                # si la codificación es i18n "en" es el CODE_MEANING2 y "es" es el CODE_MEANING
+                filename = self.xml_filenames.strings[self.xml_filenames.language_match[1]]
+                self.xml_files.strings[filename].write(u"{0}</string>\n".
+                                                       format(self.buffer).encode('utf-8'))
+            elif (name == "CODE_MEANING2"):
+                filename = self.xml_filenames.strings[self.xml_filenames.language_match[2]]
+                self.xml_files.strings[filename].write(u"{0}</string>\n".
+                                                       format(self.buffer).encode('utf-8'))
+
         if (name == "CONCEPT_NAME"):
             self.inConcept = False
-            self.xml_files[strings_xml_filename].write(
-                u"\t<string name=\"{0}\">{1}</string>\n".
-                format(self.concept.concept_value,
-                       self.concept.concept_name).encode('utf-8'))
             #This is the end of a concept name tag, if in_level is true 
             #this concept will be the level ID
             if (self.inLevel):
@@ -153,14 +187,16 @@ class DicomParser(handler.ContentHandler):
 
 
     def build_better_tree(self):
-        self.dict_report = DictReport(self.report.report_type)
-        logging.info(u"Dictionary report  type: {0}".format(self.dict_report.report_type).encode('utf-8'))
+        self.dict_report = DictReport(self.report.report_type,self.report.id_odontology)
+        logging.info(u"Dictionary report  type: {0} ({1})".format(self.dict_report.report_type,
+                                                                  self.dict_report.id_odontology).encode('utf-8'))
         for container in self.report.containers:
             #If the level doesn't exist I created it
             if (container.tree_level not in self.dict_report.tree):
                 self.dict_report.tree[container.tree_level] = DictContainer()
             #We assume that concept is unique in the xml file
             self.dict_report.tree[container.tree_level].containers[container.concept] = Children()
+            #TODO: check if this structure is the most suitable
             self.dict_report.tree[container.tree_level].containers[container.concept].attributes = container.attributes
 
             #If we are not in the root, this container has a parent
@@ -172,7 +208,7 @@ class DicomParser(handler.ContentHandler):
                     self.dict_report.tree[container.tree_level-1] = DictContainer()
                     if(container.parent not in self.dict_report.tree[container.tree_level-1].containers):
                         self.dict_report.tree[container.tree_level-1].containers[container.parent] = Children()
-                self.dict_report.tree[container.tree_level-1].containers[container.parent].children.append(container.concept)
+                self.dict_report.tree[container.tree_level-1].containers[container.parent].children_containers.append(container.concept)
 
         self.dict_report.imprime()
             
@@ -196,17 +232,41 @@ class DicomParser(handler.ContentHandler):
         #self.dict_report.imprime()
                         
 
-    def writeLayouts(report):
-        pass
+    def writeLayouts(self):
+        #Set which files are going to be used as output in this parser
+        #TODO: Layouts
+        #TODO: Java files 
+        for level in xrange(1,self.deepest_level+1):
+            try:
+                actual_level = self.dict_report.get_level(level)
+                print "[Level {0}]".format(level)
+                for concept,children in self.dict_report.get_level(level).containers.iteritems():
+                    print " * {0}".format(concept)
+                    for attr in children.attributes:
+                        print u"  {0}".format(attr).encode('utf-8')
+                    for concept in children.children_containers:
+                        print u"  -{0}".format(concept.concept_name).encode('utf-8')
+                    print ""
+                print ""
+            except KeyError:
+                #It should go to logging error
+                print "Layouts can't be created"
 
+    def endDocument(self):
+        # Write the default strings for every language
+        for language_code, xml_filename in self.xml_filenames.strings.items():
+            #English
+            if (language_code == "en"):
+                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(english))
+            #Spanish
+            elif (language_code == "es"):
+                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(spanish))
+            self.xml_files.strings[xml_filename].write("\n</resources>")
+            self.xml_files.strings[xml_filename].close()
 
-    def endDocument(self,strings_xml_filename=STRINGS_XML):
-        self.xml_files[strings_xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(english))
-        self.xml_files[strings_xml_filename].write("\n</resources>")
-        for xml_file in self.xml_files.values():
-            xml_file.close()
-        #self.report.imprime()
+        self.report.imprime()
         self.build_better_tree()
+        self.writeLayouts()
 
 
 parser = make_parser()
