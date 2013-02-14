@@ -85,7 +85,7 @@ DATE_LAYOUT = "<TextView android:id=\"@+id/${CONCEPT_VALUE}_label\"\n"\
 "\tandroid:inputType=\"date\" />"
 
 
-HEADER_LAYOUT = "<?xml version="1.0" encoding="UTF-8"?>\n"\
+HEADER_LAYOUT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"\
 "<RelativeLayout xmlns:tools=\"http://schemas.android.com/tools\"\n"\
 "\txmlns:android=\"http://schemas.android.com/apk/res/android\"\n"\
 "\tandroid:layout_width=\"match_parent\" android:layout_height=\"match_parent\">\n"\
@@ -106,7 +106,7 @@ HEADER_LAYOUT = "<?xml version="1.0" encoding="UTF-8"?>\n"\
 "\tandroid:id=\"@+id/sub_content_view\"\n"\
 "\tandroid:paddingBottom=\"5sp\" android:background=\"@color/lightGrey\"\n"\
 "\tandroid:baselineAligned=\"false\">\n"\
-"\n"\       	
+"\n"\
 "\t<!-- Left layout -->\n"\
 "\t<RelativeLayout android:id=\"@+id/left_layout\"\n"\
 "\tandroid:layout_width=\"match_parent\" android:layout_height=\"wrap_content\"\n"\
