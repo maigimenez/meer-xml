@@ -83,3 +83,35 @@ DATE_LAYOUT = "<TextView android:id=\"@+id/${CONCEPT_VALUE}_label\"\n"\
 "\tandroid:layout_marginBottom=\"10dp\"\n"\
 "\tandroid:layout_marginLeft=\"20dp\"\n "\
 "\tandroid:inputType=\"date\" />"
+
+
+HEADER_LAYOUT = "<?xml version="1.0" encoding="UTF-8"?>\n"\
+"<RelativeLayout xmlns:tools=\"http://schemas.android.com/tools\"\n"\
+"\txmlns:android=\"http://schemas.android.com/apk/res/android\"\n"\
+"\tandroid:layout_width=\"match_parent\" android:layout_height=\"match_parent\">\n"\
+"\t<!-- HEADER -->\n"\
+"\t<include android:id=\"@+id/top_header\"\n"\
+"\t\tandroid:layout_alignParentTop=\"true\" layout=\"@layout/layout_header\" />\n"\
+"\t<!-- FOOTER -->\n"
+"\t<LinearLayout android:id=\"@+id/bottom_menu\"\n"\
+"\t\tandroid:layout_width=\"fill_parent\" android:layout_height=\"wrap_content\"\n"\
+"\t\tandroid:orientation=\"horizontal\" android:layout_alignParentBottom=\"true\">\n"\
+"\t\t<!-- menu bar -->\n"\
+"\t\t<include layout=\"@layout/layout_footer_menu\" />\n"\
+"\t</LinearLayout>\n"\
+"\t<!-- MAIN PART: split layout -->\n"\
+"\t<LinearLayout android:orientation=\"horizontal\"\n"\
+"\tandroid:layout_width=\"fill_parent\" android:layout_height=\"fill_parent\"\n"\
+"\tandroid:layout_below=\"@id/top_header\" android:layout_above=\"@id/bottom_menu\"\n"\
+"\tandroid:id=\"@+id/sub_content_view\"\n"\
+"\tandroid:paddingBottom=\"5sp\" android:background=\"@color/lightGrey\"\n"\
+"\tandroid:baselineAligned=\"false\">\n"\
+"\n"\       	
+"\t<!-- Left layout -->\n"\
+"\t<RelativeLayout android:id=\"@+id/left_layout\"\n"\
+"\tandroid:layout_width=\"match_parent\" android:layout_height=\"wrap_content\"\n"\
+"\tandroid:layout_weight=\"1\" android:background=\"#eeeeee\"\n"\
+"\tandroid:layout_margin=\"20dp\" android:paddingBottom=\"20dp\"\n"\
+"\tandroid:paddingTop=\"25dp\" android:paddingLeft=\"25dp\"\n"
+"\tandroid:paddingRight=\"25dp\">\n"\
+"\n"
