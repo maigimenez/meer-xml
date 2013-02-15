@@ -32,7 +32,6 @@ class Data_type(object):
     def __init__(self):
         self.type = ""
         self.concept = Concept()
-        self.properties = []
 
     def __repr__(self):
         return u"{0}: {1}".format(self.type,self.concept.concept_name)
@@ -123,7 +122,7 @@ class Report(object):
         return False
 
     """Return the container parent of the given tree level
-    we are assuming that dicom xml file is well formed
+     we are assuming that dicom xml file is well formed
     
     """
     def return_parent(self,tree_level):

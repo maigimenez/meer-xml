@@ -85,7 +85,7 @@ NEXT_LEVEL_LAYOUT = "<TextView android:id=\"@+id/injuriesSum_label\"\n"\
 "android:layout_height=\"wrap_content\"\n"\
 "android:layout_above=\"@id/injuriesButtons_layout\"\n"\
 "android:layout_below=\"@id/injuriesSum_label\" >\n"\
-"</ListView>"		
+"</ListView>\n"		
 
 END_LAYOUT="\t\t</RelativeLayout>\n"\
 "\t</LinearLayout>\n"\
@@ -95,9 +95,9 @@ END_LAYOUT="\t\t</RelativeLayout>\n"\
 
 """ Data type layouts """
 #TODO: find a better way to handle the tabs
-DATE_LAYOUT = "\t\t\t<!-- Date: ${CONCEPT_NAME} -->\n" \
+DATE_LAYOUT = "\n\t\t\t<!-- Date: ${CONCEPT_NAME} -->\n" \
 "\t\t\t<TextView android:id=\"@+id/${CONCEPT_VALUE}_label\"\n"\
-"\t\t\t\tandroid:text=\"@string/${CONCEPT_NAME}\"\n"\
+"\t\t\t\tandroid:text=\"@string/${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\"\n"\
@@ -113,10 +113,10 @@ DATE_LAYOUT = "\t\t\t<!-- Date: ${CONCEPT_NAME} -->\n" \
 "\n"\
 "\t\t\t<EditText android:id=\"@id/${CONCEPT_VALUE}_text\"\n"\
 "\t\t\t\tandroid:text=\"\"\n "\
-"\t\t\t\tandroid:hint=\"@string/${CONCEPT_NAME}\"\n"\
+"\t\t\t\tandroid:hint=\"@string/${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"match_parent\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/${CONCEPT_VALUe}_label\"\n"\
+"\t\t\t\tandroid:layout_below=\"@id/${CONCEPT_VALUE}_label\"\n"\
 "\t\t\t\tandroid:layout_toLeftOf=\"@id/${CONCEPT_VALUE}_button\"\n "\
 "\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\"\n "\
@@ -127,7 +127,7 @@ NUM_LAYOUT = "\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_below=\"@id/${ID_PREVIOUS_ITEM}\"\n"\
-"\t\t\t\tandroid:text=\"@string/${CONCEPT_NAME}\"\n"\
+"\t\t\t\tandroid:text=\"@string/${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\" />\n"\
 "\n"\
 "\t\t\t<EditText android:id=\"@+id/${CONCEPT_VALUE}_EditText\"\n"\

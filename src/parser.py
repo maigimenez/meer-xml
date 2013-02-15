@@ -2,10 +2,13 @@
 import sys
 import logging
 import codecs
-from dicom import *
 from xml.sax import make_parser, handler
-from settings import *
 from string import Template
+
+from dicom import * 
+from templates import * 
+from settings import *
+from templates import *
 
 class XMLFiles(object):
     def __init__(self):
@@ -236,14 +239,31 @@ class DicomParser(handler.ContentHandler):
         #Set which files are going to be used as output in this parser
         #TODO: Layouts
         #TODO: Java files 
-        for level in xrange(1,self.deepest_level+1):
+        # The files for the layout are linked to the odontology of the report
+        self.xml_filenames.set_odontology(self.dict_report.id_odontology)
+        #Open for write all the files
+        for level, filename in zip(xrange(1,2),self.xml_filenames.layouts.values()):
+            print filename
+            self.xml_files.layouts[filename] = open(filename, 'w')        
+        #for level in xrange(1,self.deepest_level+1):
             try:
-                actual_level = self.dict_report.get_level(level)
+                #Write the header, main and left layout
+                self.xml_files.layouts[filename].write(HEADER_LAYOUT)
+                self.xml_files.layouts[filename].write(MAIN_LEFT_LAYOUT)
+                dict_level = self.dict_report.get_level(level)
                 print "[Level {0}]".format(level)
-                for concept,children in self.dict_report.get_level(level).containers.iteritems():
+                for concept,children in dict_level.containers.iteritems():
                     print " * {0}".format(concept)
+                    #Attributes
                     for attr in children.attributes:
-                        print u"  {0}".format(attr).encode('utf-8')
+                        CONCEPT["CONCEPT_NAME"] =  attr.concept.concept_name
+                        CONCEPT["CONCEPT_VALUE"] = attr.concept.concept_value
+                        if (attr.type == "date"):
+                            self.xml_files.layouts[filename].write(Template(DATE_LAYOUT).safe_substitute(CONCEPT))
+                        elif (attr.type == "num"):
+                            self.xml_files.layouts[filename].write(Template(NUM_LAYOUT).safe_substitute(CONCEPT))
+                        print u"  {0} ({1})".format(attr,attr.type).encode('utf-8')
+                    #Children containers
                     for concept in children.children_containers:
                         print u"  -{0}".format(concept.concept_name).encode('utf-8')
                     print ""
@@ -257,14 +277,14 @@ class DicomParser(handler.ContentHandler):
         for language_code, xml_filename in self.xml_filenames.strings.items():
             #English
             if (language_code == "en"):
-                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(english))
+                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(ENGLISH))
             #Spanish
             elif (language_code == "es"):
-                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(spanish))
+                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(SPANISH))
             self.xml_files.strings[xml_filename].write("\n</resources>")
             self.xml_files.strings[xml_filename].close()
 
-        self.report.imprime()
+        #self.report.imprime()
         self.build_better_tree()
         self.writeLayouts()
 
