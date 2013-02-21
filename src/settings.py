@@ -4,6 +4,8 @@
 STRINGS_XML = "strings.xml"
 LEVEL_1_LAYOUT = "summary.xml"
 
+
+""" Layouts """
 EXPLORATION_OF_BREAST = {1:"summary.xml",
                          2:"tree.xml",
                          3:"edit_node.xml"}
@@ -15,6 +17,21 @@ MAMOGRAPHY = {1:"summary.xml",
 LAYOUTS_DICTIONARY = {4:EXPLORATION_OF_BREAST,
                       5:MAMOGRAPHY}
 
+
+""" Activities """
+EXPLORATION_OF_BREAST_ACTIVITIES = {1:"SummaryActivity.xml",
+                                    2:"TreeActivity.xml",
+                                    3:"Edit_NodeActivity.xml"}
+
+MAMOGRAPHY_ACTIVITIES = {1:"SummaryActivity.xml",
+                         2:"TreeActivity.xml",
+                         3:"Edit_NodeActivity.xml"}
+
+ACTIVITIES_DICTIONARY = {4:EXPLORATION_OF_BREAST_ACTIVITIES,
+                         5:MAMOGRAPHY_ACTIVITIES}
+
+
+""" Internacionalization/Strings """
 I18N_MATCH = {1:"es",
               2:"en"}
 
@@ -40,13 +57,15 @@ Check internalization standard (and more complex) methods to improve this
 ENGLISH = {"ADD":"Add",
            "FINISH":"Finish",
            "VALIDATE":"Validate",
-           "CHANGE":"Change"}
+           "CHANGE":"Change",
+           "NEXT  _LEVEL": "Children level"}
 
 SPANISH = {"ADD":"Añadir",
            "FINISH":"Terminar",
            "VALIDATE":"Validar",
-           "CHANGE":"Cambiar"}
-
+           "CHANGE":"Cambiar",
+           "NEXT_LEVEL": "Siguiente nivel"}
+ 
 
 CONCEPT = {"CONCEPT_NAME":"",
            "CODE_VALUE":""}

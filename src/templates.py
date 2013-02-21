@@ -6,11 +6,12 @@
 TAB_MARGIN = "20dp"
 BLOCK_MARGIN_BOTTOM = "10dp"
 
-DEFAULT_STRINGS = "\n\t<!-- Default buttons -->\n" \
+DEFAULT_STRINGS_TEMPLATE = "\n\t<!-- Default buttons -->\n" \
 "\t<string name=\"add\">${ADD}</string>\n"\
 "\t<string name=\"finish\">${FINISH}</string>\n"\
 "\t<string name=\"validate\">${VALIDATE}</string>\n"\
-"\t<string name=\"change\">${CHANGE}</string>\n"
+"\t<string name=\"change\">${CHANGE}</string>\n"\
+"\t<string name=\"next_level\">${NEXT_LEVEL}</string>\n"
 
 HEADER_LAYOUT = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"\
 "<RelativeLayout xmlns:tools=\"http://schemas.android.com/tools\"\n"\
@@ -51,16 +52,30 @@ RIGHT_LAYOUT = "\t\t</RelativeLayout>\n"\
 "\n"\
 "\t\t<!-- Right layout -->\n"\
 "\t\t<RelativeLayout android:id=\"@+id/right_layout\"\n"\
-"\t\t\tandroid:layout_width=\"match_parent\"\n"\
-"\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\tandroid:layout_weight=\"1\"\n"\
-"\t\t\tandroid:background=\"#eeeeee\"\n"\
-"\t\t\tandroid:layout_margin=\"20dp\"\n"\
-"\t\t\tandroid:paddingBottom=\"20dp\"\n"\
-"\t\t\tandroid:paddingTop=\"25dp\"\n"\
-"\t\t\tandroid:paddingLeft=\"25dp\"\n"\
+"\t\t\tandroid:layout_width=\"match_parent\" android:layout_height=\"wrap_content\"\n"\
+"\t\t\tandroid:layout_weight=\"1\" android:background=\"#eeeeee\"\n"\
+"\t\t\tandroid:layout_margin=\"20dp\" android:paddingBottom=\"20dp\"\n"\
+"\t\t\tandroid:paddingTop=\"25dp\" android:paddingLeft=\"25dp\"\n"\
 "\t\t\tandroid:paddingRight=\"25dp\">\n"
 			
+NEXT_LEVEL_LAYOUT = "\t\t\t<TextView android:id=\"@+id/${CONCEPT_VALUE}_children_label\"\n"\
+"\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
+"\t\t\t\tandroid:text=\"@string/next_level\"\n"\
+"\t\t\t\tandroid:textAppearance=\"@android:style/TextAppearance.Large\"\n"\
+"\t\t\t\tandroid:layout_marginBottom=\"20dp\"\n"\
+"\t\t\t\tandroid:textColor=\"@color/black\"/>\n"\
+"\n"\
+"\t\t\t<ListView android:id=\"@+id/${CONCEPT_VALUE}_children_list\"\n"\
+"\t\t\t\tandroid:layout_width=\"match_parent\"\n"\
+"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_below=\"@id/${CONCEPT_VALUE}_children_label\" >\n"\
+"\t\t\t</ListView>\n"		
+
+"""
+This next level layout contains space for a button, since we are listing all the children level
+it could be confusing for the user.
+
 NEXT_LEVEL_LAYOUT = "<TextView android:id=\"@+id/injuriesSum_label\"\n"\
 "android:layout_width=\"wrap_content\"\n"\
 "android:layout_height=\"wrap_content\"\n"\
@@ -86,11 +101,11 @@ NEXT_LEVEL_LAYOUT = "<TextView android:id=\"@+id/injuriesSum_label\"\n"\
 "android:layout_above=\"@id/injuriesButtons_layout\"\n"\
 "android:layout_below=\"@id/injuriesSum_label\" >\n"\
 "</ListView>\n"		
+"""
 
 END_LAYOUT="\t\t</RelativeLayout>\n"\
 "\t</LinearLayout>\n"\
 "</RelativeLayout>\n"\
-
 
 
 """ Data type layouts """
@@ -122,7 +137,29 @@ DATE_LAYOUT = "\n\t\t\t<!-- Date: ${CONCEPT_NAME} -->\n" \
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\"\n "\
 "\t\t\t\tandroid:inputType=\"date\" />\n"
 
-NUM_LAYOUT = "\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
+""" 
+Right now num and text are being handle equally 
+TODO: Improve this template!
+
+"""
+NUM_LAYOUT = "\n\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
+"\t\t\t<TextView android:id=\"@+id/${CONCEPT_VALUE}_label\n"\
+"\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_below=\"@id/${ID_PREVIOUS_ITEM}\"\n"\
+"\t\t\t\tandroid:text=\"@string/${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:layout_marginLeft=\"20dp\" />\n"\
+"\n"\
+"\t\t\t<EditText android:id=\"@+id/${CONCEPT_VALUE}_EditText\"\n"\
+"\t\t\t\tandroid:layout_width=\"fill_parent\"\n"\
+"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_below=\"@id/${CONCEPT_VALUE}_label\"\n"\
+"\t\t\t\tandroid:hint=\"@string/${CONCEPT_NAME}\"\n"\
+"\t\t\t\tandroid:text=\"\"\n"
+"\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
+"\t\t\t\tandroid:layout_marginLeft=\"20dp\" /> \n"\
+
+TEXT_LAYOUT = "\n\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
 "\t\t\t<TextView android:id=\"@+id/${CONCEPT_VALUE}_label\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\

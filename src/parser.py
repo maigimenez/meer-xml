@@ -20,12 +20,14 @@ class XMLFiles(object):
         # CODE_MEANING - CODE_MEANING2
         self.language_match = {}
 
+
 class AndroidFiles(XMLFiles):
     def __init__(self):
         XMLFiles.__init__(self)
 
     def set_odontology(self,id_odontology):
         self.layouts = LAYOUTS_DICTIONARY[int(id_odontology)]
+        self.activities = ACTIVITIES_DICTIONARY[int(id_odontology)]        
     
     def set_languages(self,languages=""):
         self.strings = STRINGS_DICTIONARY[languages]
@@ -250,6 +252,7 @@ class DicomParser(handler.ContentHandler):
                 #Write the header, main and left layout
                 self.xml_files.layouts[filename].write(HEADER_LAYOUT)
                 self.xml_files.layouts[filename].write(MAIN_LEFT_LAYOUT)
+                #Get the actual level to write its layout
                 dict_level = self.dict_report.get_level(level)
                 print "[Level {0}]".format(level)
                 for concept,children in dict_level.containers.iteritems():
@@ -262,12 +265,21 @@ class DicomParser(handler.ContentHandler):
                             self.xml_files.layouts[filename].write(Template(DATE_LAYOUT).safe_substitute(CONCEPT))
                         elif (attr.type == "num"):
                             self.xml_files.layouts[filename].write(Template(NUM_LAYOUT).safe_substitute(CONCEPT))
+                        elif (attr.type == "text"):
+                            self.xml_files.layouts[filename].write(Template(NUM_LAYOUT).safe_substitute(CONCEPT))
                         print u"  {0} ({1})".format(attr,attr.type).encode('utf-8')
+
+                    #Write the end of left layout, the right layout and the listView for the next layout
+                    self.xml_files.layouts[filename].write(RIGHT_LAYOUT) 
+                    self.xml_files.layouts[filename].write(NEXT_LEVEL_LAYOUT)
                     #Children containers
+                    #TODO: Children must be in a java array 
                     for concept in children.children_containers:
                         print u"  -{0}".format(concept.concept_name).encode('utf-8')
                     print ""
-                print ""
+                print "" 
+                #Write the end of the layout
+                self.xml_files.layouts[filename].write(END_LAYOUT) 
             except KeyError:
                 #It should go to logging error
                 print "Layouts can't be created"
@@ -277,10 +289,12 @@ class DicomParser(handler.ContentHandler):
         for language_code, xml_filename in self.xml_filenames.strings.items():
             #English
             if (language_code == "en"):
-                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(ENGLISH))
+                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS_TEMPLATE)
+                                                           .safe_substitute(ENGLISH))
             #Spanish
             elif (language_code == "es"):
-                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS).safe_substitute(SPANISH))
+                self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS_TEMPLATE)
+                                                           .safe_substitute(SPANISH))
             self.xml_files.strings[xml_filename].write("\n</resources>")
             self.xml_files.strings[xml_filename].close()
 
