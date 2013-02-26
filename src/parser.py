@@ -10,20 +10,48 @@ from templates import *
 from settings import *
 from templates import *
 
+
 class XMLFiles(object):
     def __init__(self):
         self.layouts = {}
         self.strings = {}
         self.model = {}
-        self.actities = {}
+        self.activities = {}
         # This variable handles the internazionalization as it is
         # CODE_MEANING - CODE_MEANING2
         self.language_match = {}
+    
+    def write_java_settings(self,filename):
+        """ Write the basic structure for settings.java """
+        self.model[filename] = open(filename,'w')
+        self.model[filename].write('SETTINGS_JAVA')
 
+    def close_java_class(self,filename):
+        """ The filename points to a java class file
+        Write the closing bracket for the java class
+        
+        """
+        self.model[filename].write('END_JAVA')
+    
+    def close_files(self):
+        for xml_file in self.layouts.values():
+            xml_file.close()
+        for xml_file in self.strings.values():
+            xml_file.close()        
+        for xml_file in self.model.values():
+            xml_file.close()   
+        for xml_file in self.activities.values():
+            xml_file.close()
+        #map doesn't recognize close as a function `_´
+        #map(close, self.layouts)
 
 class AndroidFiles(XMLFiles):
     def __init__(self):
         XMLFiles.__init__(self)
+        #There is no poit for the variable model to be a dictionary here. We don't need the key
+        self.model = []
+        #Set the model classes. At this point we know that at least we will need a settings class.
+        self.model.append(SETTINGS_CLASS)
 
     def set_odontology(self,id_odontology):
         self.layouts = LAYOUTS_DICTIONARY[int(id_odontology)]
@@ -33,6 +61,7 @@ class AndroidFiles(XMLFiles):
         self.strings = STRINGS_DICTIONARY[languages]
         self.language_match = LANGUAGE_DICTIONARY[languages]
 
+    
 
 class DicomParser(handler.ContentHandler):
     logging.basicConfig(filename='info.log',level=logging.INFO)
@@ -48,9 +77,12 @@ class DicomParser(handler.ContentHandler):
         self.inType = False
         self.inConcept = False
         self.inLevel = False
+        self.repeated = False
         #Store information read from xml
         self.current_attribute = None
         self.concept = None
+        # A list of the code values already writen in strings.xml
+        self.code_values = []
         # Report-related variables
         self.report = Report()
         self.dict_report = None
@@ -110,6 +142,7 @@ class DicomParser(handler.ContentHandler):
                     xml_file.write("\n\t<!-- Lesion attributes-->\n")
         if (name == "CONCEPT_NAME"):
             self.inConcept = True
+            self.repeated = False
             self.concept = Concept()
         if (name == "DATE"):
             self.inType = True
@@ -129,21 +162,29 @@ class DicomParser(handler.ContentHandler):
             self.inData = False
             if (name == "CODE_VALUE"):
                 self.concept.concept_value = self.buffer
-                for xml_string in self.xml_files.strings.values():
-                    xml_string.write(u"\t<string name=\"{0}\">".
-                                     format(self.concept.concept_value).encode('utf-8'))
+                # Check if the code value is already written in the strings.xml file
+                if (self.buffer not in self.code_values):
+                    self.code_values.append(self.buffer)
+                    for xml_string in self.xml_files.strings.values():
+                        xml_string.write(u"\t<string name=\"code_{0}\">".
+                                         format(self.concept.concept_value).encode('utf-8'))
+                else:
+                    self.repeated = True
             elif (name == "CODE_MEANING"):
                 self.concept.concept_name = self.buffer
-                #TODO: Comprobar que esto es verdad
-                # si la codificación es default "en" es el CODE_MEANING
-                # si la codificación es i18n "en" es el CODE_MEANING2 y "es" es el CODE_MEANING
-                filename = self.xml_filenames.strings[self.xml_filenames.language_match[1]]
-                self.xml_files.strings[filename].write(u"{0}</string>\n".
-                                                       format(self.buffer).encode('utf-8'))
+                if (not self.repeated):
+                    #TODO: Comprobar que esto es verdad
+                    # si la codificación es default "en" es el CODE_MEANING
+                    # si la codificación es i18n "en" es el CODE_MEANING2 y "es" es el CODE_MEANING
+                    filename = self.xml_filenames.strings[self.xml_filenames.language_match[1]]
+                    self.xml_files.strings[filename].write(u"{0}</string>\n".
+                                                           format(self.buffer).encode('utf-8'))
             elif (name == "CODE_MEANING2"):
-                filename = self.xml_filenames.strings[self.xml_filenames.language_match[2]]
-                self.xml_files.strings[filename].write(u"{0}</string>\n".
-                                                       format(self.buffer).encode('utf-8'))
+                if (not self.repeated):
+                    filename = self.xml_filenames.strings[
+                        self.xml_filenames.language_match[2]]
+                    self.xml_files.strings[filename].write(u"{0}</string>\n".
+                                                           format(self.buffer).encode('utf-8'))
 
         if (name == "CONCEPT_NAME"):
             self.inConcept = False
@@ -237,7 +278,7 @@ class DicomParser(handler.ContentHandler):
         #self.dict_report.imprime()
                         
 
-    def writeLayouts(self):
+    def write_layouts(self):
         #Set which files are going to be used as output in this parser
         #TODO: Layouts
         #TODO: Java files 
@@ -255,23 +296,37 @@ class DicomParser(handler.ContentHandler):
                 #Get the actual level to write its layout
                 dict_level = self.dict_report.get_level(level)
                 print "[Level {0}]".format(level)
+                #Variable where we store the previous concept id
+                previous_item = "left_layout"
                 for concept,children in dict_level.containers.iteritems():
                     print " * {0}".format(concept)
                     #Attributes
                     for attr in children.attributes:
-                        CONCEPT["CONCEPT_NAME"] =  attr.concept.concept_name
-                        CONCEPT["CONCEPT_VALUE"] = attr.concept.concept_value
+                        #Fill the substitution dictionary with this concept
+                        CONCEPT_LAYOUT["CONCEPT_NAME"] =  attr.concept.concept_name
+                        CONCEPT_LAYOUT["CONCEPT_VALUE"] = attr.concept.concept_value
+                        CONCEPT_LAYOUT["PREVIOUS_ITEM"] = previous_item
+                        #Write the xml for the attribute depending on its data type.
                         if (attr.type == "date"):
-                            self.xml_files.layouts[filename].write(Template(DATE_LAYOUT).safe_substitute(CONCEPT))
+                            self.xml_files.layouts[filename].write(
+                                Template(DATE_LAYOUT).safe_substitute(CONCEPT_LAYOUT))
                         elif (attr.type == "num"):
-                            self.xml_files.layouts[filename].write(Template(NUM_LAYOUT).safe_substitute(CONCEPT))
+                            self.xml_files.layouts[filename].write(
+                                Template(NUM_LAYOUT).safe_substitute(CONCEPT_LAYOUT))
                         elif (attr.type == "text"):
-                            self.xml_files.layouts[filename].write(Template(NUM_LAYOUT).safe_substitute(CONCEPT))
+                            self.xml_files.layouts[filename].write(
+                                Template(NUM_LAYOUT).safe_substitute(CONCEPT_LAYOUT))
+                        #Now the previous value  has change, so we store the new one.
+                        previous_item = "etext_%s" % attr.concept.concept_value 
+                        print previous_item
                         print u"  {0} ({1})".format(attr,attr.type).encode('utf-8')
 
                     #Write the end of left layout, the right layout and the listView for the next layout
                     self.xml_files.layouts[filename].write(RIGHT_LAYOUT) 
-                    self.xml_files.layouts[filename].write(NEXT_LEVEL_LAYOUT)
+                    #Template(NEXT_LEVEL_LAYOUT).substitute(LEVEL=level)
+                    #print level
+                    self.xml_files.layouts[filename].write(
+                        Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=level))
                     #Children containers
                     #TODO: Children must be in a java array 
                     for concept in children.children_containers:
@@ -296,11 +351,11 @@ class DicomParser(handler.ContentHandler):
                 self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS_TEMPLATE)
                                                            .safe_substitute(SPANISH))
             self.xml_files.strings[xml_filename].write("\n</resources>")
-            self.xml_files.strings[xml_filename].close()
 
         #self.report.imprime()
         self.build_better_tree()
-        self.writeLayouts()
+        self.write_layouts()
+        self.xml_files.close_files()
 
 
 parser = make_parser()

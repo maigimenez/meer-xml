@@ -44,7 +44,7 @@ MAIN_LEFT_LAYOUT="\t<!-- MAIN PART: split layout -->\n"\
 "\t\t\tandroid:layout_width=\"match_parent\" android:layout_height=\"wrap_content\"\n"\
 "\t\t\tandroid:layout_weight=\"1\" android:background=\"#eeeeee\"\n"\
 "\t\t\tandroid:layout_margin=\"20dp\" android:paddingBottom=\"20dp\"\n"\
-"\t\t\tandroid:paddingTop=\"25dp\" android:paddingLeft=\"25dp\"\n"
+"\t\t\tandroid:paddingTop=\"25dp\" android:paddingLeft=\"25dp\"\n"\
 "\t\t\tandroid:paddingRight=\"25dp\">\n"\
 "\n"
 
@@ -58,7 +58,7 @@ RIGHT_LAYOUT = "\t\t</RelativeLayout>\n"\
 "\t\t\tandroid:paddingTop=\"25dp\" android:paddingLeft=\"25dp\"\n"\
 "\t\t\tandroid:paddingRight=\"25dp\">\n"
 			
-NEXT_LEVEL_LAYOUT = "\t\t\t<TextView android:id=\"@+id/${CONCEPT_VALUE}_children_label\"\n"\
+NEXT_LEVEL_LAYOUT = "\t\t\t<TextView android:id=\"@+id/children${LEVEL}_label\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
 "\t\t\t\tandroid:text=\"@string/next_level\"\n"\
@@ -66,10 +66,10 @@ NEXT_LEVEL_LAYOUT = "\t\t\t<TextView android:id=\"@+id/${CONCEPT_VALUE}_children
 "\t\t\t\tandroid:layout_marginBottom=\"20dp\"\n"\
 "\t\t\t\tandroid:textColor=\"@color/black\"/>\n"\
 "\n"\
-"\t\t\t<ListView android:id=\"@+id/${CONCEPT_VALUE}_children_list\"\n"\
+"\t\t\t<ListView android:id=\"@+id/children${LEVEL}_list\"\n"\
 "\t\t\t\tandroid:layout_width=\"match_parent\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/${CONCEPT_VALUE}_children_label\" >\n"\
+"\t\t\t\tandroid:layout_below=\"@id/children${LEVEL}_label\" >\n"\
 "\t\t\t</ListView>\n"		
 
 """
@@ -111,28 +111,28 @@ END_LAYOUT="\t\t</RelativeLayout>\n"\
 """ Data type layouts """
 #TODO: find a better way to handle the tabs
 DATE_LAYOUT = "\n\t\t\t<!-- Date: ${CONCEPT_NAME} -->\n" \
-"\t\t\t<TextView android:id=\"@+id/${CONCEPT_VALUE}_label\"\n"\
-"\t\t\t\tandroid:text=\"@string/${CONCEPT_VALUE}\"\n"\
+"\t\t\t<TextView android:id=\"@+id/label_${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:text=\"@string/code_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/${ID_PREVIOUS_ITEM}\"/>\n"\
+"\t\t\t\tandroid:layout_below=\"@id/${PREVIOUS_ITEM}\"/>\n"\
 "\n"\
-"\t\t\t<Button android:id=\"@+id/${CONCEPT_VALUE}_button\"\n"\
+"\t\t\t<Button android:id=\"@+id/button_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:text=\"@string/change\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\" \n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/${ID_PREVIOUS_ITEM}\"\n"\
+"\t\t\t\tandroid:layout_below=\"@id/label_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_alignParentRight=\"true\"\n "\
-"\t\t\t\tandroid:layout_alignBaseline=\"@+id/${CONCEPT_VALUE}_text\"/>\n"\
+"\t\t\t\tandroid:layout_alignBaseline=\"@+id/etext_${CONCEPT_VALUE}\"/>\n"\
 "\n"\
-"\t\t\t<EditText android:id=\"@id/${CONCEPT_VALUE}_text\"\n"\
+"\t\t\t<EditText android:id=\"@id/etext_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:text=\"\"\n "\
-"\t\t\t\tandroid:hint=\"@string/${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:hint=\"@string/code_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"match_parent\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/${CONCEPT_VALUE}_label\"\n"\
-"\t\t\t\tandroid:layout_toLeftOf=\"@id/${CONCEPT_VALUE}_button\"\n "\
+"\t\t\t\tandroid:layout_below=\"@id/label_${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:layout_toLeftOf=\"@id/button_${CONCEPT_VALUE}\"\n "\
 "\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\"\n "\
 "\t\t\t\tandroid:inputType=\"date\" />\n"
@@ -143,35 +143,42 @@ TODO: Improve this template!
 
 """
 NUM_LAYOUT = "\n\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
-"\t\t\t<TextView android:id=\"@+id/${CONCEPT_VALUE}_label\n"\
+"\t\t\t<TextView android:id=\"@+id/label_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/${ID_PREVIOUS_ITEM}\"\n"\
-"\t\t\t\tandroid:text=\"@string/${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:layout_below=\"@id/${PREVIOUS_ITEM}\"\n"\
+"\t\t\t\tandroid:text=\"@string/code_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\" />\n"\
 "\n"\
-"\t\t\t<EditText android:id=\"@+id/${CONCEPT_VALUE}_EditText\"\n"\
+"\t\t\t<EditText android:id=\"@+id/etext_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"fill_parent\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/${CONCEPT_VALUE}_label\"\n"\
-"\t\t\t\tandroid:hint=\"@string/${CONCEPT_NAME}\"\n"\
+"\t\t\t\tandroid:layout_below=\"@id/label_${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:hint=\"@string/code_${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:text=\"\"\n"\
+"\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
+"\t\t\t\tandroid:layout_marginLeft=\"20dp\" /> \n"\
+
+TEXT_LAYOUT = "\n\t\t\t<!-- Text: ${CONCEPT_NAME} -->\n" \
+"\t\t\t<TextView android:id=\"@+id/label_${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_below=\"@id/${PREVIOUS_ITEM}\"\n"\
+"\t\t\t\tandroid:text=\"@string/code_${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:layout_marginLeft=\"20dp\" />\n"\
+"\n"\
+"\t\t\t<EditText android:id=\"@+id/etext_${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:layout_width=\"fill_parent\"\n"\
+"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_below=\"@id/label_${CONCEPT_VALUE}\"\n"\
+"\t\t\t\tandroid:hint=\"@string/code_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:text=\"\"\n"
 "\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\" /> \n"\
 
-TEXT_LAYOUT = "\n\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
-"\t\t\t<TextView android:id=\"@+id/${CONCEPT_VALUE}_label\n"\
-"\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/${ID_PREVIOUS_ITEM}\"\n"\
-"\t\t\t\tandroid:text=\"@string/${CONCEPT_VALUE}\"\n"\
-"\t\t\t\tandroid:layout_marginLeft=\"20dp\" />\n"\
-"\n"\
-"\t\t\t<EditText android:id=\"@+id/${CONCEPT_VALUE}_EditText\"\n"\
-"\t\t\t\tandroid:layout_width=\"fill_parent\"\n"\
-"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/${CONCEPT_VALUE}_label\"\n"\
-"\t\t\t\tandroid:hint=\"@string/${CONCEPT_NAME}\"\n"\
-"\t\t\t\tandroid:text=\"\"\n"
-"\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
-"\t\t\t\tandroid:layout_marginLeft=\"20dp\" /> \n"\
+
+""" JAVA CLASSES TEMPLATES """
+SETTINGS_JAVA ="package com.i3m.meerAndroid.model\;\n"\
+"public class settings {"
+
+END_CLASS ="}"

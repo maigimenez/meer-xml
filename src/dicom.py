@@ -94,13 +94,20 @@ class Container(object):
 
 
 class Report(object):
-    """This class manages the whole report"""
+    """This class manages the report while we are reading it from xml"""
     def __init__(self):
         self.report_type = ""
         self.id_odontology = -1
         # tree_level: Container()
         self.containers = []
 
+    """ I store code values read in a local variable so there is no need of this, isnt't it?
+    def is_reapeted(self):
+        Return if the concept has been already stored in the report
+        so it has been already written in the strings.xml
+        
+    """
+        
     def add_attribute(self,child_level,current_attribute):
         for container in self.containers:
             if ((container.tree_level == child_level) and container.open):
@@ -121,19 +128,23 @@ class Report(object):
                 return True
         return False
 
-    """Return the container parent of the given tree level
-     we are assuming that dicom xml file is well formed
-    
-    """
+
     def return_parent(self,tree_level):
+        """Return the container parent of the given tree level
+        we are assuming that dicom xml file is well formed
+        
+        Keyword arguments:
+        tree level -- tree level we want to know the father
+        
+        """
         for container in self.containers:
             if(container.tree_level == tree_level-1 and container.open):
                 return container.concept
         return None
 
 
-    """ Pretty print of a report """
     def imprime(self):
+        """ Pretty print of a report """
         print u"\n ------ {0} ---------- \n".format(self.report_type)
         for container in self.containers:
             print u"(L{0}) {1} ({2}):".format(

@@ -31,6 +31,9 @@ ACTIVITIES_DICTIONARY = {4:EXPLORATION_OF_BREAST_ACTIVITIES,
                          5:MAMOGRAPHY_ACTIVITIES}
 
 
+""" Models """
+SETTINGS_CLASS = "settings.java"
+
 """ Internacionalization/Strings """
 I18N_MATCH = {1:"es",
               2:"en"}
@@ -67,5 +70,22 @@ SPANISH = {"ADD":"Añadir",
            "NEXT_LEVEL": "Siguiente nivel"}
  
 
-CONCEPT = {"CONCEPT_NAME":"",
-           "CODE_VALUE":""}
+""" Level names [EN] """
+EXPLORATION_OF_BREAST_LEVELS = {1:"Summary",
+                                2:"Organs",
+                                3:"Lesions"}
+
+MAMOGRAPHY_ACTIVITIES_LEVELS = {1:"Summary",
+                                2:"Organs",
+                                3:"Lesions"}
+
+LEVELS_DICTIONARY = {4:EXPLORATION_OF_BREAST_LEVELS,
+                     5:MAMOGRAPHY_LEVELS}
+
+
+
+
+CONCEPT_LAYOUT = {"CONCEPT_NAME":"",
+                  "CODE_VALUE":"",
+                  "PREVIOUS":""}
+
