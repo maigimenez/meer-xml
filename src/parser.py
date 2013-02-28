@@ -45,6 +45,7 @@ class XMLFiles(object):
         #map doesn't recognize close as a function `_´
         #map(close, self.layouts)
 
+#TODO you are replicating concepts,bitch! Solve this. It's a mess
 class AndroidFiles(XMLFiles):
     def __init__(self):
         XMLFiles.__init__(self)
@@ -90,6 +91,10 @@ class DicomParser(handler.ContentHandler):
         self.xml_filenames = AndroidFiles()
         self.xml_files = XMLFiles()
 
+    def get_levels_strings(self,language_code):
+        """ Return the strings with the level title based on the odontology. """
+        return LEVELS_DICTIONARY[int(self.report.id_odontology)][language_code]
+
     def startDocument(self):
         #Set which files are going to be used as output in this parser
         #Strings
@@ -115,31 +120,19 @@ class DicomParser(handler.ContentHandler):
                 self.deepest_level = self.tree_level 
             self.inLevel = True
             logging.info('* Tree level {0}'.format(self.tree_level))
-            for xml_file in self.xml_files.strings.values():
-                #Report level
-                if (self.tree_level==1):
-                    xml_file.write("\n\t<!-- Report -->\n")
-                #Organs level
-                elif (self.tree_level==2):
-                    xml_file.write("\n\n\t<!-- Organ -->\n")
-                #Lesions level
-                elif (self.tree_level==3):
-                    xml_file.write("\n\n\t<!-- Lesions -->\n")
+            for language_code,xml_filename in self.xml_filenames.strings.items():
+                level_name = self.get_levels_strings(language_code)[self.tree_level]
+                self.xml_files.strings[xml_filename].write(
+                    "\n\t<!--  ({0}) {1} -->\n".format(self.tree_level,level_name))
         if (name == "CHILDS"): 
             # Begin of childs tag, so we are in a new (deeper) child level
             self.child_level += 1
             self.inLevel = False
             logging.info('* Child level {0}'.format(self.child_level))
-            for xml_file in self.xml_files.strings.values():
-                #Report level
-                if (self.tree_level==1):
-                    xml_file.write("\n\t<!-- Report attributes-->\n")
-                #Organs level
-                elif (self.tree_level==2):
-                    xml_file.write("\n\t<!-- Organ attributes-->\n")
-                #Lesions level
-                elif (self.tree_level==3):
-                    xml_file.write("\n\t<!-- Lesion attributes-->\n")
+            for language_code,xml_filename in self.xml_filenames.strings.items():
+                level_name = self.get_levels_strings(language_code)[self.tree_level]
+                self.xml_files.strings[xml_filename].write(
+                    "\n\t<!-- ({0}a) {1} -->\n".format(self.tree_level,level_name))
         if (name == "CONCEPT_NAME"):
             self.inConcept = True
             self.repeated = False
@@ -346,15 +339,21 @@ class DicomParser(handler.ContentHandler):
             if (language_code == "en"):
                 self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS_TEMPLATE)
                                                            .safe_substitute(ENGLISH))
+                self.xml_files.strings[xml_filename].write("\n\t<!-- Tree levels -->\n")
+                levels = self.get_levels_strings("en")
+                for level,name in levels.iteritems():
+                    self.xml_files.strings[xml_filename].write(
+                        "\t<string name=\"level-{0}\">{1}</string>\n".format(level,name))
             #Spanish
             elif (language_code == "es"):
                 self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS_TEMPLATE)
                                                            .safe_substitute(SPANISH))
+            #Write the levels based on the odontology
             self.xml_files.strings[xml_filename].write("\n</resources>")
 
         #self.report.imprime()
-        self.build_better_tree()
-        self.write_layouts()
+        #self.build_better_tree()
+        #self.write_layouts()
         self.xml_files.close_files()
 
 

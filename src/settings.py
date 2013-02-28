@@ -70,19 +70,28 @@ SPANISH = {"ADD":"Añadir",
            "NEXT_LEVEL": "Siguiente nivel"}
  
 
-""" Level names [EN] """
+""" Level names """
 EXPLORATION_OF_BREAST_LEVELS = {1:"Summary",
                                 2:"Organs",
                                 3:"Lesions"}
 
-MAMOGRAPHY_ACTIVITIES_LEVELS = {1:"Summary",
-                                2:"Organs",
-                                3:"Lesions"}
+EXPLORACION_DE_PECHO_NIVELES = {1:"Resumen",
+                                2:"Organos",
+                                3:"Lesiones"}
 
-LEVELS_DICTIONARY = {4:EXPLORATION_OF_BREAST_LEVELS,
-                     5:MAMOGRAPHY_LEVELS}
+MAMOGRAPHY_LEVELS = {1:"Summary",
+                     2:"Organs",
+                     3:"Lesions"}
 
+MAMOGRAFIA_NIVELES = {1:"Resumen",
+                      2:"Organos",
+                      3:"Lesiones"}
 
+LEVELS_DICTIONARY = {4:{"en":EXPLORATION_OF_BREAST_LEVELS,
+                        "es":EXPLORACION_DE_PECHO_NIVELES},
+                     5:{"en":MAMOGRAPHY_LEVELS,
+                        "es":MAMOGRAFIA_NIVELES}
+                     }
 
 
 CONCEPT_LAYOUT = {"CONCEPT_NAME":"",
