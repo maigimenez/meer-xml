@@ -6,13 +6,14 @@ LEVEL_1_LAYOUT = "summary.xml"
 
 
 """ Layouts """
-EXPLORATION_OF_BREAST = {1:"summary.xml",
-                         2:"tree.xml",
-                         3:"edit_node.xml"}
+#level: (filename,number of columns)
+EXPLORATION_OF_BREAST = {1:("summary.xml",1),
+                         2:("tree_${CODE}.xml",1),
+                         3:("edit_node_${CODE}.xml",2)}
 
-MAMOGRAPHY = {1:"summary.xml",
-              2:"tree.xml",
-              3:"edit_node.xml"}
+MAMOGRAPHY = {1:("summary.xml",1),
+              2:("tree_${CODE}.xml",1),
+              3:("edit_node_${CODE}.xml",2)}
 
 LAYOUTS_DICTIONARY = {4:EXPLORATION_OF_BREAST,
                       5:MAMOGRAPHY}

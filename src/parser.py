@@ -240,7 +240,6 @@ class DicomParser(handler.ContentHandler):
 
             #If we are not in the root, this container has a parent
             if(container.tree_level-1>0):
-                #print "Entro",container.tree_level,self.dict_report.tree.keys()
                 #If parent level does not exist we create it
                 if (container.tree_level-1 not in self.dict_report.tree):
                     print "no soy el padre"
@@ -271,66 +270,91 @@ class DicomParser(handler.ContentHandler):
         #self.dict_report.imprime()
                         
 
+    def write_attributes_layout(self,filename,attributes,previous):
+        #Variable where we store the previous concept id
+        previous_item = previous        
+        #Attributes
+        for attr in attributes:
+            #Fill the substitution dictionary with this concept
+            CONCEPT_LAYOUT["CONCEPT_NAME"] =  attr.concept.concept_name
+            CONCEPT_LAYOUT["CONCEPT_VALUE"] = attr.concept.concept_value
+            CONCEPT_LAYOUT["PREVIOUS_ITEM"] = previous_item
+            #Write the xml for the attribute depending on its data type.
+            if (attr.type == "date"):
+                self.xml_files.layouts[filename].write(
+                    Template(DATE_LAYOUT).safe_substitute(CONCEPT_LAYOUT))
+            elif (attr.type == "num"):
+                self.xml_files.layouts[filename].write(
+                    Template(NUM_LAYOUT).safe_substitute(CONCEPT_LAYOUT))
+            elif (attr.type == "text"):
+                self.xml_files.layouts[filename].write(
+                    Template(NUM_LAYOUT).safe_substitute(CONCEPT_LAYOUT))
+            #Now the previous value  has change, so we store the new one.
+            previous_item = "etext_%s" % attr.concept.concept_value 
+            logging.info("New previous item: {0}".format(previous_item))
+            print u"  {0} ".format(attr).encode('utf-8')
+            
+
+    def write_one_column_layout(self,filename_code,level,level_container):
+        for concept,children in level_container.containers.iteritems():
+            #Add the concept_value to the layout file and open the file for writting 
+            filename = Template(filename_code).safe_substitute(CODE=concept.concept_value)
+            print filename
+            self.xml_files.layouts[filename] = open(filename, 'w')
+            try:
+                print(" * {0}".format(concept))
+                #Write the header, main and left layout
+                self.xml_files.layouts[filename].write(HEADER_LAYOUT)
+                self.xml_files.layouts[filename].write(MAIN_LEFT_LAYOUT)    
+                #Write the left title
+                self.xml_files.layouts[filename].write(Template(TITLE_LAYOUT).safe_substitute(LEVEL=level))  
+                #Variable where we store the previous concept id
+                previous_item = "level_{0}_label".format(level)
+               
+                #ATTRIBUTES
+                self.write_attributes_layout(filename,children.attributes,previous_item)
+
+                #Write the end of left layout, the right layout and the listView for the next layout
+                self.xml_files.layouts[filename].write(RIGHT_LAYOUT) 
+                
+                #CHILDREN
+                #Write the right title
+                self.xml_files.layouts[filename].write(Template(TITLE_LAYOUT).safe_substitute(LEVEL=level+1))
+                #Write the children's listView
+                self.xml_files.layouts[filename].write(Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=level+1))
+                #TODO: Children must be in a java array   
+                for concept in children.children_containers:
+                     print u"  -{0}".format(concept.concept_name).encode('utf-8')
+
+                #Write the end of the layout
+                self.xml_files.layouts[filename].write(END_LAYOUT) 
+                print
+
+            except KeyError:
+                 #It should go to logging error
+                print "Layouts can't be created"
+                
+    def write_two_columns_layout(self,filename,level):
+        pass
+
     def write_layouts(self):
         #Set which files are going to be used as output in this parser
         #TODO: Layouts
         #TODO: Java files 
         # The files for the layout are linked to the odontology of the report
+        logging.info("\nWRITE LAYOUTS")
         self.xml_filenames.set_odontology(self.dict_report.id_odontology)
         #Open for write all the files
-        for level, filename in zip(xrange(1,2),self.xml_filenames.layouts.values()):
-            print filename
-            self.xml_files.layouts[filename] = open(filename, 'w')        
-        #for level in xrange(1,self.deepest_level+1):
-            try:
-                #Write the header, main and left layout
-                self.xml_files.layouts[filename].write(HEADER_LAYOUT)
-                self.xml_files.layouts[filename].write(MAIN_LEFT_LAYOUT)
-                #Get the actual level to write its layout
-                dict_level = self.dict_report.get_level(level)
-                print "[Level {0}]".format(level)
-                #Variable where we store the previous concept id
-                previous_item = "left_layout"
-                for concept,children in dict_level.containers.iteritems():
-                    print " * {0}".format(concept)
-                    #Attributes
-                    for attr in children.attributes:
-                        #Fill the substitution dictionary with this concept
-                        CONCEPT_LAYOUT["CONCEPT_NAME"] =  attr.concept.concept_name
-                        CONCEPT_LAYOUT["CONCEPT_VALUE"] = attr.concept.concept_value
-                        CONCEPT_LAYOUT["PREVIOUS_ITEM"] = previous_item
-                        #Write the xml for the attribute depending on its data type.
-                        if (attr.type == "date"):
-                            self.xml_files.layouts[filename].write(
-                                Template(DATE_LAYOUT).safe_substitute(CONCEPT_LAYOUT))
-                        elif (attr.type == "num"):
-                            self.xml_files.layouts[filename].write(
-                                Template(NUM_LAYOUT).safe_substitute(CONCEPT_LAYOUT))
-                        elif (attr.type == "text"):
-                            self.xml_files.layouts[filename].write(
-                                Template(NUM_LAYOUT).safe_substitute(CONCEPT_LAYOUT))
-                        #Now the previous value  has change, so we store the new one.
-                        previous_item = "etext_%s" % attr.concept.concept_value 
-                        print previous_item
-                        print u"  {0} ({1})".format(attr,attr.type).encode('utf-8')
-
-                    #Write the end of left layout, the right layout and the listView for the next layout
-                    self.xml_files.layouts[filename].write(RIGHT_LAYOUT) 
-                    #Template(NEXT_LEVEL_LAYOUT).substitute(LEVEL=level)
-                    #print level
-                    self.xml_files.layouts[filename].write(
-                        Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=level))
-                    #Children containers
-                    #TODO: Children must be in a java array 
-                    for concept in children.children_containers:
-                        print u"  -{0}".format(concept.concept_name).encode('utf-8')
-                    print ""
-                print "" 
-                #Write the end of the layout
-                self.xml_files.layouts[filename].write(END_LAYOUT) 
-            except KeyError:
-                #It should go to logging error
-                print "Layouts can't be created"
+        for level, layout in zip(xrange(1,self.deepest_level),self.xml_filenames.layouts.values()):
+            print layout
+            #Get the actual level to write its layout
+            dict_level = self.dict_report.get_level(level)
+            print "[Level {0}]".format(level)
+            if (layout[1]==1):
+                self.write_one_column_layout(layout[0],level,dict_level)
+            else:
+                self.write_two_columns_layout(layout[0],level,dict_level)
+                
 
     def endDocument(self):
         # Write the default strings for every language
@@ -343,7 +367,7 @@ class DicomParser(handler.ContentHandler):
                 levels = self.get_levels_strings("en")
                 for level,name in levels.iteritems():
                     self.xml_files.strings[xml_filename].write(
-                        "\t<string name=\"level-{0}\">{1}</string>\n".format(level,name))
+                        "\t<string name=\"level_{0}\">{1}</string>\n".format(level,name))
             #Spanish
             elif (language_code == "es"):
                 self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS_TEMPLATE)
@@ -352,8 +376,8 @@ class DicomParser(handler.ContentHandler):
             self.xml_files.strings[xml_filename].write("\n</resources>")
 
         #self.report.imprime()
-        #self.build_better_tree()
-        #self.write_layouts()
+        self.build_better_tree()
+        self.write_layouts()
         self.xml_files.close_files()
 
 

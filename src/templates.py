@@ -58,18 +58,10 @@ RIGHT_LAYOUT = "\t\t</RelativeLayout>\n"\
 "\t\t\tandroid:paddingTop=\"25dp\" android:paddingLeft=\"25dp\"\n"\
 "\t\t\tandroid:paddingRight=\"25dp\">\n"
 			
-NEXT_LEVEL_LAYOUT = "\t\t\t<TextView android:id=\"@+id/children${LEVEL}_label\"\n"\
-"\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:text=\"@string/next_level\"\n"\
-"\t\t\t\tandroid:textAppearance=\"@android:style/TextAppearance.Large\"\n"\
-"\t\t\t\tandroid:layout_marginBottom=\"20dp\"\n"\
-"\t\t\t\tandroid:textColor=\"@color/black\"/>\n"\
-"\n"\
-"\t\t\t<ListView android:id=\"@+id/children${LEVEL}_list\"\n"\
+NEXT_LEVEL_LAYOUT = "\n\t\t\t<ListView android:id=\"@+id/children${LEVEL}_list\"\n"\
 "\t\t\t\tandroid:layout_width=\"match_parent\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
-"\t\t\t\tandroid:layout_below=\"@id/children${LEVEL}_label\" >\n"\
+"\t\t\t\tandroid:layout_below=\"@id/level_${LEVEL}_label\" >\n"\
 "\t\t\t</ListView>\n"		
 
 """
@@ -175,6 +167,15 @@ TEXT_LAYOUT = "\n\t\t\t<!-- Text: ${CONCEPT_NAME} -->\n" \
 "\t\t\t\tandroid:text=\"\"\n"
 "\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\" /> \n"\
+
+TITLE_LAYOUT = "\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
+"\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_alignParentLeft=\"true\"\n"\
+"\t\t\t\tandroid:layout_alignParentTop=\"true\"\n"\
+"\t\t\t\tandroid:layout_marginBottom=\"20dp\"\n"\
+"\t\t\t\tandroid:text=\"@string/level_${LEVEL}\"\n"\
+"\t\t\t\tandroid:textAppearance=\"@android:style/TextAppearance.Large\" />\n"
 
 
 """ JAVA CLASSES TEMPLATES """
