@@ -6,63 +6,10 @@ from xml.sax import make_parser, handler
 from string import Template
 
 from dicom import * 
+from files import *
 from templates import * 
 from settings import *
-from templates import *
-
-
-class XMLFiles(object):
-    def __init__(self):
-        self.layouts = {}
-        self.strings = {}
-        self.model = {}
-        self.activities = {}
-        # This variable handles the internazionalization as it is
-        # CODE_MEANING - CODE_MEANING2
-        self.language_match = {}
-    
-    def write_java_settings(self,filename):
-        """ Write the basic structure for settings.java """
-        self.model[filename] = open(filename,'w')
-        self.model[filename].write('SETTINGS_JAVA')
-
-    def close_java_class(self,filename):
-        """ The filename points to a java class file
-        Write the closing bracket for the java class
-        
-        """
-        self.model[filename].write('END_JAVA')
-    
-    def close_files(self):
-        for xml_file in self.layouts.values():
-            xml_file.close()
-        for xml_file in self.strings.values():
-            xml_file.close()        
-        for xml_file in self.model.values():
-            xml_file.close()   
-        for xml_file in self.activities.values():
-            xml_file.close()
-        #map doesn't recognize close as a function `_´
-        #map(close, self.layouts)
-
-#TODO you are replicating concepts,bitch! Solve this. It's a mess
-class AndroidFiles(XMLFiles):
-    def __init__(self):
-        XMLFiles.__init__(self)
-        #There is no poit for the variable model to be a dictionary here. We don't need the key
-        self.model = []
-        #Set the model classes. At this point we know that at least we will need a settings class.
-        self.model.append(SETTINGS_CLASS)
-
-    def set_odontology(self,id_odontology):
-        self.layouts = LAYOUTS_DICTIONARY[int(id_odontology)]
-        self.activities = ACTIVITIES_DICTIONARY[int(id_odontology)]        
-    
-    def set_languages(self,languages=""):
-        self.strings = STRINGS_DICTIONARY[languages]
-        self.language_match = LANGUAGE_DICTIONARY[languages]
-
-    
+ 
 
 class DicomParser(handler.ContentHandler):
     logging.basicConfig(filename='info.log',level=logging.INFO)
