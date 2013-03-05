@@ -294,12 +294,38 @@ class DicomParser(handler.ContentHandler):
             logging.info("New previous item: {0}".format(previous_item))
             print u"  {0} ".format(attr).encode('utf-8')
             
-
+   
     def write_one_column_layout(self,filename_code,level,level_container):
         for concept,children in level_container.containers.iteritems():
             #Add the concept_value to the layout file and open the file for writting 
             filename = Template(filename_code).safe_substitute(CODE=concept.concept_value)
-            print filename
+            print filename, "One column"
+            print concept
+            self.xml_files.layouts[filename] = open(filename, 'w')
+            try:
+                print(" * {0}".format(concept))
+                #Write the header, main and left layout
+                self.xml_files.layouts[filename].write(HEADER_LAYOUT)
+                self.xml_files.layouts[filename].write(MAIN_LAYOUT)    
+                #Write the main title
+                self.xml_files.layouts[filename].write(Template(TITLE_LAYOUT).safe_substitute(LEVEL=concept.concept_value))  
+                #Variable where we store the previous concept id
+                previous_item = "level_{0}_label".format(level)
+               
+                #Write the end of the layout
+                self.xml_files.layouts[filename].write(END_LAYOUT) 
+                print
+
+            except KeyError:
+                 #It should go to logging error
+                print "Layouts can't be created"
+
+
+    def write_two_columns_layout(self,filename_code,level,level_container):
+        for concept,children in level_container.containers.iteritems():
+            #Add the concept_value to the layout file and open the file for writting 
+            filename = Template(filename_code).safe_substitute(CODE=concept.concept_value)
+            print filename, "- Two columns"
             self.xml_files.layouts[filename] = open(filename, 'w')
             try:
                 print(" * {0}".format(concept))
@@ -307,7 +333,7 @@ class DicomParser(handler.ContentHandler):
                 self.xml_files.layouts[filename].write(HEADER_LAYOUT)
                 self.xml_files.layouts[filename].write(MAIN_LEFT_LAYOUT)    
                 #Write the left title
-                self.xml_files.layouts[filename].write(Template(TITLE_LAYOUT).safe_substitute(LEVEL=level))  
+                self.xml_files.layouts[filename].write(Template(GENERIC_TITLE_LAYOUT).safe_substitute(LEVEL=level))  
                 #Variable where we store the previous concept id
                 previous_item = "level_{0}_label".format(level)
                
@@ -319,7 +345,7 @@ class DicomParser(handler.ContentHandler):
                 
                 #CHILDREN
                 #Write the right title
-                self.xml_files.layouts[filename].write(Template(TITLE_LAYOUT).safe_substitute(LEVEL=level+1))
+                self.xml_files.layouts[filename].write(Template(GENERIC_TITLE_LAYOUT).safe_substitute(LEVEL=level+1))
                 #Write the children's listView
                 self.xml_files.layouts[filename].write(Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=level+1))
                 #TODO: Children must be in a java array   
@@ -333,10 +359,7 @@ class DicomParser(handler.ContentHandler):
             except KeyError:
                  #It should go to logging error
                 print "Layouts can't be created"
-                
-    def write_two_columns_layout(self,filename,level):
-        pass
-
+             
     def write_layouts(self):
         #Set which files are going to be used as output in this parser
         #TODO: Layouts
@@ -350,6 +373,8 @@ class DicomParser(handler.ContentHandler):
             #Get the actual level to write its layout
             dict_level = self.dict_report.get_level(level)
             print "[Level {0}]".format(level)
+            #for the first and third level we went a one column layout
+            #TODO: This should go to a conf file
             if (layout[1]==1):
                 self.write_one_column_layout(layout[0],level,dict_level)
             else:

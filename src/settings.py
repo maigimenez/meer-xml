@@ -7,7 +7,7 @@ LEVEL_1_LAYOUT = "summary.xml"
 
 """ Layouts """
 #level: (filename,number of columns)
-EXPLORATION_OF_BREAST = {1:("summary.xml",1),
+EXPLORATION_OF_BREAST = {1:("summary.xml",2),
                          2:("tree_${CODE}.xml",1),
                          3:("edit_node_${CODE}.xml",2)}
 

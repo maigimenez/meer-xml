@@ -64,6 +64,23 @@ NEXT_LEVEL_LAYOUT = "\n\t\t\t<ListView android:id=\"@+id/children${LEVEL}_list\"
 "\t\t\t\tandroid:layout_below=\"@id/level_${LEVEL}_label\" >\n"\
 "\t\t\t</ListView>\n"		
 
+MAIN_LAYOUT="\t<!-- MAIN PART: split layout -->\n"\
+"\t<LinearLayout android:orientation=\"horizontal\"\n"\
+"\t\tandroid:layout_width=\"fill_parent\" android:layout_height=\"fill_parent\"\n"\
+"\t\tandroid:layout_below=\"@id/top_header\" android:layout_above=\"@id/bottom_menu\"\n"\
+"\t\tandroid:id=\"@+id/sub_content_view\"\n"\
+"\t\tandroid:paddingBottom=\"5sp\" android:background=\"@color/lightGrey\"\n"\
+"\t\tandroid:baselineAligned=\"false\">\n"\
+"\n"\
+"\t\t<!-- Left layout -->\n"\
+"\t\t<RelativeLayout android:id=\"@+id/main_layout\"\n"\
+"\t\t\tandroid:layout_width=\"match_parent\" android:layout_height=\"wrap_content\"\n"\
+"\t\t\tandroid:layout_weight=\"1\" android:background=\"#eeeeee\"\n"\
+"\t\t\tandroid:layout_margin=\"20dp\" android:paddingBottom=\"20dp\"\n"\
+"\t\t\tandroid:paddingTop=\"25dp\" android:paddingLeft=\"25dp\"\n"\
+"\t\t\tandroid:paddingRight=\"25dp\">\n"\
+"\n"
+
 """
 This next level layout contains space for a button, since we are listing all the children level
 it could be confusing for the user.
@@ -105,7 +122,7 @@ END_LAYOUT="\t\t</RelativeLayout>\n"\
 DATE_LAYOUT = "\n\t\t\t<!-- Date: ${CONCEPT_NAME} -->\n" \
 "\t\t\t<TextView android:id=\"@+id/label_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:text=\"@string/code_${CONCEPT_VALUE}\"\n"\
-"\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_width=\"wrap_contenxt\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\"\n"\
 "\t\t\t\tandroid:layout_below=\"@id/${PREVIOUS_ITEM}\"/>\n"\
@@ -168,7 +185,7 @@ TEXT_LAYOUT = "\n\t\t\t<!-- Text: ${CONCEPT_NAME} -->\n" \
 "\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\" /> \n"\
 
-TITLE_LAYOUT = "\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
+GENERIC_TITLE_LAYOUT = "\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_alignParentLeft=\"true\"\n"\
@@ -177,6 +194,14 @@ TITLE_LAYOUT = "\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
 "\t\t\t\tandroid:text=\"@string/level_${LEVEL}\"\n"\
 "\t\t\t\tandroid:textAppearance=\"@android:style/TextAppearance.Large\" />\n"
 
+TITLE_LAYOUT = "\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
+"\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
+"\t\t\t\tandroid:layout_alignParentLeft=\"true\"\n"\
+"\t\t\t\tandroid:layout_alignParentTop=\"true\"\n"\
+"\t\t\t\tandroid:layout_marginBottom=\"20dp\"\n"\
+"\t\t\t\tandroid:text=\"@string/code_${LEVEL}\"\n"\
+"\t\t\t\tandroid:textAppearance=\"@android:style/TextAppearance.Large\" />\n"
 
 """ JAVA CLASSES TEMPLATES """
 SETTINGS_JAVA ="package com.i3m.meerAndroid.model\;\n"\
