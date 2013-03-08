@@ -207,4 +207,7 @@ TITLE_LAYOUT = "\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
 SETTINGS_JAVA ="package com.i3m.meerAndroid.model\;\n"\
 "public class settings {"
 
+STRING_ARRAY = 	"private static String[] values_{CODE_MEANING}  = \{${VALUES}\};" 
+
 END_CLASS ="}"
+
