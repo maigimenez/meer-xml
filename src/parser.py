@@ -197,6 +197,25 @@ class DicomParser(handler.ContentHandler):
 
         self.dict_report.imprime()
             
+    
+    def write_children(self,language):
+        if(language=="en"):
+            filename = self.xml_filenames.strings["en"]
+            print filename
+            self.xml_files.strings[filename].write("\n\t<!-- Children Arrays -->\n")
+            #Close the file to allow the search in read mode
+            self.xml_files.strings[filename].close()
+            level_array = self.xml_files. get_children_string(self.dict_report.tree,filename)
+            self.xml_files.strings[filename]= open(filename,'a')
+            print level_array
+            for parent, children in level_array.iteritems():
+                self.xml_files.strings[filename].write(
+                    "\t<string-array name=code_{0}-children>\n".format(parent))
+                for child in children:
+                    self.xml_files.strings[filename].write(
+                        "\t\t<item>{0}</item>\n".format(child))
+                self.xml_files.strings[filename].write("\t</string-array>\n")
+
 
     def build_tree(self):
         self.dict_report = Dict_Report(self.report.report_type)
@@ -215,7 +234,6 @@ class DicomParser(handler.ContentHandler):
                     if(child.tree_level-1 == container.tree_level and child.parent == container.concept):
                         self.dict_report.tree[key].containers.append(child.concept)
         #self.dict_report.imprime()
-                        
 
     def write_attributes_layout(self,filename,attributes,previous):
         #Variable where we store the previous concept id
@@ -261,7 +279,16 @@ class DicomParser(handler.ContentHandler):
                
                 #Write the end of the layout
                 self.xml_files.layouts[filename].write(END_LAYOUT) 
-                print
+
+                #Write the children's listView
+                self.xml_files.layouts[filename].write(Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=level+1))
+
+                values=[]
+                for concept in children.children_containers:
+                    values.append(concept.concept_name)
+                    print u"  -{0}".format(concept.concept_name).encode('utf-8')
+
+                print 
 
             except KeyError:
                  #It should go to logging error
@@ -308,12 +335,14 @@ class DicomParser(handler.ContentHandler):
                 print "Layouts can't be created"
              
     def write_layouts(self):
+        """ Write xml layouts and settings.java with the arrays needed to populate the listviews """
         #Set which files are going to be used as output in this parser
         #TODO: Layouts
         #TODO: Java files 
         # The files for the layout are linked to the odontology of the report
         logging.info("\nWRITE LAYOUTS")
         self.xml_filenames.set_odontology(self.dict_report.id_odontology)
+
         #Open for write all the files
         for level, layout in zip(xrange(1,self.deepest_level),self.xml_filenames.layouts.values()):
             print layout
@@ -329,17 +358,23 @@ class DicomParser(handler.ContentHandler):
                 
 
     def endDocument(self):
+        self.build_better_tree()
+
         # Write the default strings for every language
         for language_code, xml_filename in self.xml_filenames.strings.items():
             #English
             if (language_code == "en"):
                 self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS_TEMPLATE)
                                                            .safe_substitute(ENGLISH))
+                #Write default levels
                 self.xml_files.strings[xml_filename].write("\n\t<!-- Tree levels -->\n")
                 levels = self.get_levels_strings("en")
                 for level,name in levels.iteritems():
                     self.xml_files.strings[xml_filename].write(
                         "\t<string name=\"level_{0}\">{1}</string>\n".format(level,name))
+                print "ARRAYS"
+                #Write string arrays for the children
+                self.write_children("en")
             #Spanish
             elif (language_code == "es"):
                 self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS_TEMPLATE)
@@ -348,8 +383,7 @@ class DicomParser(handler.ContentHandler):
             self.xml_files.strings[xml_filename].write("\n</resources>")
 
         #self.report.imprime()
-        self.build_better_tree()
-        self.write_layouts()
+        #self.write_layouts()
         self.xml_files.close_files()
 
 

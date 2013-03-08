@@ -1,5 +1,6 @@
 #  -*- coding: utf-8 -*-
 from files_settings import *
+import re
 
 #{filename:<file>}
 class XMLFiles(object):
@@ -17,6 +18,29 @@ class XMLFiles(object):
         self.model[filename] = open(filename,'w')
         self.model[filename].write('SETTINGS_JAVA')
 
+    def get_container_meaning(self,code,filename):
+        """ Returns concept meaning given a filename and a concept_code"""
+        strings_file = open(filename)
+        for line in strings_file:
+            if (code in line):
+                m = re.search('>.+<', line)
+                strings_file.close()
+                return m.group(0)[1:-1]
+
+    def get_children_string(self,report_tree,filename):
+        """ Returns a dictionary with parent code as key and concept meaning as children """
+        level_array = {}
+        for dict_containers in report_tree.values():
+            for concept,children in dict_containers.containers.iteritems():
+                if (len(children.children_containers)>0):
+                    level_array[concept.concept_value]=[]
+                    for child in children.children_containers:
+                        child_meaning = self.get_container_meaning(
+                            "code_{0}".format(child.concept_value),filename)
+                        level_array[concept.concept_value].append(child_meaning)
+                        
+        return level_array
+        
     def close_java_class(self,filename):
         """ The filename points to a java class file
         Write the closing bracket for the java class
@@ -36,6 +60,7 @@ class XMLFiles(object):
         #map doesn't recognize close as a function `_´
         #map(close, self.layouts)
 
+#{code|level:filename}
 class AndroidFiles(object):
     def __init__(self):
         self.layouts = {}
