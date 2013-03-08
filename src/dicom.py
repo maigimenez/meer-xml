@@ -158,7 +158,7 @@ class Report(object):
             print
 
 
-
+ 
 
 """
 Dictionay implementation of the report
@@ -210,3 +210,6 @@ class DictReport(object):
     def get_level(self,level):
         return self.tree[level]
 
+
+    def get_tree(self):
+        return self.tree
