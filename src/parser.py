@@ -1,4 +1,4 @@
-#  -*- coding: utf-8 -*-
+  #  -*- coding: utf-8 -*-
 import sys
 import logging
 import codecs
@@ -215,6 +215,22 @@ class DicomParser(handler.ContentHandler):
                     self.xml_files.strings[filename].write(
                         "\t\t<item>{0}</item>\n".format(child))
                 self.xml_files.strings[filename].write("\t</string-array>\n")
+        if(language=="es"):
+            filename = self.xml_filenames.strings["es"]
+            print filename
+            self.xml_files.strings[filename].write("\n\t<!-- Children Arrays -->\n")
+            #Close the file to allow the search in read mode
+            self.xml_files.strings[filename].close()
+            level_array = self.xml_files. get_children_string(self.dict_report.tree,filename)
+            self.xml_files.strings[filename]= open(filename,'a')
+            print level_array
+            for parent, children in level_array.iteritems():
+                self.xml_files.strings[filename].write(
+                    "\t<string-array name=code_{0}-children>\n".format(parent))
+                for child in children:
+                    self.xml_files.strings[filename].write(
+                        "\t\t<item>{0}</item>\n".format(child))
+                self.xml_files.strings[filename].write("\t</string-array>\n")
 
 
     def build_tree(self):
@@ -379,6 +395,15 @@ class DicomParser(handler.ContentHandler):
             elif (language_code == "es"):
                 self.xml_files.strings[xml_filename].write(Template(DEFAULT_STRINGS_TEMPLATE)
                                                            .safe_substitute(SPANISH))
+                #Write default levels
+                self.xml_files.strings[xml_filename].write("\n\t<!-- Tree levels -->\n")
+                levels = self.get_levels_strings("es")
+                for level,name in levels.iteritems():
+                    self.xml_files.strings[xml_filename].write(
+                        "\t<string name=\"level_{0}\">{1}</string>\n".format(level,name))
+                print "ARRAYS"
+                #Write string arrays for the children
+                self.write_children("es")
             #Write the levels based on the odontology
             self.xml_files.strings[xml_filename].write("\n</resources>")
 
