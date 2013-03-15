@@ -1,6 +1,7 @@
-  #  -*- coding: utf-8 -*-
+#  -*- coding: utf-8 -*-
 import sys
 import logging
+import os
 import codecs
 from xml.sax import make_parser, handler
 from string import Template
@@ -9,7 +10,8 @@ from dicom import *
 from files import *
 from templates import * 
 from settings import *
- 
+
+
 
 class DicomParser(handler.ContentHandler):
     logging.basicConfig(filename='info.log',level=logging.INFO)
@@ -26,9 +28,11 @@ class DicomParser(handler.ContentHandler):
         self.inConcept = False
         self.inLevel = False
         self.repeated = False
+        self.in_unit_measurement = False
         #Store information read from xml
         self.current_attribute = None
         self.concept = None
+        self.unit_measurement = None
         # A list of the code values already writen in strings.xml
         self.code_values = []
         # Report-related variables
@@ -83,7 +87,10 @@ class DicomParser(handler.ContentHandler):
         if (name == "CONCEPT_NAME"):
             self.inConcept = True
             self.repeated = False
-            self.concept = Concept()
+            if (self.in_unit_measurement):
+                self.unit_measurement = Concept()
+            else:
+                self.concept = Concept()
         if (name == "DATE"):
             self.inType = True
             self.current_attribute = Date()        
@@ -93,6 +100,8 @@ class DicomParser(handler.ContentHandler):
         if (name == "NUM"):
             self.inType = True
             self.current_attribute = Num()
+        if (name == "UNIT_MEASUREMENT"):
+            self.in_unit_measurement = True
         if (name == "CODE_VALUE" or "CODE_MEANING" or "CODE_MEANING2"):
             self.inData = True
             self.buffer = ""
@@ -101,7 +110,10 @@ class DicomParser(handler.ContentHandler):
         if (name == "CODE_VALUE" or name=="CODE_MEANING" or "CODE_MEANING2"):
             self.inData = False
             if (name == "CODE_VALUE"):
-                self.concept.concept_value = self.buffer
+                if(not self.in_unit_measurement):
+                    self.concept.concept_value = self.buffer
+                else:
+                    self.unit_measurement.concept_value = self.buffer
                 # Check if the code value is already written in the strings.xml file
                 if (self.buffer not in self.code_values):
                     self.code_values.append(self.buffer)
@@ -111,7 +123,10 @@ class DicomParser(handler.ContentHandler):
                 else:
                     self.repeated = True
             elif (name == "CODE_MEANING"):
-                self.concept.concept_name = self.buffer
+                if (not self.in_unit_measurement):
+                    self.concept.concept_name = self.buffer
+                else: 
+                    self.unit_measurement.concept_name = self.buffer
                 if (not self.repeated):
                     #TODO: Comprobar que esto es verdad
                     # si la codificación es default "en" es el CODE_MEANING
@@ -137,7 +152,7 @@ class DicomParser(handler.ContentHandler):
                         self.report.return_parent(self.tree_level)))
                 #TODO: no va al log, s'imprimix per consola igual
                 #logging.info(self.report.imprime())
-            if (self.inType == False):
+            if (self.inType == False):   
                 self.concept = None
         if (name == "CONTAINER"):
             logging.info("* End tree level: {0}".format(self.tree_level))
@@ -161,11 +176,14 @@ class DicomParser(handler.ContentHandler):
             self.concept = None
         if (name == "NUM"):
             self.current_attribute.concept = self.concept
-            logging.info("    -> Num: {0}".format(self.current_attribute.concept))
+            self.current_attribute.unit_measurement = self.unit_measurement
+            logging.info("    -> Num: {0} - {1}".format(
+                    self.current_attribute.concept,self.current_attribute.unit_measurement))
             self.report.add_attribute(self.child_level,self.current_attribute)
             self.inType = False
             self.concept = None
-       
+        if (name == "UNIT_MEASUREMENT"):
+            self.in_unit_measurement = False       
        
     def characters(self,chars):
         if (self.inData):
@@ -189,7 +207,6 @@ class DicomParser(handler.ContentHandler):
             if(container.tree_level-1>0):
                 #If parent level does not exist we create it
                 if (container.tree_level-1 not in self.dict_report.tree):
-                    print "no soy el padre"
                     self.dict_report.tree[container.tree_level-1] = DictContainer()
                     if(container.parent not in self.dict_report.tree[container.tree_level-1].containers):
                         self.dict_report.tree[container.tree_level-1].containers[container.parent] = Children()
@@ -205,12 +222,12 @@ class DicomParser(handler.ContentHandler):
             self.xml_files.strings[filename].write("\n\t<!-- Children Arrays -->\n")
             #Close the file to allow the search in read mode
             self.xml_files.strings[filename].close()
-            level_array = self.xml_files. get_children_string(self.dict_report.tree,filename)
+            level_array = self.xml_files.get_children_string(self.dict_report.tree,filename)
             self.xml_files.strings[filename]= open(filename,'a')
             print level_array
             for parent, children in level_array.iteritems():
                 self.xml_files.strings[filename].write(
-                    "\t<string-array name=code_{0}-children>\n".format(parent))
+                    "\t<string-array name=\"code_{0}_children\">\n".format(parent))
                 for child in children:
                     self.xml_files.strings[filename].write(
                         "\t\t<item>{0}</item>\n".format(child))
@@ -226,7 +243,7 @@ class DicomParser(handler.ContentHandler):
             print level_array
             for parent, children in level_array.iteritems():
                 self.xml_files.strings[filename].write(
-                    "\t<string-array name=code_{0}-children>\n".format(parent))
+                    "\t<string-array name=\"code_{0}_children\">\n".format(parent))
                 for child in children:
                     self.xml_files.strings[filename].write(
                         "\t\t<item>{0}</item>\n".format(child))
@@ -274,12 +291,12 @@ class DicomParser(handler.ContentHandler):
             previous_item = "etext_%s" % attr.concept.concept_value 
             logging.info("New previous item: {0}".format(previous_item))
             print u"  {0} ".format(attr).encode('utf-8')
-            
+        return previous_item          
    
     def write_one_column_layout(self,filename_code,level,level_container):
         for concept,children in level_container.containers.iteritems():
             #Add the concept_value to the layout file and open the file for writting 
-            filename = Template(filename_code).safe_substitute(CODE=concept.concept_value)
+            filename = Template(filename_code).safe_substitute(CODE=concept.concept_value.lower())
             print filename, "One column"
             print concept
             self.xml_files.layouts[filename] = open(filename, 'w')
@@ -289,66 +306,131 @@ class DicomParser(handler.ContentHandler):
                 self.xml_files.layouts[filename].write(HEADER_LAYOUT)
                 self.xml_files.layouts[filename].write(MAIN_LAYOUT)    
                 #Write the main title
-                self.xml_files.layouts[filename].write(Template(TITLE_LAYOUT).safe_substitute(LEVEL=concept.concept_value))  
+                self.xml_files.layouts[filename].write(
+                    Template(TITLE_LAYOUT).safe_substitute(LEVEL=concept.concept_value))  
                 #Variable where we store the previous concept id
-                previous_item = "level_{0}_label".format(level)
+                previous_item = "level_{0}_label".format(concept.concept_value)
                
-                #Write the end of the layout
-                self.xml_files.layouts[filename].write(END_LAYOUT) 
-
                 #Write the children's listView
-                self.xml_files.layouts[filename].write(Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=level+1))
-
+                self.xml_files.layouts[filename].write(
+                    Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=concept.concept_value))
                 values=[]
                 for concept in children.children_containers:
                     values.append(concept.concept_name)
                     print u"  -{0}".format(concept.concept_name).encode('utf-8')
 
                 print 
+                #Write the end of the layout
+                self.xml_files.layouts[filename].write(END_LAYOUT) 
 
             except KeyError:
                  #It should go to logging error
                 print "Layouts can't be created"
+ 
 
+    def write_two_columns_layout_one_level(self,filename,level,concept,children):
+        print filename, "- Two columns"
+        self.xml_files.layouts[filename] = open(filename, 'w')
+        try:
+            print(" * {0}".format(concept))
+            #Write the header, main and left layout
+            self.xml_files.layouts[filename].write(HEADER_LAYOUT)
+            self.xml_files.layouts[filename].write(MAIN_LEFT_LAYOUT)    
+            
+            #There are only children in this layout
+            if (len(children.attributes)>0):
+                #Write the title
+                self.xml_files.layouts[filename].write(
+                    Template(GENERIC_TITLE_LAYOUT).safe_substitute(LEVEL=level))  
+                #Variable where we store the previous concept id
+                previous_item = "level_{0}_label".format(level)
+                num_attributes = len(children.attributes)
+                first_attributes = children.attributes[0:num_attributes/2]
+                last_attributes = children.attributes[num_attributes/2:]
+                #Write the attributes
+                previous_item = self.write_attributes_layout(filename,first_attributes,previous_item)
+                #Write the end of left layout, the right layout
+                self.xml_files.layouts[filename].write(RIGHT_LAYOUT) 
+                previous_item = self.write_attributes_layout(filename,last_attributes,previous_item)
+
+            
+            #There are only children in this layout
+            else:
+                #Write the title
+                self.xml_files.layouts[filename].write(
+                    Template(GENERIC_TITLE_LAYOUT).safe_substitute(LEVEL=level))  
+                #Variable where we store the previous concept id
+                previous_item = "level_{0}_label".format(level)
+
+                #TODO: this is not handled in the string-array, so the java activitity will NOT
+                #populate this properly
+                #Write the children
+                #Write the children's listView
+                self.xml_files.layouts[filename].write(
+                    Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=concept.concept_value+"-1"))
+                self.xml_files.layouts[filename].write(RIGHT_LAYOUT) 
+                self.xml_files.layouts[filename].write(
+                    Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=concept.concept_value+"2"))
+
+            #Write the end of the layout
+            self.xml_files.layouts[filename].write(END_LAYOUT) 
+            print
+            
+        except KeyError:
+            #It should go to logging error
+            print "Layouts can't be created"
+
+    def write_two_columns_layout_two_levels(self,filename,level,concept,children):
+        print filename, "- Two columns"
+        self.xml_files.layouts[filename] = open(filename, 'w')
+        try:
+            print(" * {0}".format(concept))
+            #Write the header, main and left layout
+            self.xml_files.layouts[filename].write(HEADER_LAYOUT)
+            self.xml_files.layouts[filename].write(MAIN_LEFT_LAYOUT)    
+            #Write the left title
+            self.xml_files.layouts[filename].write(Template(GENERIC_TITLE_LAYOUT).safe_substitute(LEVEL=level))  
+            #Variable where we store the previous concept id
+            previous_item = "level_{0}_label".format(level)
+               
+            #ATTRIBUTES
+            self.write_attributes_layout(filename,children.attributes,previous_item)
+
+            #Write the end of left layout, the right layout and the listView for the next layout
+            self.xml_files.layouts[filename].write(RIGHT_LAYOUT) 
+                
+            #CHILDREN
+            #Write the right title
+            self.xml_files.layouts[filename].write(Template(GENERIC_TITLE_LAYOUT).safe_substitute(LEVEL=level+1))
+            
+            #Write the children's listView
+            self.xml_files.layouts[filename].write(
+                Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=level+1))
+            #TODO: Children must be in a java array   
+            for concept in children.children_containers:
+                print u"  -{0}".format(concept.concept_name).encode('utf-8')
+
+            #Write the end of the layout
+            self.xml_files.layouts[filename].write(END_LAYOUT) 
+            print
+
+        except KeyError:
+            #It should go to logging error
+            print "Layouts can't be created"
 
     def write_two_columns_layout(self,filename_code,level,level_container):
         for concept,children in level_container.containers.iteritems():
             #Add the concept_value to the layout file and open the file for writting 
-            filename = Template(filename_code).safe_substitute(CODE=concept.concept_value)
-            print filename, "- Two columns"
-            self.xml_files.layouts[filename] = open(filename, 'w')
-            try:
-                print(" * {0}".format(concept))
-                #Write the header, main and left layout
-                self.xml_files.layouts[filename].write(HEADER_LAYOUT)
-                self.xml_files.layouts[filename].write(MAIN_LEFT_LAYOUT)    
-                #Write the left title
-                self.xml_files.layouts[filename].write(Template(GENERIC_TITLE_LAYOUT).safe_substitute(LEVEL=level))  
-                #Variable where we store the previous concept id
-                previous_item = "level_{0}_label".format(level)
-               
-                #ATTRIBUTES
-                self.write_attributes_layout(filename,children.attributes,previous_item)
-
-                #Write the end of left layout, the right layout and the listView for the next layout
-                self.xml_files.layouts[filename].write(RIGHT_LAYOUT) 
-                
-                #CHILDREN
-                #Write the right title
-                self.xml_files.layouts[filename].write(Template(GENERIC_TITLE_LAYOUT).safe_substitute(LEVEL=level+1))
-                #Write the children's listView
-                self.xml_files.layouts[filename].write(Template(NEXT_LEVEL_LAYOUT).safe_substitute(LEVEL=level+1))
-                #TODO: Children must be in a java array   
-                for concept in children.children_containers:
-                     print u"  -{0}".format(concept.concept_name).encode('utf-8')
-
-                #Write the end of the layout
-                self.xml_files.layouts[filename].write(END_LAYOUT) 
-                print
-
-            except KeyError:
-                 #It should go to logging error
-                print "Layouts can't be created"
+            filename = Template(filename_code).safe_substitute(CODE=concept.concept_value.lower())
+            #If the file already exists do not write the layout again. 
+            if (not os.path.isfile(filename)):
+                #Without children or attributes there will be only one level in the layout
+                if (len(children.attributes)==0 or len(children.children_containers)==0):
+                    print "One Level"
+                    self.write_two_columns_layout_one_level(filename,level,concept,children)
+                else:
+                    print "Two levels"
+                    self.write_two_columns_layout_two_levels(filename,level,concept,children)
              
     def write_layouts(self):
         """ Write xml layouts and settings.java with the arrays needed to populate the listviews """
@@ -360,7 +442,7 @@ class DicomParser(handler.ContentHandler):
         self.xml_filenames.set_odontology(self.dict_report.id_odontology)
 
         #Open for write all the files
-        for level, layout in zip(xrange(1,self.deepest_level),self.xml_filenames.layouts.values()):
+        for level, layout in zip(xrange(1,self.deepest_level+1),self.xml_filenames.layouts.values()):
             print layout
             #Get the actual level to write its layout
             dict_level = self.dict_report.get_level(level)

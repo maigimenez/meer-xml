@@ -64,7 +64,11 @@ class Num(Data_type):
     def __init__(self):
         Data_type.__init__(self)
         self.type = "num"
+        self.unit_measurement = Concept()
 
+    def __repr__(self):
+        return u"{0}: {1} - type({2})".format(
+            self.type,self.concept.concept_name,self.unit_measurement.concept_name)
 
 class Container(object):
     """This class stores a container tag from xml"""
