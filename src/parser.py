@@ -274,9 +274,12 @@ class DicomParser(handler.ContentHandler):
         #Attributes
         for attr in attributes:
             #Fill the substitution dictionary with this concept
-            CONCEPT_LAYOUT["CONCEPT_NAME"] =  attr.concept.concept_name
+            CONCEPT_LAYOUT = {}
+            CONCEPT_LAYOUT["CONCEPT_NAME"] = attr.concept.concept_name
             CONCEPT_LAYOUT["CONCEPT_VALUE"] = attr.concept.concept_value
             CONCEPT_LAYOUT["PREVIOUS_ITEM"] = previous_item
+            #print CONCEPT_LAYOUT
+            #print 
             #Write the xml for the attribute depending on its data type.
             if (attr.type == "date"):
                 self.xml_files.layouts[filename].write(
@@ -290,7 +293,7 @@ class DicomParser(handler.ContentHandler):
             #Now the previous value  has change, so we store the new one.
             previous_item = "etext_%s" % attr.concept.concept_value 
             logging.info("New previous item: {0}".format(previous_item))
-            print u"  {0} ".format(attr).encode('utf-8')
+            print u"  {0} ".format(attr).encode('utf-8')            
         return previous_item          
    
     def write_one_column_layout(self,filename_code,level,level_container):
@@ -490,7 +493,7 @@ class DicomParser(handler.ContentHandler):
             self.xml_files.strings[xml_filename].write("\n</resources>")
 
         #self.report.imprime()
-        #self.write_layouts()
+        self.write_layouts()
         self.xml_files.close_files()
 
 

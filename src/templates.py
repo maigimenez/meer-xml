@@ -119,7 +119,8 @@ END_LAYOUT="\t\t</RelativeLayout>\n"\
 
 """ Data type layouts """
 #TODO: find a better way to handle the tabs
-DATE_LAYOUT = "\n\t\t\t<!-- Date: ${CONCEPT_NAME} -->\n" \
+#DATE_LAYOUT = u"\n\t\t\t<!-- Date: ${CONCEPT_NAME} -->\n" \
+DATE_LAYOUT = "\n\t\t\t<!-- Date -->\n" \
 "\t\t\t<TextView android:id=\"@+id/label_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:text=\"@string/code_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
@@ -151,7 +152,8 @@ Right now num and text are being handle equally
 TODO: Improve this template!
 
 """
-NUM_LAYOUT = "\n\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
+#NUM_LAYOUT = u"\n\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
+NUM_LAYOUT = "\n\t\t\t<!-- Num: -->"\
 "\t\t\t<TextView android:id=\"@+id/label_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
@@ -168,7 +170,8 @@ NUM_LAYOUT = "\n\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
 "\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\" /> \n"\
 
-TEXT_LAYOUT = "\n\t\t\t<!-- Text: ${CONCEPT_NAME} -->\n" \
+#TEXT_LAYOUT = u"\n\t\t\t<!-- Text: ${CONCEPT_NAME} -->\n" \
+TEXT_LAYOUT ="\n\t\t\t<!-- Text  -->\n" \
 "\t\t\t<TextView android:id=\"@+id/label_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
@@ -185,7 +188,7 @@ TEXT_LAYOUT = "\n\t\t\t<!-- Text: ${CONCEPT_NAME} -->\n" \
 "\t\t\t\tandroid:layout_marginBottom=\"10dp\"\n"\
 "\t\t\t\tandroid:layout_marginLeft=\"20dp\" /> \n"\
 
-GENERIC_TITLE_LAYOUT = "\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
+GENERIC_TITLE_LAYOUT = u"\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_alignParentLeft=\"true\"\n"\
@@ -194,7 +197,7 @@ GENERIC_TITLE_LAYOUT = "\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_labe
 "\t\t\t\tandroid:text=\"@string/level_${LEVEL}\"\n"\
 "\t\t\t\tandroid:textAppearance=\"@android:style/TextAppearance.Large\" />\n"
 
-TITLE_LAYOUT = "\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
+TITLE_LAYOUT = u"\n\t\t\t <TextView android:id=\"@+id/level_${LEVEL}_label\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_alignParentLeft=\"true\"\n"\
