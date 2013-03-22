@@ -116,7 +116,6 @@ END_LAYOUT="\t\t</RelativeLayout>\n"\
 "\t</LinearLayout>\n"\
 "</RelativeLayout>\n"\
 
-
 """ Data type layouts """
 #TODO: find a better way to handle the tabs
 #DATE_LAYOUT = u"\n\t\t\t<!-- Date: ${CONCEPT_NAME} -->\n" \
@@ -153,7 +152,7 @@ TODO: Improve this template!
 
 """
 #NUM_LAYOUT = u"\n\t\t\t<!-- Num: ${CONCEPT_NAME} -->\n" \
-NUM_LAYOUT = "\n\t\t\t<!-- Num: -->"\
+NUM_LAYOUT = "\n\t\t\t<!-- Num: -->\n"\
 "\t\t\t<TextView android:id=\"@+id/label_${CONCEPT_VALUE}\"\n"\
 "\t\t\t\tandroid:layout_width=\"wrap_content\"\n"\
 "\t\t\t\tandroid:layout_height=\"wrap_content\"\n"\
