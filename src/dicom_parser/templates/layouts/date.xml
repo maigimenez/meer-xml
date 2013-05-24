@@ -1,0 +1,26 @@
+			<!-- Date {{ concept_name }}-->
+			<TextView android:id="@+id/label_{{ concept_value }}"
+				android:text="@string/code_{{ concept_value }}"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="20dp"
+				android:layout_below="@id/{{ previous_item }}"/>
+
+			<Button android:id="@+id/button_{{ concept_value }}"
+				android:text="@string/change"
+				android:layout_width="wrap_content" 
+				android:layout_height="wrap_content"
+				android:layout_below="@id/label_{{ concept_value }}"
+				android:layout_alignParentRight="true"
+ 				android:layout_alignBaseline="@+id/etext_{{ concept_value }}"/>
+
+			<EditText android:id="@id/etext_{{ concept_value }}"
+				android:text=""
+ 				android:hint="@string/code_{{ concept_value }}"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/label_{{ concept_value }}"
+				android:layout_toLeftOf="@id/button_{{ concept_value }}"
+ 				android:layout_marginBottom="10dp"
+				android:layout_marginLeft="20dp"
+ 				android:inputType="date" />

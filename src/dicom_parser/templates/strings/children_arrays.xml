@@ -1,0 +1,8 @@
+
+
+       <!-- Children Arrays -->
+       <string-array name="code_{{ parent_code }}_children">
+       {%- for child in children %}
+             <item>{{ child }}</item>
+       {%- endfor %}
+       </string-array>

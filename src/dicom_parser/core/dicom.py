@@ -1,4 +1,6 @@
  #  -*- coding: utf-8 -*-
+from config_variables import * 
+
 class Property(object):
     """This class manages the properties of a concept """
     def __init__(self):
@@ -11,18 +13,24 @@ class Property(object):
 
 class Concept(object):
     """ This class manages the concept"""
-    def __init__(self,concept_name="",concept_value=-1):
+    def __init__(self,concept_name={},concept_value=-1):
+        #print "init"
         self.concept_name = concept_name
         self.concept_value = concept_value
 
     def __str__(self):
-        return u"Concept name: {0} - Concept value: {1}".format(
-            self.concept_name, self.concept_value).encode('utf-8')
+        localized_strings = ""
+        for localized_string in self.concept_name.values():
+            localized_strings +=  localized_string + ", "
+        return u"Concept names: {0} - Concept value: {1}".format(
+            localized_strings, self.concept_value).encode('utf-8')
 
     def __repr__(self):
-        return u"Concept name: {0} - Concept value: {1}".format(
-            self.concept_name, self.concept_value).encode('utf-8')
-
+        localized_strings = ""
+        for localized_string in self.concept_name.values():
+            localized_strings +=  localized_string + ", "
+        return u"Concept names: {0} - Concept value: {1}".format(
+            localized_strings, self.concept_value).encode('utf-8')
 
 class Data_type(object):
     """This class manages a data type. 
@@ -66,9 +74,17 @@ class Num(Data_type):
         self.type = "num"
         self.unit_measurement = Concept()
 
+    def is_bool(self):
+        """ Return if a num data is boolean or not"""
+        unit_type = self.unit_measurement.concept_name.values()
+        if ("Unidades Boleanas" in unit_type or "Boolean Units" in unit_type):
+            return True
+        return False
+
     def __repr__(self):
         return u"{0}: {1} - type({2})".format(
             self.type,self.concept.concept_name,self.unit_measurement.concept_name)
+
 
 class Container(object):
     """This class stores a container tag from xml"""
@@ -103,30 +119,26 @@ class Report(object):
         self.report_type = ""
         self.id_odontology = -1
         # tree_level: Container()
-        self.containers = []
-
-    """ I store code values read in a local variable so there is no need of this, isnt't it?
-    def is_reapeted(self):
-        Return if the concept has been already stored in the report
-        so it has been already written in the strings.xml
-        
-    """
+        self._containers = []
         
     def add_attribute(self,child_level,current_attribute):
-        for container in self.containers:
+        """Add an attribute given the child level of the attribute and the attribute to add""" 
+        for container in self._containers:
             if ((container.tree_level == child_level) and container.open):
                 container.attributes.append(current_attribute)
                 return True
         return False
 
     def add_container(self,new_container):
-        return self.containers.append(new_container)
+        """Add a container to the report """ 
+        self._containers.append(new_container)
 
     #TODO:
     # Si n'hi han atributs al final tanqem abans d'hora
     # hi hauria d'utilitzar tree_level
     def close_level(self,child_level):
-        for container in self.containers:
+        """Close the container given a level of the attributes (child_level)"""
+        for container in self._containers:
             if ((container.tree_level == child_level) and container.open):
                 container.open = False
                 return True
@@ -141,29 +153,27 @@ class Report(object):
         tree level -- tree level we want to know the father
         
         """
-        for container in self.containers:
+        for container in self._containers:
             if(container.tree_level == tree_level-1 and container.open):
                 return container.concept
         return None
 
 
     def imprime(self):
-        """ Pretty print of a report """
-        print u"\n ------ {0} ---------- \n".format(self.report_type)
-        for container in self.containers:
+        """ Prettqy print of a report """
+        print u"\n ******** {0} ********* \n".format(self.report_type)
+        for container in self._containers:
             print u"(L{0}) {1} ({2}):".format(
                 container.tree_level,
-                container.concept.concept_name,
+                container.concept.concept_name.values(),
                 len(container.attributes)).encode('utf-8')
             for attr in container.attributes:
                 print u"    - {0} ({1})".format(
                     attr.concept.concept_name,
                     attr.type).encode('utf-8')
-            print
-
-
+            print 
+        
  
-
 """
 Dictionay implementation of the report
 """
@@ -178,12 +188,21 @@ class DictContainer(object):
         #Container's concept_name is the key and the values are its children (attributes and other containers)
         self.containers = {}
 
+
 class DictReport(object):
     def __init__(self, report_type="",id_odontology=-1):
         self.report_type = report_type
         self.id_odontology = id_odontology
         #This dictionary stores the report. Level is the key and the values are DictContainers
         self.tree = {}
+        
+    def get_deepest_level(self):
+        """ Return deepest level of the tree."""
+        deepest_level = -1
+        for level in self.tree.keys():
+            if (level>deepest_level):
+                deepest_level = level
+        return deepest_level
 
     """ Pretty print of a report """
     def imprime(self):
@@ -191,29 +210,79 @@ class DictReport(object):
         
         for level,dict_containers in self.tree.iteritems():
             for concept,children in dict_containers.containers.iteritems():
-                num_childs = len(self.tree[level].containers[concept].children_containers)
+                num_children = len(self.tree[level].containers[concept].children_containers)
                 num_attrs = len(self.tree[level].containers[concept].attributes)
-                print u"(L{0}) {1} (no.att: {2} - no.child:{3}):".format(
+                print u"(L{0}) {1} (no.attr: {2} - no.child:{3}):".format(
                     level,
                     concept.concept_name,
                     num_attrs,
-                    num_childs).encode('utf-8')
-            if(num_attrs > 0):
-                print u"  * Attributes"
-                for attr in self.tree[level].containers[concept].attributes:
-                    print u"    - {0} ({1})".format(
-                        attr.concept.concept_name,
-                        attr.type).encode('utf-8')
-            if (num_childs > 0):
-                print u"  * Childs"
-                for child in self.tree[level].containers[concept].children_containers:
-                    print u"    - {0}".format(child.concept_name).encode('utf-8')
+                    num_children).encode('utf-8')
+                if(num_attrs > 0):
+                    print u"  * Attributes"
+                    for attr in self.tree[level].containers[concept].attributes:
+                        if (attr.type == NUM and attr.is_bool()):
+                            attr_type = BOOL
+                        else:
+                            attr_type = attr.type
+                        print u"    - {0} ({1})".format(
+                            attr.concept.concept_name,
+                            attr_type).encode('utf-8')
+                if (num_children > 0):
+                    print u"  * Childs"
+                    for child in self.tree[level].containers[concept].children_containers:
+                        print u"    - {0}".format(child.concept_name).encode('utf-8')
                     
             print
 
     def get_level(self,level):
+        """ Retun the tree level given a level """
         return self.tree[level]
 
-
     def get_tree(self):
+        """ Return the dicom report in a dictionary """
         return self.tree
+
+    def get_odontology(self):
+        """ Return current report odontology """
+        return self.id_odontology
+    
+    def get_children(self):
+        """ Return a dictionary with the children of the report
+
+        The key is the concept_value of the parent and the value is a list 
+        whith the children concept meaning
+
+        """
+        children_dict = {}
+        for level,dict_containers in self.tree.iteritems():
+            for concept,children in dict_containers.containers.iteritems():
+                num_childs = len(self.tree[level].containers[concept].children_containers)
+                if (num_childs>0):
+                    children_dict[concept.concept_value] = []
+                    for child in self.tree[level].containers[concept].children_containers:
+                        children_dict[concept.concept_value].append(child.concept_name)
+        return  children_dict
+    
+    def get_data_form_report(self,language_code,template_type):
+        """ Return data from the report in a dictionary
+
+        Keyword:
+        language_code -- language for the data returned
+        template_type -- indicates the template type and therefore the information to extract from the report.
+        self -- Dict Report with the information extracted from the dicom XML.
+    
+        """
+        substitution_words = [] 
+        children_dict = self.get_children()
+        if (template_type in MULTIPLE_PROPERTIES.keys()):
+            for parent, children in children_dict.iteritems():
+                dict_aux = {MULTIPLE_PROPERTIES[template_type][0]:parent}
+                for child in children:
+                    if (MULTIPLE_PROPERTIES[template_type][1] not in dict_aux.keys()):
+                        dict_aux[MULTIPLE_PROPERTIES[template_type][1]] = [unicode(child[language_code])]
+                    else:
+                        dict_aux[MULTIPLE_PROPERTIES[template_type][1]].append(unicode(child[language_code]))
+                    #substitution_words[template_type].append(unicode(child[language_code]))
+            substitution_words.append(dict_aux)
+            
+        return substitution_words

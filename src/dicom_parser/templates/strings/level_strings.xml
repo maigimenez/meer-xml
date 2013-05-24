@@ -1,0 +1,5 @@
+    
+        <!-- Default tree levels -->
+	{%- for level in level_strings %}
+	<string name="level_{{ level['level_code'] }}">{{ level['level_meaning'] }}</string>
+    {%- endfor %}

@@ -3,10 +3,13 @@ import logging
 import os
 from string import Template
 from templates import *
+#from jinja2 import Enviroment,PackageLoaderT,emplate
 
 logging.basicConfig(filename='write-layouts.log',level=logging.INFO) 
 
 def write_attributes_layout(xml_files,filename,attributes,previous):
+    #template = Template('Hello {{ name }}')
+    #template.render(name=='John Doe')
     #Variable where we store the previous concept id
     previous_item = previous        
     #Attributes

@@ -1,0 +1,7 @@
+	<!--  ({{ level_num }}) {{ level_name }} -->
+	<string name="code_{{ root_code }}">{{ root_meaning }}</string>
+
+	<!--  ({{ level_num }}) {{ level_name }} : {{ attributes }} -->
+    {%- for attribute in attributes %}
+	<string name="code_{{attribute['code']}}">{{attribute['meaning']}}</string>
+    {%- endfor %}

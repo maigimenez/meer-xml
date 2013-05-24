@@ -1,6 +1,8 @@
 #  -*- coding: utf-8 -*-
-from files_settings import *
 import re
+from config import ( get_substitution_options,get_filepath,get_language_section_options, 
+    get_property, get_property_interpolation , get_filepath_odontology )
+from config_variables import *
 
 #{filename:<file>}
 class XMLFiles(object):
@@ -13,6 +15,7 @@ class XMLFiles(object):
         # CODE_MEANING - CODE_MEANING2
         self.language_match = {}
     
+    #TODO: This is method is obsolete
     def write_java_settings(self,filename):
         """ Write the basic structure for settings.java """
         self.model[filename] = open(filename,'w')
@@ -68,13 +71,31 @@ class AndroidFiles(object):
         #There is no point for the variable model to be a dictionary here. We don't need the key
         self.model = []
         #Set the model classes. At this point we know that at least we will need a settings class.
-        self.model.append(SETTINGS_CLASS)
+        #self.model.append(SETTINGS_CLASS)
         self.activities={}
 
-    def set_odontology(self,id_odontology):
-        self.layouts = LAYOUTS_DICTIONARY[int(id_odontology)]
-        self.activities = ACTIVITIES_DICTIONARY[int(id_odontology)]        
+
+    #ef set_odontology(self,id_odontology):
+    #   self.layouts = LAYOUTS_DICTIONARY[int(id_odontology)]
+    #   self.activities = ACTIVITIES_DICTIONARY[int(id_odontology)]        
     
+    def set_odontology(self,id_odontology):
+        """ Set the filenames for of layouts and android activities using the report odontology id """
+        self.layouts = get_filepath_odontology(id_odontology,LAYOUTS)
+
+    #TODO: Move this to config.py
     def set_languages(self,languages=""):
-        self.strings = STRINGS_DICTIONARY[languages]
-        self.language_match = LANGUAGE_DICTIONARY[languages]
+        section,options = get_language_section_options(languages)
+
+        #Get default strings
+        default_section = XML_STRINGS_SECTION
+        default_options = get_substitution_options(default_section)
+        output_directory = get_filepath('Strings')
+        defaults = {}
+        for default_option in default_options:
+            defaults[default_option]= get_property(default_section,default_option)
+        #Populate the dictionary where the key is the DICOM XML tag and the value is the filename.
+        for option in options:
+            self.strings[option.upper()] = ( output_directory+'/'+
+                                             get_property_interpolation(section,option,False,defaults))
+            

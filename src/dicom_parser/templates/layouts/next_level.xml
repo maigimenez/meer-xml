@@ -1,0 +1,6 @@
+
+			<ListView android:id="@+id/children_{{code}}_list"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/level_{{ parent_code }}_label" >
+			</ListView>
