@@ -2,14 +2,14 @@
 import sys
 import logging
 import xml.sax
-from core.dicom import *
-from core.files import *
-from core.config import *
+from core.dicom import (Report, Concept, Container, Date, Text, Num,
+                        DictReport, DictContainer, Children)
+from core.config import get_language_code
 
-    
+
 class DicomParser(xml.sax.handler.ContentHandler):
     #TODO: Improve the logging system
-    logging.basicConfig(filename='info.log',level=logging.INFO)
+    logging.basicConfig(filename='info.log', level=logging.INFO)
 
     def __init__(self):
         """ Init all the internal variables """
@@ -35,14 +35,20 @@ class DicomParser(xml.sax.handler.ContentHandler):
         self._report = Report()
         self._dict_report = None
 
-    def parse(self,xml_file):
-        """ Parse the file using this handler. Returns the report using a DictReport """
-        xml.sax.parse(xml_file,self)
+    def parse(self, xml_file):
+        """ Parse the file using this handler.
+        Returns the report using a DictReporT.
+
+        Keyword Argument:
+        xml_file  -- XML file in DICOM format to parse
+
+        """
+        xml.sax.parse(xml_file, self)
         return self._dict_report
 
     def startElement(self, name, attrs):
         """ Handles start of a tag """
-        #XML root: stores the odontology 
+        #XML root: stores the odontology
         if (name == "DICOM_SR"):
             try:
                 self._report.report_type = attrs['Description']
@@ -52,14 +58,14 @@ class DicomParser(xml.sax.handler.ContentHandler):
                 self._report.report_type = attrs['reportType']
         #Begin of a container tag
         if (name == "CONTAINER"):
-            # We are in a new (deeper) tree level 
+            # We are in a new (deeper) tree level
             self._tree_level += 1
             if (self._tree_level > self._deepest_level):
-                self._deepest_level = self._tree_level 
+                self._deepest_level = self._tree_level
             self._in_level = True
             logging.info('* Tree level {0}'.format(self._tree_level))
         #Begin of child tag
-        if (name == "CHILDS"): 
+        if (name == "CHILDS"):
             # We are in a new (deeper) child level
             self._child_level += 1
             self._in_level = False
@@ -70,12 +76,12 @@ class DicomParser(xml.sax.handler.ContentHandler):
             #Unit measurement tag also has a concept name
             #It explains the unit measurement type (boolean units basically)
             if (self._in_unit_measurement):
-                self._unit_measurement = Concept({},-1)
+                self._unit_measurement = Concept({}, -1)
             else:
-                self._concept = Concept({},-1)
+                self._concept = Concept({}, -1)
         if (name == "DATE"):
             self._in_type = True
-            self._current_attribute = Date()        
+            self._current_attribute = Date()
         if (name == "TEXT"):
             self._in_type = True
             self._current_attribute = Text()
@@ -87,106 +93,125 @@ class DicomParser(xml.sax.handler.ContentHandler):
         if (name == "CODE_VALUE" or "CODE_MEANING" or "CODE_MEANING2"):
             self._in_data = True
             self._buffer = ''
-    
-    def endElement(self,name):
+
+    def endElement(self, name):
         """ Store data read in the report internal variable """
-        if (name == "CODE_VALUE" or name=="CODE_MEANING" or "CODE_MEANING2"):
+        if(name == "CODE_VALUE" or name == "CODE_MEANING"
+           or name == "CODE_MEANING2"):
             self._in_data = False
             if (name == "CODE_VALUE"):
                 if(not self._in_unit_measurement):
                     self._concept.concept_value = self._buffer
                 else:
                     self._unit_measurement.concept_value = self._buffer
-                # Check if the code value is already written in the strings.xml file
+                # Check if the code value is already written
+                # in the strings.xml file
                 if (self._buffer not in self._code_values):
                     self._code_values.append(self._buffer)
                 else:
                     self._repeated = True
             elif (name == "CODE_MEANING" or name == "CODE_MEANING2"):
-                #If it's a unit measurement this is the end of a concept
-                #If there are 2 languages (CODE_MEANING and CODE_MEANING2) in the report tree 
-                #It's stored concept name of the main langage (CODE_MEANING)
+                # If it's a unit measurement this is the end of a concept
+                # If there are 2 languages (CODE_MEANING and CODE_MEANING2) in
+                # the report tree It's stored concept name of the main langage
+                # (CODE_MEANING)
+                # TODO: pass language code  with a variable (not sys.argv)
                 if (not self._in_unit_measurement):
-                    self._concept.concept_name[get_language_code(name,sys.argv[2])] = self._buffer
+                    self._concept.concept_name[
+                        get_language_code(name, sys.argv[2])] = self._buffer
                 #The attribute is a Num type and we store its unit measurement
-                elif(self._in_unit_measurement): 
-                    self._unit_measurement.concept_name[get_language_code(name,sys.argv[2])] = self._buffer
+                elif(self._in_unit_measurement):
+                    self._unit_measurement.concept_name[
+                        get_language_code(name, sys.argv[2])] = self._buffer
         if (name == "CONCEPT_NAME"):
             self._in_concept = False
-            #This is the end of a concept name tag, if in_level is true 
+            #This is the end of a concept name tag, if in_level is true
             #this concept will be the level ID
             if (self._in_level):
                 logging.info(self._concept)
-                self._report.add_container(Container(
-                        self._concept,self._tree_level,True,
-                        self._report.return_parent(self._tree_level)))
+                self._report.add_container(
+                    Container(self._concept, self._tree_level, True,
+                              self._report.return_parent(self._tree_level)))
                 #TODO: no va al log, s'imprimix per consola igual
                  #logging.info(self._report.imprime())
-            if (self._in_type == False):   
+            if (self._in_type is False):
                 self._concept = None
         if (name == "CONTAINER"):
             logging.info("* End tree level: {0}".format(self._tree_level))
             self._tree_level -= 1
             self.currentLevel = None
-        if (name == "CHILDS"): 
+        if (name == "CHILDS"):
             logging.info("* End of child-level: {0}".format(self._child_level))
             self._report.close_level(self._child_level)
             self._child_level -= 1
         if (name == "DATE"):
             self._current_attribute.concept = self._concept
-            logging.info("    -> Date: {0}".format(self._current_attribute.concept))
+            logging.info(
+                "    -> Date: {0}".format(self._current_attribute.concept))
             self._in_type = False
             self._concept = None
-            self._report.add_attribute(self._child_level,self._current_attribute)
+            self._report.add_attribute(
+                self._child_level, self._current_attribute)
         if (name == "TEXT"):
             self._current_attribute.concept = self._concept
-            logging.info("    -> Text: {0}".format(self._current_attribute.concept))
-            self._report.add_attribute(self._child_level,self._current_attribute)
+            logging.info(
+                "    -> Text: {0}".format(self._current_attribute.concept))
+            self._report.add_attribute(
+                self._child_level, self._current_attribute)
             self._in_type = False
             self._concept = None
         if (name == "NUM"):
             self._current_attribute.concept = self._concept
             self._current_attribute.unit_measurement = self._unit_measurement
-            logging.info("    -> Num: {0} * {1}".format(
-                    self._current_attribute.concept,self._current_attribute.unit_measurement))
-            self._report.add_attribute(self._child_level,self._current_attribute)
+            logging.info(
+                "    -> Num: {0} * {1}".format(
+                    self._current_attribute.concept,
+                    self._current_attribute.unit_measurement))
+            self._report.add_attribute(
+                self._child_level, self._current_attribute)
             self._in_type = False
             self._concept = None
         if (name == "UNIT_MEASUREMENT"):
-            self._in_unit_measurement = False       
+            self._in_unit_measurement = False
 
-    def characters(self,chars):
+    def characters(self, chars):
         """ Store the characters read in a buffer """
         if (self._in_data):
             self._buffer += chars
 
     def build_tree(self):
-        """ Build a dictionary tree using the information read in the file. Returnd this dictionary report """
-        self._dict_report = DictReport(self._report.report_type,self._report.id_odontology)
-        logging.info(u"Dictionary report  type: {0} ({1})".format(self._dict_report.report_type,
-                                                                  self._dict_report.id_odontology).encode('utf-8'))
+        """ Build a dictionary tree using the information read in the file.
+        Return this dictionary report """
+        self._dict_report = DictReport(self._report.report_type,
+                                       self._report.id_odontology)
+        logging.info(
+            u"Dictionary report  type: {0} ({1})".format(
+                self._dict_report.report_type,
+                self._dict_report.id_odontology).encode('utf-8'))
         for container in self._report._containers:
             #If the level doesn't exist I created it
             if (container.tree_level not in self._dict_report.tree):
                 self._dict_report.tree[container.tree_level] = DictContainer()
             #We assume that concept is unique in the xml file
-            self._dict_report.tree[container.tree_level].containers[container.concept] = Children()
+            self._dict_report.tree[container.tree_level].containers[
+                container.concept] = Children()
             #TODO: check if this structure is the most suitable
-            self._dict_report.tree[
-                container.tree_level].containers[container.concept].attributes = container.attributes
+            self._dict_report.tree[container.tree_level].containers[
+                container.concept].attributes = container.attributes
             #If we are not in the root, this container has a parent
-            if(container.tree_level-1>0):
+            if(container.tree_level - 1 > 0):
                 #If parent level does not exist we create it
-                if (container.tree_level-1 not in self._dict_report.tree):
-                    self._dict_report.tree[container.tree_level-1] = DictContainer()
-                    if(container.parent not in self._dict_report.tree[container.tree_level-1].containers):
-                        self._dict_report.tree[container.tree_level-1].containers[container.parent] = Children()
-                self._dict_report.tree[
-                    container.tree_level-1].containers[
-                    container.parent].children_containers.append(container.concept)
-        #self._dict_report.imprime()
+                if (container.tree_level - 1 not in self._dict_report.tree):
+                    self._dict_report.tree[
+                        container.tree_level - 1] = DictContainer()
+                    if(container.parent not in self._dict_report.tree[
+                            container.tree_level - 1].containers):
+                        self._dict_report.tree[container.tree_level - 1].\
+                            containers[container.parent] = Children()
+                self._dict_report.tree[container.tree_level - 1].\
+                    containers[container.parent].children_containers.\
+                    append(container.concept)
 
     def endDocument(self):
         """ Build the report tree and close the string files """
         self.build_tree()
-            
