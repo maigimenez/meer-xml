@@ -34,26 +34,11 @@ class DicomParser(xml.sax.handler.ContentHandler):
         # Report-related variables
         self._report = Report()
         self._dict_report = None
-        # XML files {filename(key):file(value)}
-        #self._xml_filenames = filenames
-        #self._xml_files = {}
 
     def parse(self,xml_file):
         """ Parse the file using this handler. Returns the report using a DictReport """
         xml.sax.parse(xml_file,self)
         return self._dict_report
-
-    #def startDocument(self):
-        #"""
-        #Open every strings file in write mode an writes the heading strings. 
-        #xml_files it's a dictionary that stores the filename as key and the file object as value
-#
- #       """
-        #for strings_filename in self._xml_filenames.values():
-        #    self._xml_files[strings_filename] = open(strings_filename, 'w')
-        #    self._xml_files[strings_filename].write('<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
-        #    self._xml_files[strings_filename].write('<resources>\n')
-
 
     def startElement(self, name, attrs):
         """ Handles start of a tag """
@@ -73,29 +58,12 @@ class DicomParser(xml.sax.handler.ContentHandler):
                 self._deepest_level = self._tree_level 
             self._in_level = True
             logging.info('* Tree level {0}'.format(self._tree_level))
-            #for dicom_tag,xml_filename in self._xml_filenames.items():
-            #    level_name = get_odontology_level(
-            #        odontology_id = self._report.id_odontology,
-            #        tree_level = self._tree_level,
-            #        dicom_tag=dicom_tag,
-            #        languages_tag=sys.argv[2])
-            #    self._xml_files[xml_filename].write(
-            #        "\n\t<!--  ({0}) {1} -->\n".format(self._tree_level,level_name))
-
         #Begin of child tag
         if (name == "CHILDS"): 
             # We are in a new (deeper) child level
             self._child_level += 1
             self._in_level = False
             logging.info('* Child level {0}'.format(self._child_level))
-            #for dicom_tag,xml_filename in self._xml_filenames.items():
-            #    level_name = get_odontology_level(
-            #        odontology_id = self._report.id_odontology,
-            #        dicom_tag = dicom_tag,
-            #        languages_tag = sys.argv[2],
-            #        tree_level=self._tree_level)
-            #    self._xml_files[xml_filename].write(
-            #        "\n\t<!-- ({0}) {1} -->\n".format(self._tree_level,level_name))
         if (name == "CONCEPT_NAME"):
             self._in_concept = True
             self._repeated = False
@@ -119,7 +87,6 @@ class DicomParser(xml.sax.handler.ContentHandler):
         if (name == "CODE_VALUE" or "CODE_MEANING" or "CODE_MEANING2"):
             self._in_data = True
             self._buffer = ''
-
     
     def endElement(self,name):
         """ Store data read in the report internal variable """
@@ -133,13 +100,6 @@ class DicomParser(xml.sax.handler.ContentHandler):
                 # Check if the code value is already written in the strings.xml file
                 if (self._buffer not in self._code_values):
                     self._code_values.append(self._buffer)
-                    #for xml_string in self._xml_files.values():
-                    #    if (not self._in_unit_measurement):
-                    #        xml_string.write(u"\t<string name=\"code_{0}\">".
-                    #                         format(self._concept.concept_value).encode('utf-8'))
-                    #    else:
-                    #        xml_string.write(u"\t<string name=\"code_{0}\">".
-                    #                         format(self._unit_measurement.concept_value).encode('utf-8'))
                 else:
                     self._repeated = True
             elif (name == "CODE_MEANING" or name == "CODE_MEANING2"):
@@ -151,11 +111,6 @@ class DicomParser(xml.sax.handler.ContentHandler):
                 #The attribute is a Num type and we store its unit measurement
                 elif(self._in_unit_measurement): 
                     self._unit_measurement.concept_name[get_language_code(name,sys.argv[2])] = self._buffer
-                #If the concept it's not reapeated it will be written.
-                #if (not self._repeated):
-                #    filename = self._xml_filenames[name]
-                #    self._xml_files[filename].write(u"{0}</string>\n".
-                 #                                  format(self._buffer).encode('utf-8'))
         if (name == "CONCEPT_NAME"):
             self._in_concept = False
             #This is the end of a concept name tag, if in_level is true 
@@ -205,7 +160,6 @@ class DicomParser(xml.sax.handler.ContentHandler):
         if (self._in_data):
             self._buffer += chars
 
-
     def build_tree(self):
         """ Build a dictionary tree using the information read in the file. Returnd this dictionary report """
         self._dict_report = DictReport(self._report.report_type,self._report.id_odontology)
@@ -232,11 +186,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
                     container.parent].children_containers.append(container.concept)
         #self._dict_report.imprime()
 
-
     def endDocument(self):
         """ Build the report tree and close the string files """
-        #self._report.imprime()
         self.build_tree()
-        #for xml_file in self._xml_files.values():
-        #    xml_file.close()
             
