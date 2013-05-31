@@ -1,5 +1,6 @@
  #  -*- coding: utf-8 -*-
 from config_variables import * 
+from config import get_odontology_level
 
 class Property(object):
     """This class manages the properties of a concept """
@@ -263,7 +264,7 @@ class DictReport(object):
                         children_dict[concept.concept_value].append(child.concept_name)
         return  children_dict
     
-    def get_data_form_report(self,language_code,template_type):
+    def get_data_form_report(self,languages,template_type):
         """ Return data from the report in a dictionary
 
         Keyword:
@@ -272,17 +273,75 @@ class DictReport(object):
         self -- Dict Report with the information extracted from the dicom XML.
     
         """
-        substitution_words = [] 
+        substitution_words = []
         children_dict = self.get_children()
         if (template_type in MULTIPLE_PROPERTIES.keys()):
-            for parent, children in children_dict.iteritems():
-                dict_aux = {MULTIPLE_PROPERTIES[template_type][0]:parent}
-                for child in children:
-                    if (MULTIPLE_PROPERTIES[template_type][1] not in dict_aux.keys()):
-                        dict_aux[MULTIPLE_PROPERTIES[template_type][1]] = [unicode(child[language_code])]
-                    else:
-                        dict_aux[MULTIPLE_PROPERTIES[template_type][1]].append(unicode(child[language_code]))
-                    #substitution_words[template_type].append(unicode(child[language_code]))
-            substitution_words.append(dict_aux)
-            
+            #Dictionary for a dicom level substitution
+            if (template_type == DICOM_LEVEL):
+                written_codes = []
+                for level,dict_containers in self.tree.iteritems():
+                    for concept,children in dict_containers.containers.iteritems():
+                        dict_aux = {}
+                        for language in languages:
+                            dict_aux[language] = {}
+                        # Write concepts.
+                        # A concept can be repeated but not its attributes. 
+                        if (concept.concept_value not in written_codes):
+                            #print "????????", concept.concept_value
+                            level_names = {}
+                            # TODO: Think a better way to reduce this complexity. 
+                            for language in languages:
+                            #Init the ditionary to store all languages.
+                               # dict_aux[language] = {}
+                                level_names[language] = unicode(get_odontology_level(
+                                        odontology_id=self.get_odontology(),
+                                        tree_level=level,
+                                        languages_tag=language),"utf-8")
+                            #print level, concept.concept_value, level_names
+                            # Level information
+                                dict_aux[language] = {MULTIPLE_PROPERTIES[template_type][0]:level}
+                            #print unicode(level_names[language])
+                                dict_aux[language][MULTIPLE_PROPERTIES[template_type][1]] = level_names[language]
+                            # Parent node information
+                                dict_aux[language][MULTIPLE_PROPERTIES[template_type][2]] = concept.concept_value
+                                dict_aux[language][MULTIPLE_PROPERTIES[template_type][3]] = concept.concept_name[language]
+                                written_codes.append(concept.concept_value)
+                        # Write Attributes
+                        num_attrs = len(self.tree[level].
+                                        containers[concept].attributes)
+                        # Write attributes if there are any.
+                        if(num_attrs > 0):
+                            for language in languages:
+                                dict_aux[language][MULTIPLE_PROPERTIES[template_type][4]]=[]
+                                for attr in (self.tree[level].
+                                             containers[concept].attributes):
+                                    attrs_aux = {}
+                                    if (attr.concept.concept_value not in written_codes):
+                                        attrs_aux[MULTIPLE_PROPERTIES[template_type][5]] = attr.concept.concept_value
+                                        attrs_aux[MULTIPLE_PROPERTIES[template_type][6]] = attr.concept.concept_name[language]
+                                        written_codes.append(attr.concept.concept_value)
+                                        dict_aux[language][MULTIPLE_PROPERTIES[template_type][4]].append(attrs_aux)
+                                        # print dict_aux
+                                        # print 
+                                        # print "******************"
+                        substitution_words.append(dict_aux)
+                    
+            else:
+                #print children_dict
+                for parent, children in children_dict.iteritems():
+                    dict_aux = {}
+                    for language in languages:
+                        dict_aux[language] = {MULTIPLE_PROPERTIES[template_type][0]:parent}
+                    for child in children:
+                        # TODO: If I expect handle X languages but in the report there are Y languages, this will throw an error. Solve this. 
+                        for language in languages:
+                            if (MULTIPLE_PROPERTIES[template_type][1] not in dict_aux[language].keys()):
+                                dict_aux[language][MULTIPLE_PROPERTIES[template_type][1]] = [unicode(child[language])]
+                            else:
+                                dict_aux[language][MULTIPLE_PROPERTIES[template_type][1]].append(unicode(child[language]))
+                    #print dict_aux
+                    substitution_words.append(dict_aux)
+        #print "********", substitution_words
+        #print
+        #print
         return substitution_words

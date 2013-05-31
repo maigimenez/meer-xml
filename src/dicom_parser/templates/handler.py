@@ -16,7 +16,7 @@ from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    DEFAULT_INPUT, GENERIC_TITLE, NUM, END,
                                    NEXT_LEVEL, DATE, TEXT, STRINGS,
                                    DEFAULT_STRINGS, LEVEL_STRINGS,
-                                   CHILDREN_ARRAYS)
+                                   CHILDREN_ARRAYS,DICOM_LEVEL)
 
 
 def get_languages(language_code):
@@ -50,7 +50,7 @@ def set_environment(template_type):
 
 #TODO: Capture the exceptions
 def substitute_words(environment, section,
-                     template_name, language_code, template_var):
+                     template_name, languages, template_var):
     """ Return localized strings
     in a dictionary if it is not multiple substitution or
     in a list of dictiories if there are multiple substitutions
@@ -62,14 +62,16 @@ def substitute_words(environment, section,
     language_code -- code for the dicom tags.
                      it has a relation of the supported languages.
     template_var -- string with the template var name from config_variables
-
+    
     """
     # Get the jinja2 template
     template = environment.get_template(template_name)
     # Get the localized words for being replace in the template
-    substitution_words = get_substitution_dictionary(language_code,
-                                                     section, template_var)
-    return template.render(substitution_words)
+    localized_strings = {}
+    for language in languages:
+        localized_strings[language] = template.render(get_substitution_dictionary(language,
+                                                                   section, template_var))
+    return localized_strings
 
 
 def get_localized_report(environment, template_name, language_code,
@@ -87,16 +89,33 @@ def get_localized_report(environment, template_name, language_code,
     """
     localized_strings = []
     template = environment.get_template(template_name)
-    substitution_words = report.get_data_form_report(
+    substitution_words_list = report.get_data_form_report(
         language_code, template_var)
+
+    #print substitution_words_list
+    #print
     #From report we get multiple substitution_words.
     #We render each set of words for the template
-    for substitution_word in substitution_words:
-        localized_strings.append(template.render(substitution_word))
+    for substitution_words in substitution_words_list:
+        #print "*****", substitution_words
+        #print 
+        #print
+        strings_render = {}
+        for language, substitution_word in substitution_words.iteritems():
+            #print substitution_word
+            #print
+            strings_render[language] = template.render(substitution_word)
+            # if (language == 'es_ES'):
+            #     print substitution_word
+            #     print 
+            #     print
+            #     print template.render(substitution_word)
+            #     print
+        localized_strings.append(strings_render)
     return localized_strings
 
 
-def write_template(template, language, xml_file, report=None):
+def write_template(template, languages, xml_files, report=None):
     """ Write a piece of localized template
 
     Keyword Arguments:
@@ -107,6 +126,7 @@ def write_template(template, language, xml_file, report=None):
     report -- dicom report where information is taken.
 
     """
+   # print template
     #Set the section of the template name for the strings.
     if (report is not None):
         if (template in TEMPLATE_BY_ID):
@@ -125,14 +145,27 @@ def write_template(template, language, xml_file, report=None):
         #Get localized strings from report or form properties
         if (template in TEMPLATE_BY_REPORT):
             localized_strings = get_localized_report(
-                env, template_filename, language, template, report)
+                env, template_filename, languages, template, report)
+            print localized_strings[0]['es_ES']
         else:
-            localized_strings = substitute_words(
-                env, section, template_filename, language, template)
+            localized_strings = [substitute_words(
+                    env, section, template_filename, languages, template)]
+
         #Write the localized string
-        for localized_string in localized_strings:
-            xml_file.write(
-                u'{0}'.format(localized_string).encode('utf-8'))
+        #if (template == 'dicom_level'):
+            #print "?????", localized_strings
+            #for localized_block in localized_strings:
+            #    for language, localized_string in localized_block.iteritems():
+             #       if (language == 'es_ES'):
+                        #print localized_string
+              ###          print 
+                 #       print
+        #print template
+        #print 
+        for localized_block in localized_strings:
+            for language, localized_string in localized_block.iteritems():
+                xml_files[language].write(
+                    u'{0}'.format(localized_string).encode('utf-8'))
 
 
 def write_strings(language_code, report):
@@ -144,51 +177,69 @@ def write_strings(language_code, report):
     """
     #Get supported languages.
     languages = get_languages(language_code)
+    strings_filename = {}
+    strings_files = {}
+    # Get and open current language file
     for language in languages:
+        strings_filename[language] = get_xml_filepath(language, STRINGS)
+        strings_files[language] = open(strings_filename[language], 'w')
+        strings_files[language].write(u'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
+        strings_files[language].write(u'<resources>')
+    
+    # Write default strings for every language and close the resources
+    write_template(DICOM_LEVEL,languages,strings_files,report)
+    #write_template(DEFAULT_STRINGS, languages, strings_files)
+    #write_template(LEVEL_STRINGS, languages, strings_files, report)
+    #write_template(CHILDREN_ARRAYS, languages, strings_files, report)
+
+    # Write closing tags for the xml files
+    for language in languages:
+        strings_files[language].write(u'\n</resources>')
+        strings_files[language].close()
+
+
+    #or language in languages:
         # Get and open current language file
-        strings_filename = get_xml_filepath(language, STRINGS)
-        strings_file = open(strings_filename, 'w')
+        #trings_filename = get_xml_filepath(language, STRINGS)
+        #trings_file = open(strings_filename, 'w')
         # Varible where store written attributes so
         # attributes aren't wrote 2 times.
-        written_attrs = []
+        #ritten_attrs = []
         # Write start strings xml tags
-        strings_file.write(u'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
-        strings_file.write(u'<resources>')
+        
+        #
         # Write attributes for every level.
-        for level, dict_containers in report.tree.iteritems():
-            for concept, children in dict_containers.containers.iteritems():
-                level_name = get_odontology_level(
-                    odontology_id=report.get_odontology(),
-                    tree_level=level,
-                    languages_tag=language)
-                # Write level meaning
-                strings_file.write(
-                    "\n\t<!-- ({0}) {1} -->\n".format(level, level_name))
-                num_attrs = len(report.tree[level].
-                                containers[concept].attributes)
-                strings_file.write(
-                    u"\t<string name=\"code_{0}\">{1}</sting>\n"
-                    .format(concept.concept_value,
-                            concept.concept_name[language]).encode('utf-8'))
-                # Write attributes if there are any.
-                if(num_attrs > 0):
-                    for attr in (report.tree[level].
-                                 containers[concept].attributes):
-                        if (attr.concept.concept_value not in written_attrs):
-                            strings_file.write(
-                                u"\t<string name=\"code_{0}>{1}</sting>\n"
-                                .format(attr.concept.concept_value,
-                                        attr.concept.concept_name[language])
-                                .encode('utf-8'))
-                            # Add this attribute to writen attributes list
-                            written_attrs.append(attr.concept.concept_value)
-        # Write default strings for every language and close the resources
-        write_template(DEFAULT_STRINGS, language, strings_file)
-        write_template(LEVEL_STRINGS, language, strings_file, report)
-        write_template(CHILDREN_ARRAYS, language, strings_file, report)
-        # Write closing tags for the xml files
-        strings_file.write('\n</resources>')
-        strings_file.close()
+        # for level, dict_containers in report.tree.iteritems():
+        #     for concept, children in dict_containers.containers.iteritems():
+        #         level_name = get_odontology_level(
+        #             odontology_id=report.get_odontology(),
+        #             tree_level=level,
+        #             languages_tag=language)
+        #         # # Write level meaning
+        #         strings_file.write(
+        #              "\n\t<!-- ({0}) {1} -->\n".format(level, level_name))
+        #         num_attrs = len(report.tree[level].
+        #                         containers[concept].attributes)
+        #         strings_file.write(
+        #             u"\t<string name=\"code_{0}\">{1}</string>\n"
+        #             .format(concept.concept_value,
+        #                     concept.concept_name[language]).encode('utf-8'))
+        #         # Write attributes if there are any.
+        #         if(num_attrs > 0):
+        #             for attr in (report.tree[level].
+        #                          containers[concept].attributes):
+        #                 if (attr.concept.concept_value not in written_attrs):
+        #                     strings_file.write(
+        #                         u"\t<string name=\"code_{0}\">{1}</string>\n"
+        #                         .format(attr.concept.concept_value,
+        #                                 attr.concept.concept_name[language])
+        #                         .encode('utf-8'))
+        #                     # Add this attribute to writen attributes list
+        #                     written_attrs.append(attr.concept.concept_value)
+        #
+        #
+        #write_template(CHILDREN_ARRAYS, language, strings_file, report)
+       
 
 ###################################LAYOUTS###################################
 

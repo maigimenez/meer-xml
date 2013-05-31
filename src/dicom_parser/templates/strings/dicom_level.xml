@@ -1,7 +1,11 @@
-	<!--  ({{ level_num }}) {{ level_name }} -->
-	<string name="code_{{ root_code }}">{{ root_meaning }}</string>
+{% if level_num is defined %}
+        <!-- ({{ level_num }}) {{ level_name }} -->
+        <string name="code_{{ root_code }}">{{ root_meaning }}</string>
+{% endif %}
+{% if attributes is defined %}
+        <!-- {{ root_meaning }} : Attributes -->
+        {%- for attribute in attributes %}
+        <string name="code_{{ attribute['code'] }}">{{attribute['meaning']}}</string>
+        {%- endfor %}
 
-	<!--  ({{ level_num }}) {{ level_name }} : {{ attributes }} -->
-    {%- for attribute in attributes %}
-	<string name="code_{{attribute['code']}}">{{attribute['meaning']}}</string>
-    {%- endfor %}
+{% endif %}

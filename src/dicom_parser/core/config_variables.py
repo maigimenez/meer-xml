@@ -37,21 +37,23 @@ TEMPLATES_ROOT_PATH = 'Templates Path'
 STRING_TEMPLATES_SECTION = 'String Templates'
 STRING_TEMPLATES_PATH = 'String Templates Path'
 
-LAYOUT_TEMPLATES_SECTION = 'Layout Templates'
+LAYOUT_TEMPLATES_SECTION = 'Layout Templates' 
 LAYOUT_TEMPLATES_PATH = 'Layout Templates Path'
 
 # STRING TEMPLATES
 DEFAULT_STRINGS = 'default_strings'
 LEVEL_STRINGS = 'level_strings' 
 CHILDREN_ARRAYS = 'children_arrays'
-STRING_TEMPLATES = [DEFAULT_STRINGS,LEVEL_STRINGS,CHILDREN_ARRAYS]
+DICOM_LEVEL = 'dicom_level'
+STRING_TEMPLATES = [DEFAULT_STRINGS,LEVEL_STRINGS,CHILDREN_ARRAYS,DICOM_LEVEL]
 #The options for these properties section replace a unique template value
 MULTIPLE_PROPERTIES = {LEVEL_STRINGS:('level_code','level_meaning'),
-                       CHILDREN_ARRAYS:('parent_code','children')}
+                       CHILDREN_ARRAYS:('parent_code','children'),
+                       DICOM_LEVEL:('level_num','level_name','root_code','root_meaning','attributes','code','meaning')}
 #These templates are filled based on the report ID
 TEMPLATE_BY_ID = [LEVEL_STRINGS]
 #These templates are filled based on data from the report
-TEMPLATE_BY_REPORT = [CHILDREN_ARRAYS]
+TEMPLATE_BY_REPORT = [CHILDREN_ARRAYS,DICOM_LEVEL]
 
 # LAYOUT TEMPLATES
 END = 'End'

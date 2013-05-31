@@ -16,6 +16,8 @@ xml_filenames.set_languages(LANGUAGE_CODE)
 #While parsing, the strings file is written.
 report = parser.DicomParser().parse(sys.argv[1])
 report.imprime()
+print
+print
 
 # Write the filenames of the layouts and the activities based on the report odontology
 xml_filenames.set_odontology(report.get_odontology())
