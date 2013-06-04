@@ -278,21 +278,24 @@ class DictReport(object):
         if (template_type in MULTIPLE_PROPERTIES.keys()):
             #Dictionary for a dicom level substitution
             if (template_type == DICOM_LEVEL):
-                written_codes = []
-                for level,dict_containers in self.tree.iteritems():
-                    for concept,children in dict_containers.containers.iteritems():
-                        dict_aux = {}
-                        for language in languages:
+                written_codes = {}
+                # TODO: Think a better way to reduce this complexity. 
+                for language in languages:
+                    written_codes[language] = []
+                    for level,dict_containers in self.tree.iteritems():
+                        for concept,children in dict_containers.containers.iteritems():
+                            dict_aux = {}
                             dict_aux[language] = {}
-                        # Write concepts.
-                        # A concept can be repeated but not its attributes. 
-                        if (concept.concept_value not in written_codes):
-                            #print "????????", concept.concept_value
-                            level_names = {}
-                            # TODO: Think a better way to reduce this complexity. 
-                            for language in languages:
-                            #Init the ditionary to store all languages.
-                               # dict_aux[language] = {}
+                            parent_written = False
+                            # Write concepts.
+                            # A concept can be repeated but not its attributes. 
+                            if (concept.concept_value not in written_codes[language]):
+                                parent_written = True
+                                #print "????????", concept.concept_value
+                                level_names = {}
+                           
+                                #Init the ditionary to store all languages.
+                                #  dict_aux[language] = {}
                                 level_names[language] = unicode(get_odontology_level(
                                         odontology_id=self.get_odontology(),
                                         tree_level=level,
@@ -305,26 +308,40 @@ class DictReport(object):
                             # Parent node information
                                 dict_aux[language][MULTIPLE_PROPERTIES[template_type][2]] = concept.concept_value
                                 dict_aux[language][MULTIPLE_PROPERTIES[template_type][3]] = concept.concept_name[language]
-                                written_codes.append(concept.concept_value)
-                        # Write Attributes
-                        num_attrs = len(self.tree[level].
+                                written_codes[language].append(concept.concept_value)
+                                # print written_codes
+                                # print
+                                # print dict_aux
+                                # print 
+                                # print "*************"
+                                #substitution_words.append(dict_aux)
+
+                            # Write Attributes
+                            num_attrs = len(self.tree[level].
                                         containers[concept].attributes)
-                        # Write attributes if there are any.
-                        if(num_attrs > 0):
-                            for language in languages:
+                            attributes_written = False
+                            # Write attributes if there are any.
+                            if(num_attrs > 0):
+                                #for language in languages:
                                 dict_aux[language][MULTIPLE_PROPERTIES[template_type][4]]=[]
+                                print "init ", language," - Dictionary", dict_aux
                                 for attr in (self.tree[level].
                                              containers[concept].attributes):
                                     attrs_aux = {}
-                                    if (attr.concept.concept_value not in written_codes):
+                                    if (attr.concept.concept_value not in written_codes[language]):
+                                        atributes_written = True
                                         attrs_aux[MULTIPLE_PROPERTIES[template_type][5]] = attr.concept.concept_value
                                         attrs_aux[MULTIPLE_PROPERTIES[template_type][6]] = attr.concept.concept_name[language]
-                                        written_codes.append(attr.concept.concept_value)
+                                        written_codes[language].append(attr.concept.concept_value)
                                         dict_aux[language][MULTIPLE_PROPERTIES[template_type][4]].append(attrs_aux)
-                                        # print dict_aux
-                                        # print 
-                                        # print "******************"
-                        substitution_words.append(dict_aux)
+                                if (atributes_written and not parent_written):
+                                    dict_aux[language][MULTIPLE_PROPERTIES[template_type][3]] = concept.concept_name[language]
+                                print
+                                print dict_aux
+                                print "******************"
+                                print
+                                print
+                            substitution_words.append(dict_aux)
                     
             else:
                 #print children_dict

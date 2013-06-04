@@ -146,7 +146,8 @@ def write_template(template, languages, xml_files, report=None):
         if (template in TEMPLATE_BY_REPORT):
             localized_strings = get_localized_report(
                 env, template_filename, languages, template, report)
-            print localized_strings[0]['es_ES']
+            #print localized_strings[0]['es_ES']
+            #print localized_strings[0]['en_GB']
         else:
             localized_strings = [substitute_words(
                     env, section, template_filename, languages, template)]
