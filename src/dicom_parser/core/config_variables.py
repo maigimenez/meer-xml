@@ -48,9 +48,9 @@ DICOM_LEVEL = 'dicom_level'
 STRING_TEMPLATES = [DEFAULT_STRINGS,LEVEL_STRINGS,CHILDREN_ARRAYS,DICOM_LEVEL]
 #The options for these properties section replace a unique template value
 MULTIPLE_PROPERTIES = {LEVEL_STRINGS:('level_code','level_meaning'),
-                       CHILDREN_ARRAYS:('parent_code','children'),
-                       DICOM_LEVEL:('level_num','level_name','levels',
-                                    'attributes','code','meaning')}
+                       CHILDREN_ARRAYS:('nodes','parent_code','children'),
+                       DICOM_LEVEL:('levels', 'attributes', 'level_num',
+                                    'level_name','code','meaning')}
 #These templates are filled based on the report ID
 TEMPLATE_BY_ID = [LEVEL_STRINGS]
 #These templates are filled based on data from the report
