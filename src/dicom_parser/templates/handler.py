@@ -89,30 +89,40 @@ def get_localized_report(environment, template_name, language_code,
     """
     localized_strings = []
     template = environment.get_template(template_name)
-    substitution_words_list = report.get_data_form_report(
+    substitution_languages = report.get_data_form_report(
         language_code, template_var)
+   
+    strings_render = {}
+    for language,words in substitution_languages.iteritems():
+        if (template_var == CHILDREN_ARRAYS):
+            print "****", words
+        else:
+            print words
+            print 
+        strings_render[language] = template.render(words)
+    return strings_render
+    # print substitution_words_list
+    # #print
+    # #From report we get multiple substitution_words.
+    # #We render each set of words for the template
+    # for substitution_words in substitution_words_list:
+    #     #print "*****", substitution_words
+    #     #print 
+    #     #print
+    #     strings_render = {}
+    #     for language, substitution_word in substitution_words.iteritems():
+    #         #print substitution_word
+    #         #print
+    #         strings_render[language] = template.render(substitution_word)
+    #         # if (language == 'es_ES'):
+    #         #     print substitution_word
+    #         #     print 
+    #         #     print
+    #         #     print template.render(substitution_word)
+    #         #     print
+    #     localized_strings.append(strings_render)
+    # return localized_strings
 
-    #print substitution_words_list
-    #print
-    #From report we get multiple substitution_words.
-    #We render each set of words for the template
-    for substitution_words in substitution_words_list:
-        #print "*****", substitution_words
-        #print 
-        #print
-        strings_render = {}
-        for language, substitution_word in substitution_words.iteritems():
-            #print substitution_word
-            #print
-            strings_render[language] = template.render(substitution_word)
-            # if (language == 'es_ES'):
-            #     print substitution_word
-            #     print 
-            #     print
-            #     print template.render(substitution_word)
-            #     print
-        localized_strings.append(strings_render)
-    return localized_strings
 
 
 def write_template(template, languages, xml_files, report=None):
@@ -149,8 +159,8 @@ def write_template(template, languages, xml_files, report=None):
             #print localized_strings[0]['es_ES']
             #print localized_strings[0]['en_GB']
         else:
-            localized_strings = [substitute_words(
-                    env, section, template_filename, languages, template)]
+            localized_strings = substitute_words(
+                    env, section, template_filename, languages, template)
 
         #Write the localized string
         #if (template == 'dicom_level'):
@@ -163,10 +173,12 @@ def write_template(template, languages, xml_files, report=None):
                  #       print
         #print template
         #print 
-        for localized_block in localized_strings:
-            for language, localized_string in localized_block.iteritems():
-                xml_files[language].write(
-                    u'{0}'.format(localized_string).encode('utf-8'))
+        #print
+        #print localized_strings
+        #for localized_block in localized_strings:
+        for language, localized_string in localized_strings.iteritems():
+            xml_files[language].write(
+                u'{0}'.format(localized_string).encode('utf-8'))
 
 
 def write_strings(language_code, report):
@@ -189,9 +201,9 @@ def write_strings(language_code, report):
     
     # Write default strings for every language and close the resources
     write_template(DICOM_LEVEL,languages,strings_files,report)
-    #write_template(DEFAULT_STRINGS, languages, strings_files)
-    #write_template(LEVEL_STRINGS, languages, strings_files, report)
-    #write_template(CHILDREN_ARRAYS, languages, strings_files, report)
+    write_template(DEFAULT_STRINGS, languages, strings_files)
+    write_template(LEVEL_STRINGS, languages, strings_files, report)
+    write_template(CHILDREN_ARRAYS, languages, strings_files, report)
 
     # Write closing tags for the xml files
     for language in languages:
