@@ -1,11 +1,12 @@
+{# TODO: Improve level group#}
 {% for level in levels %}
-        <!-- ({{ level['level_num'] }}) {{ level['level_name'] }} -->
-        <string name="code_{{ level['code'] }}">{{ level['meaning'] }}</string>
-{% endfor %}
-
-        <!-- Attributes -->
+    <!-- ({{ level['level_num'] }}) {{ level['level_name'] }} -->
+    <string name="code_{{ level['code'] }}">{{ level['meaning'] }}</string>
+{%- endfor %}
+{# TODO: Internazionalize this #}
+    <!-- Attributes -->
 {%- for attribute in attributes %}
-        <string name="code_{{ attribute['code'] }}">{{attribute['meaning']}}</string>
+    <string name="code_{{ attribute['code'] }}">{{attribute['meaning']}}</string>
 {%- endfor %}
 
 

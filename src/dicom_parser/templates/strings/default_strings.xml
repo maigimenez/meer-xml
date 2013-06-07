@@ -1,8 +1,7 @@
-
-	<!-- Default buttons -->
-	<string name="add">{{ add }}</string>
-	<string name="finish">{{ finish }}</string>
-	<string name="validate">{{ validate }}</string>
-	<string name="change">{{ change }}</string>
-	<string name="next_level">{{ next_level }}</string>
+    <!-- Default buttons -->
+    <string name="add">{{ add }}</string>
+    <string name="finish">{{ finish }}</string>
+    <string name="validate">{{ validate }}</string>
+    <string name="change">{{ change }}</string>
+    <string name="next_level">{{ next_level }}</string>
 
