@@ -15,7 +15,7 @@ from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    DEFAULT_INPUT, GENERIC_TITLE, NUM, END,
                                    NEXT_LEVEL, DATE, TEXT, STRINGS,
                                    DEFAULT_STRINGS, LEVEL_STRINGS,
-                                   CHILDREN_ARRAYS, DICOM_LEVEL)
+                                   CHILDREN_ARRAYS, DICOM_LEVEL,BOOL)
 
 
 def get_languages(language_code):
@@ -214,7 +214,7 @@ def write_template_substitution(environment, layout_file, template_type,
                                           parent_code=concept.concept_value)
         current_item = "children_{0}_list".format(concept.concept_value)
     # Num type attribute
-    elif (template_type == NUM ):
+    elif (template_type == NUM  or TEXT):
         localized_concept = concept.concept_name[language]
         render_template = template.render(concept_name=localized_concept,
                                           concept_value=concept.concept_value,
@@ -225,52 +225,66 @@ def write_template_substitution(environment, layout_file, template_type,
     return current_item
 
 
-def get_layout_file(report_level, xml_filename, concept):
-    """ Reuturn filename of current layout based on the concept. """
+def get_layout_file(report_level, xml_filename, concept, parent):
+    """ Reuturn filename of current layout 
+    based on the concept and its parent. """
     # Add the concept_value to the layout file and open the file for writting
     if (int(report_level) == 1):
         filename = xml_filename
     else:
         filename = Template(xml_filename).safe_substitute(
-            CODE=concept.concept_value.lower())
+            CODE=concept.concept_value.lower(),
+            PARENT=parent.lower())
     return filename
 
 
 def write_attributes_layout(environment, layout_file, attributes,
-                            previous_item, language_code):
-    for attribute in attributes:
-        print " - {0}".format(attribute.type)
-        #TODO: Discriminate between num and bool
-        if(attribute.type == NUM or attribute.type == DATE or
-           attribute.type == TEXT):
-            #Get the concept name in the default language.
-            default_language = get_language_code('CODE_MEANING', language_code)
-            current_item = write_template_substitution(
-                environment,
-                layout_file,
-                attribute.type,
-                concept=attribute.concept,
-                previous_item=previous_item,
-                language=default_language)
-        else:
-            #Throw an error
-            current_item = previous_item
-        return current_item
+                            previous_item):
+    print len(attributes)
+    # for attribute in attributes:
+    #     print " - {0}".format(attribute.type)
+    #     if (attribute.type == NUM and attribute.is_bool()):
+    #         attribute_type = BOOL
+    #     else:
+    #         attribute_type = attribute.type
+    #     print u"    - {0} ({1})".format(
+    #         attribute.concept.concept_name,
+    #         attribute_type).encode('utf-8')
+    #     #TODO: Discriminate between num and bool
+    #     if(attribute.type == NUM or attribute.type == DATE or
+    #        attribute.type == TEXT):
+    #         # Get the concept name in the default language.
+    #         # TODO: Check if this is "really" needed. 
+    #         default_language = get_language_code('CODE_MEANING', language_code)
+    #         current_item = write_template_substitution(
+    #             environment,
+    #             layout_file,
+    #             attribute.type,
+    #             concept=attribute.concept,
+    #             previous_item=previous_item,
+    #             language=default_language)
+    #         print current_item
+    #     else:
+    #         #Throw an error
+    #         current_item = previous_item
+    #     return current_item
 
 
 #TODO: add the behaviour to support a layout with only attributes too ->
 #      -> write_one_column_layout_one_level
-def write_one_column_layout_children(report_level, xml_filename, dict_level):
+def write_one_column_layout_children(report_level, xml_filename, report):
     """ Write a layout with one columns where there are only children
 
     Keyword Arguments:
     report_level -- level of the report to write
     xml_filename -- file name where the layout should be written
-    dict_level -- tree level inside a dictionary to write in the xml layout
+    dict_level -- DICOM report where information is to write in the xml layout
 
     """
+    dict_level = report.get_level(int(report_level))
     for concept, children in dict_level.containers.iteritems():
-        layout_filename = get_layout_file(report_level, xml_filename, concept)
+        parent = report.get_parent_code(int(report_level),concept)
+        layout_filename = get_layout_file(report_level, xml_filename, concept,parent)
         #If the concept have already generate a layout don't do it again.
         if (not isfile(layout_filename)):
             layout_file = open(layout_filename, 'w')
@@ -297,7 +311,7 @@ def write_one_column_layout_children(report_level, xml_filename, dict_level):
 
 
 def write_two_columns_layout_one_level(level, layout_filename, concept,
-                                       children, language_code):
+                                       children):
     layout_file = open(layout_filename, 'w')
     print(" * {0}".format(concept))
     # Set the Environment for the jinja2 templates.
@@ -321,7 +335,7 @@ def write_two_columns_layout_one_level(level, layout_filename, concept,
         #Write the attributes
         previous_item = write_attributes_layout(environment, layout_file,
                                                 first_attributes,
-                                                previous_item, language_code)
+                                                previous_item)
     print
 
 
@@ -329,42 +343,66 @@ def write_two_columns_layout_two_levels():
     pass
 
 
-def write_two_columns_layout(report_level, xml_filename, dict_level,
+def write_two_columns_layout(report_level, xml_filename, report,
                              language_code):
-    for concept, children in dict_level.containers.iteritems():
-        layout_filename = get_layout_file(report_level, xml_filename, concept)
-        #If the concept have already generate a layout don't do it again.
-        if (not isfile(layout_filename)):
-            if(len(children.attributes) == 0 or
-               len(children.children_containers) == 0):
-                print "{0}: One Level".format(layout_filename)
-                write_two_columns_layout_one_level(report_level,
-                                                   layout_filename, concept,
-                                                   children, language_code)
-            else:
-                print "Two levels"
-                #write_two_columns_layout_two_levels(xml_files,
-                #filename,level,concept,children)
+    parent_level = report.get_level(int(report_level)-1)
+    # If parent_level is None we are in the root level. 
+    if (parent_level is not None):
+        for parent, dict_level in parent_level.containers.iteritems():
+            for level_children in dict_level.children_containers:
+                layout_filename = get_layout_file(report_level, xml_filename, level_children,
+                                                  parent.concept_value)
+                print layout_filename
+    
+                # Get the level to write its layout 
+                children_to_write = report.get_children(
+                    int(report_level),level_children)
+                #for  in level_to_write.containers.iteritems():
+                #    print concept, children
+                
+            print
 
-        else:
-            print "Layout {0} already created".format(layout_filename)
+    # for concept, children in dict_level.containers.iteritems():
+    #     print "**", concept
+    #     parent_code = report.get_parent_code(int(report_level),concept)
+    #     layout_filename = get_layout_file(report_level, xml_filename, concept,
+    #                                       parent_code)
+    #     print layout_filename
+        #If the concept have already generate a layout don't do it again.
+        # if (not isfile(layout_filename)): 
+        #     if(len(children.attributes) == 0 or
+        #        len(children.children_containers) == 0):
+        #         print "{0}: One Level".format(layout_filename)
+        #         write_two_columns_layout_one_level(report_level,
+        #                                            layout_filename, concept,
+        #                                            children, language_code)
+        #     else:
+        #         print "Two levels"
+        #         #write_two_columns_layout_two_levels(xml_files,
+        #         #filename,level,concept,children)
+
+        # else:
+        #     print "Layout {0} already created".format(layout_filename)
 
 
 def write_layouts(xml_filenames, report, language_code):
+    print xml_filenames
     for level, layout_filename in xml_filenames.items():
        #Get the odontology id of the report
         odontology_id = report.get_odontology()
         #Get the actual level to write its layout
-        dict_level = report.get_level(int(level))
+        #dict_level = report.get_level(int(level))
+        #parent_code = report.get_parent_code(int(level))
+        #print "parent", parent_code, " level: ", level
         #Get the level distribution for this level.
         level_settings = get_layout_settings(odontology_id, level)
-        print
         print "[Level {0}] {1}".format(level, level_settings)
         if (level_settings == COLUMN_1):
             # TODO: Discriminate between layouts with children,
             # attributes or both.
             write_one_column_layout_children(level, layout_filename,
-                                             dict_level)
+                                             report)
         elif (level_settings == COLUMNS_2):
             write_two_columns_layout(level, layout_filename,
-                                     dict_level, language_code)
+                                     report, language_code)
+        print 

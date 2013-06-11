@@ -85,6 +85,7 @@ class AndroidFiles(object):
 
     #TODO: Move this to config.py
     def set_languages(self,languages=""):
+        #print get_language_section_options(languages)
         section,options = get_language_section_options(languages)
 
         #Get default strings

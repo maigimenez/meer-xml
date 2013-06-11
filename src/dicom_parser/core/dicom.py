@@ -213,8 +213,8 @@ class DictReport(object):
         
         for level,dict_containers in self.tree.iteritems():
             for concept,children in dict_containers.containers.iteritems():
-                num_children = len(self.tree[level].containers[concept].children_containers)
-                num_attrs = len(self.tree[level].containers[concept].attributes)
+                num_children = len(children.children_containers)
+                num_attrs = len(children.attributes)
                 print u"(L{0}) {1} (no.attr: {2} - no.child:{3}):".format(
                     level,
                     concept.concept_name,
@@ -222,7 +222,7 @@ class DictReport(object):
                     num_children).encode('utf-8')
                 if(num_attrs > 0):
                     print u"  * Attributes"
-                    for attr in self.tree[level].containers[concept].attributes:
+                    for attr in children.attributes:
                         if (attr.type == NUM and attr.is_bool()):
                             attr_type = BOOL
                         else:
@@ -232,14 +232,38 @@ class DictReport(object):
                             attr_type).encode('utf-8')
                 if (num_children > 0):
                     print u"  * Childs"
-                    for child in self.tree[level].containers[concept].children_containers:
+                    for child in children.children_containers:
                         print u"    - {0}".format(child.concept_name).encode('utf-8')
                     
             print
 
+    def get_parent_code(self, level,concept):
+        """ Return container code parent of level given """
+        if (level==1):
+            return ""
+        for parent, children  in self.tree[level-1].containers.iteritems():
+            for child in children.children_containers:
+                if (child.concept_value == concept.concept_value):
+                    return parent.concept_value
+
     def get_level(self,level):
         """ Retun the tree level given a level """
+        if (level == 0):
+            return None
         return self.tree[level]
+
+    def get_children(self,level,concept):
+        """ Retun the tree level given a level """
+        if (level == 0):
+            return None
+        else:
+            #print "*", type(self.tree[level].containers)
+            #print self.tree[level].containers
+            for concept_level,children  in self.tree[level].containers.iteritems():
+                if (concept_level.concept_value == concept.concept_value):
+                    return children
+
+                    
 
     def get_tree(self):
         """ Return the dicom report in a dictionary """
@@ -249,7 +273,7 @@ class DictReport(object):
         """ Return current report odontology """
         return self.id_odontology
     
-    def get_children(self):
+    def get_children_dictionary(self):
         """ Return a dictionary with the children of the report
 
         The key is the concept_value of the parent and the value is a list 
@@ -347,7 +371,7 @@ class DictReport(object):
             elif (template_type == CHILDREN_ARRAYS):
                 # Get children in a dictionary.
                 # TODO: Check this time complexity.
-                children_dict = self.get_children()
+                children_dict = self.get_children_dictionary()
                 # Init dictinary. Keys are language code and values contains
                 # values to fill the template
                 nodes_tag = MULTIPLE_PROPERTIES[CHILDREN_ARRAYS][0]
