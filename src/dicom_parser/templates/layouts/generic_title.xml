@@ -1,9 +1,9 @@
-			 <TextView android:id="@+id/level_{{ level }}_label"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignParentLeft="true"
-				android:layout_alignParentTop="true"
-				android:layout_marginBottom="20dp"
-				android:text="@string/level_{{ level }}"
-				android:textAppearance="@android:style/TextAppearance.Large" />
+            <TextView android:id="@+id/level_{{ level }}_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="20dp"
+                android:text="@string/level_{{ level }}"				
+                android:textAppearance="@android:style/TextAppearance.Large" />
 

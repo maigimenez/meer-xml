@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- (1) Resumen -->
+    <string name="code_172117008">Exploración  de la Mama</string>
+    <!-- (2) Órganos -->
+    <string name="code_RID29896">Mama Derecha</string>
+    <!-- (2) Órganos -->
+    <string name="code_RID29897">Mama Izquierda</string>
+    <!-- (3) Lesiones -->
+    <string name="code_TRMM0011">Hallazgos Asociados</string>
+    <!-- (3) Lesiones -->
+    <string name="code_TRMM0010">Asimetria</string>
+    <!-- (3) Lesiones -->
+    <string name="code_TRMM0009">Masa</string>
+
+    <!-- Attributes -->
+    <string name="code_399651003">Fecha Informe</string>
+    <string name="code_118522005">Identificador</string>
+    <string name="code_RID13159">Identificador del Paciente</string>
+    <string name="code_RID34272">Adenopatías Axilares</string>
+    <string name="code_TRMM0012">Adenopatías Supraclaviculares</string>
+    <string name="code_RID34267">Alteraciones Cutaneas</string>
+    <string name="code_RID34314">Alteraciones Pezón</string>
+    <string name="code_54302000">Secreción</string>
+    <string name="code_RID29929">Cuadrante Supero-Externo (CSE) de la Mama Derecha</string>
+    <string name="code_RID29935">Cuadrante Infero-Externo (CIE) de la Mama Derecha</string>
+    <string name="code_RID29932">Cuadrante Supero-Interno (CSI) de la Mama Derecha</string>
+    <string name="code_RID29938">Cuadrante Infero-Interno (CII) de la Mama Derecha</string>
+    <string name="code_RID29947">Línea Intercudrántica Externa (LIE) de la Mama Derecha</string>
+    <string name="code_RID29941">Línea Intercuadrántica Superior (LIS) de la Mama Derecha</string>
+    <string name="code_RID29953">Línea Intercudrántica Inferior (LIInf) de la Mama Derecha</string>
+    <string name="code_RID29944">Línea Intercudrántica Interna (LIInt) de la Mama Derecha</string>
+    <string name="code_RID29950">Retroareolar de la Mama Derecha</string>
+    <string name="code_RID29907">Pezón de la Mama Derecha</string>
+    <string name="code_RID29918">Areola de la Mama Derecha</string>
+    <string name="code_TRMM0001">Prolongación Axilar de la Mama Derecha</string>
+    <string name="code_TRMM0003">Axila de la Mama Derecha</string>
+    <string name="code_TRMM0005">Surco Inframamario de la Mama Derecha</string>
+    <string name="code_TRMM0007">Surco Intermamario de la Mama Derecha</string>
+    <string name="code_RID29930">Cuadrante Supero-Externo (CSE) de la Mama Izquierda</string>
+    <string name="code_RID29936">Cuadrante Infero-Externo (CIE) de la Mama Izquierda</string>
+    <string name="code_RID29933">Cuadrante Supero-Interno (CSI) de la Mama Izquierda</string>
+    <string name="code_RID29939">Cuadrante Infero-Interno (CII) de la Mama Izquierda</string>
+    <string name="code_RID29948">Línea Intercudrántica Externa (LIE) de la Mama Izquierda</string>
+    <string name="code_RID29942">Línea Intercuadrántica Superior (LIS) de la Mama Izquierda</string>
+    <string name="code_RID29954">Línea Intercudrántica Inferior (LIInf) de la Mama Izquierda</string>
+    <string name="code_RID29945">Línea Intercudrántica Interna (LIInt) de la Mama Izquierda</string>
+    <string name="code_RID29951">Retroareolar de la Mama Izquierda</string>
+    <string name="code_RID29908">Pezón de la Mama Izquierda</string>
+    <string name="code_RID29919">Areola de la Mama Izquierda</string>
+    <string name="code_TRMM0002">Prolongación Axilar de la Mama Izquierda</string>
+    <string name="code_TRMM0004">Axila de la Mama Izquierda</string>
+    <string name="code_TRMM0006">Surco Inframamario de la Mama Izquierda</string>
+    <string name="code_TRMM0008">Surco Intermamario de la Mama Izquierda</string>
+
+    <!-- Default buttons -->
+    <string name="add">Añadir</string>
+    <string name="finish">Terminar</string>
+    <string name="validate">Validar</string>
+    <string name="change">Cambiar</string>
+    <string name="next_level">Siguiente nivel</string>
+    
+    <!-- Default tree levels -->
+    <string name="level_1">Resumen</string>
+    <string name="level_2">Órganos</string>
+    <string name="level_3">Lesiones</string>
+
+    <!-- Children Arrays -->
+     <string-array name="code_172117008_children">
+        <item>Mama Derecha</item>
+        <item>Mama Izquierda</item>
+    </string-array>
+    
+     <string-array name="code_RID29897_children">
+        <item>Masa</item>
+        <item>Asimetria</item>
+        <item>Hallazgos Asociados</item>
+    </string-array>
+    
+     <string-array name="code_RID29896_children">
+        <item>Masa</item>
+        <item>Asimetria</item>
+        <item>Hallazgos Asociados</item>
+    </string-array>
+    
+</resources>

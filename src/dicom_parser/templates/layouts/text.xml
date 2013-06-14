@@ -1,19 +1,19 @@
 
-			<!-- Text: {{ concept_name }} -->			
-			<TextView android:id="@+id/label_{{ concept_value }}"
-                                  android:layout_width="wrap_content"
-                                  android:layout_height="wrap_content"
-                                  android:layout_below="@id/{{ previous_item }}"
-                                  android:text="@string/code_{{ concept_value }}"
-                                  android:layout_marginLeft="20dp" />
+                        <!-- Text: {{ concept_name }} -->			
+                        <TextView android:id="@+id/label_{{ concept_value }}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/{{ previous_item }}"
+                            android:text="@string/code_{{ concept_value }}"
+                            android:layout_marginLeft="20dp" />
 
-			<EditText android:id="@+id/etext_{{ concept_value }}"
-                                  android:layout_width="fill_parent"
-                                  android:layout_height="wrap_content"
-                                  android:layout_below="@id/label_{{ concept_value }}"
-                                  android:hint="@string/code_{{ concept_value }}"
-                                  android:text=""
-                                  android:inputType="text"
-                                  android:layout_marginBottom="10dp"
-                                  android:layout_marginLeft="20dp" /> 
+                        <EditText android:id="@+id/etext_{{ concept_value }}"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/label_{{ concept_value }}"
+                            android:hint="@string/code_{{ concept_value }}"
+                            android:text=""
+                            android:inputType="text"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="20dp" /> 
 

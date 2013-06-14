@@ -1,16 +1,18 @@
-	<!-- MAIN PART: split layout -->
-	<LinearLayout android:orientation="horizontal"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:layout_below="@id/top_header" android:layout_above="@id/bottom_menu"
-		android:id="@+id/sub_content_view"
-		android:paddingBottom="5sp" android:background="@color/lightGrey"
-		android:baselineAligned="false">
 
-		<!-- Left layout -->
-		<RelativeLayout android:id="@+id/left_layout"
-			android:layout_width="match_parent" android:layout_height="wrap_content"
-			android:layout_weight="1" android:background="#eeeeee"
-			android:layout_margin="20dp" android:paddingBottom="20dp"
-			android:paddingTop="25dp" android:paddingLeft="25dp"
-			android:paddingRight="25dp">
+
+    <!-- MAIN PART: split layout -->
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:layout_below="@id/top_header" android:layout_above="@id/bottom_menu"
+        android:id="@+id/sub_content_view"
+        android:paddingBottom="5sp" android:background="@color/lightGrey"
+        android:baselineAligned="false">
+
+        <!-- Left layout -->
+        <RelativeLayout android:id="@+id/left_layout"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_weight="1" android:background="#eeeeee"
+            android:layout_margin="20dp" android:paddingBottom="20dp"
+            android:paddingTop="25dp" android:paddingLeft="25dp"
+            android:paddingRight="25dp">
 

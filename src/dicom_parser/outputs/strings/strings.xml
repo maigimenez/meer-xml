@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- (1) Summary -->
+    <string name="code_172117008">Exploration of Breast</string>
+    <!-- (2) Organs -->
+    <string name="code_RID29896">Right Female Breast</string>
+    <!-- (2) Organs -->
+    <string name="code_RID29897">Left female breast</string>
+    <!-- (3) Lesions -->
+    <string name="code_TRMM0011">Associated Findings</string>
+    <!-- (3) Lesions -->
+    <string name="code_TRMM0010">Asymmetry</string>
+    <!-- (3) Lesions -->
+    <string name="code_TRMM0009">Mass</string>
+
+    <!-- Attributes -->
+    <string name="code_399651003">Date of Report</string>
+    <string name="code_118522005">Identifier</string>
+    <string name="code_RID13159">Patient Identifier</string>
+    <string name="code_RID34272">Axillary Adenopathy</string>
+    <string name="code_TRMM0012">Supraclavicular Adenopathy</string>
+    <string name="code_RID34267">Skin Lesion</string>
+    <string name="code_RID34314">Nipple Changes</string>
+    <string name="code_54302000">Discharge From Nipple</string>
+    <string name="code_RID29929">Upper Outer Quadrant of Right Female Breast</string>
+    <string name="code_RID29935">Lower Outer Quadrant of Right Female Breast</string>
+    <string name="code_RID29932">Upper Inner Quadrant of Right Female Breast</string>
+    <string name="code_RID29938">Lower Inner Quadrant of Right Female Breast</string>
+    <string name="code_RID29947">Lateral Region of Right Breast</string>
+    <string name="code_RID29941">Superior Region of Right Breast</string>
+    <string name="code_RID29953">Subareolar Region of Right Breast</string>
+    <string name="code_RID29944">Medial Region of Right Breast</string>
+    <string name="code_RID29950">Central Region of Right Breast</string>
+    <string name="code_RID29907">Nipple of Right Female Breast</string>
+    <string name="code_RID29918">Areola of Right Female Breast</string>
+    <string name="code_TRMM0001">Axillary Tail of Right Female Breast</string>
+    <string name="code_TRMM0003">Axillary Region of Right Female Breast</string>
+    <string name="code_TRMM0005">Inframammary Sulcus of Right Female Breast</string>
+    <string name="code_TRMM0007">Intermammary Sulcus of Right Female Breast </string>
+    <string name="code_RID29930">Upper Outer Quadrant of Left Female Breast</string>
+    <string name="code_RID29936">Lower Outer Quadrant of Left Female Breast</string>
+    <string name="code_RID29933">Upper Inner Quadrant of Left Female Breast</string>
+    <string name="code_RID29939">Lower Inner Quadrant of Left Female Breast</string>
+    <string name="code_RID29948">Lateral Region of Left Breast</string>
+    <string name="code_RID29942">Superior Region of Left Breast</string>
+    <string name="code_RID29954">Subareolar Region of Left Breast</string>
+    <string name="code_RID29945">Medial Region of Left Breast</string>
+    <string name="code_RID29951">Central Region of Left Breast</string>
+    <string name="code_RID29908">Nipple of Left Female Breast</string>
+    <string name="code_RID29919">Areola of Left Female Breast</string>
+    <string name="code_TRMM0002">Axillary Tail of Left Female Breast</string>
+    <string name="code_TRMM0004">Axillary Region of Left Female Breast</string>
+    <string name="code_TRMM0006">Inframammary Sulcus  of Left Female Breast</string>
+    <string name="code_TRMM0008">Intermammary Sulcus  of Left Female Breast</string>
+
+    <!-- Default buttons -->
+    <string name="add">Add</string>
+    <string name="finish">Finish</string>
+    <string name="validate">Validate</string>
+    <string name="change">Change</string>
+    <string name="next_level">Next Level</string>
+    
+    <!-- Default tree levels -->
+    <string name="level_1">Summary</string>
+    <string name="level_2">Organs</string>
+    <string name="level_3">Lesions</string>
+
+    <!-- Children Arrays -->
+     <string-array name="code_172117008_children">
+        <item>Right Female Breast</item>
+        <item>Left female breast</item>
+    </string-array>
+    
+     <string-array name="code_RID29897_children">
+        <item>Mass</item>
+        <item>Asymmetry</item>
+        <item>Associated Findings</item>
+    </string-array>
+    
+     <string-array name="code_RID29896_children">
+        <item>Mass</item>
+        <item>Asymmetry</item>
+        <item>Associated Findings</item>
+    </string-array>
+    
+</resources>
