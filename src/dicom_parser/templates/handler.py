@@ -15,7 +15,8 @@ from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    DEFAULT_INPUT, GENERIC_TITLE, NUM, END,
                                    NEXT_LEVEL, DATE, TEXT, STRINGS,
                                    DEFAULT_STRINGS, LEVEL_STRINGS,
-                                   CHILDREN_ARRAYS, DICOM_LEVEL, BOOL, RIGHT)
+                                   CHILDREN_ARRAYS, DICOM_LEVEL, BOOL, RIGHT,
+                                   SCROLL)
 
 
 def get_languages(language_code):
@@ -51,6 +52,7 @@ def set_environment(template_type):
 def substitute_words(environment, section,
                      template_name, languages, template_var):
     """ Return localized strings
+                        write_two_columns_layout_one_level(report_level,
     in a dictionary if it is not multiple substitution or
     in a list of dictiories if there are multiple substitutions
 
@@ -192,6 +194,7 @@ def write_template_substitution(environment, layout_file, template_type,
     to fill the template
 
     """
+    print template_type
     template_name = get_property(LAYOUT_TEMPLATES_SECTION, template_type)
     template = environment.get_template(template_name)
     render_template = ""
@@ -214,12 +217,14 @@ def write_template_substitution(environment, layout_file, template_type,
                                           parent_code=concept.concept_value)
         current_item = "children_{0}_list".format(concept.concept_value)
     # Num type attribute
-    elif (template_type == NUM or TEXT):
+    elif (template_type == NUM or template_type == TEXT):
         localized_concept = concept.concept_name[language]
         render_template = template.render(concept_name=localized_concept,
                                           concept_value=concept.concept_value,
                                           previous_item=previous_item)
         current_item = "etext_{0}".format(concept.concept_value)
+    elif (template_type == SCROLL):
+        render_template = template.render(parent=previous_item)
     #Write the template instatiated in layout file
     layout_file.write(render_template.encode('utf-8'))
     return current_item
@@ -242,12 +247,12 @@ def write_attributes_layout(environment, layout_file, attributes,
                             previous_item, language_code):
     print len(attributes)
     for attribute in attributes:
-        print " - {0}".format(attribute.type)
+        #print " - {0}".format(attribute.type)
         if (attribute.type == NUM and attribute.is_bool()):
             attribute_type = BOOL
         else:
             attribute_type = attribute.type
-        print u"    - {0} ({1})".format(
+        print u" - {0} ({1})".format(
             attribute.concept.concept_name,
             attribute_type).encode('utf-8')
         #TODO: Discriminate between num and bool
@@ -263,10 +268,12 @@ def write_attributes_layout(environment, layout_file, attributes,
                 concept=attribute.concept,
                 previous_item=previous_item,
                 language=default_language)
+            previous_item = current_item
             print current_item
         else:
             #Throw an error
             current_item = previous_item
+    print
     return current_item
 
 
@@ -322,7 +329,7 @@ def write_two_columns_layout_one_level(level, layout_filename, concept,
     write_template_snippet(layout_file, HEADER)
     write_template_snippet(layout_file, MAIN_LEFT)
 
-    # There are ONLY CHILDREN in this layout
+    # There are ONLY ATTRIBUTES in this layout
     if (len(children.attributes) > 0):
         # Get the template snippet, find the subtitution terms and
         # write the template
@@ -330,6 +337,9 @@ def write_two_columns_layout_one_level(level, layout_filename, concept,
                                     GENERIC_TITLE, report_level=level)
         # Store previous concept id
         previous_item = "level_{0}_label".format(level)
+        # Write the scoll for the attributes 
+        write_template_substitution(environment, layout_file,
+                                    SCROLL, previous_item=previous_item)        
         # Split attributes in two columns
         num_attributes = len(children.attributes)
         first_attributes = children.attributes[0:(num_attributes / 2)]
@@ -340,11 +350,19 @@ def write_two_columns_layout_one_level(level, layout_filename, concept,
                                                 previous_item, language_code)
         #Write the end of left layout, the right layout
         write_template_snippet(layout_file, RIGHT)
+        # Write the scoll for the attributes 
+        write_template_substitution(environment, layout_file,
+                                    SCROLL, previous_item=previous_item)        
+
         previous_item = write_attributes_layout(environment, layout_file,
                                                 last_attributes,
                                                 previous_item, language_code)
-    write_template_snippet(layout_file, END)
-    layout_file.close()
+        write_template_snippet(layout_file, END)
+        layout_file.close()
+
+    # There are ONLY CHILDREN in this layout
+    else:
+        pass 
 
 
 def write_two_columns_layout_two_levels():

@@ -6,15 +6,15 @@ DEFAULT_INPUT = 'default'
 
 # LANGUAGES
 # List of languages used. It's set with the second script parameter.
-I18N = ["es_ES","en_GB"]
+I18N = ["es_ES", "en_GB"]
 DEFAULT = ["en_GB"]
 
 # CONFIG SECTIONS AND OPTIONS
 OUTPUT_DIRECTORIES_SECTION = 'Output Directories'
 STRINGS_OUTPUT_OPTION = 'Strings'
 XML_STRINGS_SECTION = 'XML Strings Filenames'
-DEFAULT_STRINGS_SECTION="Default Dicom"
-I18N_SECTION="i18n Dicom"
+DEFAULT_STRINGS_SECTION = "Default Dicom"
+I18N_SECTION = "i18n Dicom"
 PROPERTIES_OPTION = "Properties"
 # Properties
 EXTENSIONS_SECTION = 'Extensions'
@@ -37,24 +37,25 @@ TEMPLATES_ROOT_PATH = 'Templates Path'
 STRING_TEMPLATES_SECTION = 'String Templates'
 STRING_TEMPLATES_PATH = 'String Templates Path'
 
-LAYOUT_TEMPLATES_SECTION = 'Layout Templates' 
+LAYOUT_TEMPLATES_SECTION = 'Layout Templates'
 LAYOUT_TEMPLATES_PATH = 'Layout Templates Path'
 
 # STRING TEMPLATES
 DEFAULT_STRINGS = 'default_strings'
-LEVEL_STRINGS = 'level_strings' 
+LEVEL_STRINGS = 'level_strings'
 CHILDREN_ARRAYS = 'children_arrays'
 DICOM_LEVEL = 'dicom_level'
-STRING_TEMPLATES = [DEFAULT_STRINGS,LEVEL_STRINGS,CHILDREN_ARRAYS,DICOM_LEVEL]
+STRING_TEMPLATES = [DEFAULT_STRINGS, LEVEL_STRINGS, CHILDREN_ARRAYS,
+                    DICOM_LEVEL]
 #The options for these properties section replace a unique template value
-MULTIPLE_PROPERTIES = {LEVEL_STRINGS:('level_code','level_meaning'),
-                       CHILDREN_ARRAYS:('nodes','parent_code','children'),
-                       DICOM_LEVEL:('levels', 'attributes', 'level_num',
-                                    'level_name','code','meaning')}
+MULTIPLE_PROPERTIES = {LEVEL_STRINGS: ('level_code', 'level_meaning'),
+                       CHILDREN_ARRAYS: ('nodes', 'parent_code', 'children'),
+                       DICOM_LEVEL: ('levels', 'attributes', 'level_num',
+                                     'level_name', 'code', 'meaning')}
 #These templates are filled based on the report ID
 TEMPLATE_BY_ID = [LEVEL_STRINGS]
 #These templates are filled based on data from the report
-TEMPLATE_BY_REPORT = [CHILDREN_ARRAYS,DICOM_LEVEL]
+TEMPLATE_BY_REPORT = [CHILDREN_ARRAYS, DICOM_LEVEL]
 
 # LAYOUT TEMPLATES
 END = 'End'
@@ -68,10 +69,10 @@ NUM = 'num'
 BOOL = 'bool'
 DATE = 'date'
 TEXT = 'text'
-LAYOUT_TEMPLATES = [END,HEADER,MAIN_LEFT,RIGHT,
-                    NEXT_LEVEL,GENERIC_TITLE,
-                    NUM,DATE,TEXT]
+SCROLL = 'scroll'
+LAYOUT_TEMPLATES = [END, HEADER, MAIN_LEFT, RIGHT,
+                    NEXT_LEVEL, GENERIC_TITLE,
+                    NUM, DATE, TEXT, SCROLL]
 
 # XML FILETYPES
 STRINGS = 'Strings'
-

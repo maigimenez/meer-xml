@@ -15,9 +15,9 @@ xml_filenames.set_languages(LANGUAGE_CODE)
 # PARSE  
 #While parsing, the strings file is written.
 report = parser.DicomParser().parse(sys.argv[1])
-report.imprime()
-print
-print
+#report.imprime()
+#print
+#print
 
 # Write the filenames of the layouts and the activities based on the report odontology
 xml_filenames.set_odontology(report.get_odontology())
@@ -25,7 +25,8 @@ xml_filenames.set_odontology(report.get_odontology())
 #WRITE STRINGS XML
 template_engine.write_strings(LANGUAGE_CODE,report)
 
-#deepest_level = report.get_deepest_level()
+deepest_level = report.get_deepest_level()
+#print xml_filenames.layouts
 #WRITE LAYOUTS
-#template_engine.write_layouts(xml_filenames.layouts,report,LANGUAGE_CODE)
+template_engine.write_layouts(xml_filenames.layouts,report,LANGUAGE_CODE)
 #dicom_xml.close()
