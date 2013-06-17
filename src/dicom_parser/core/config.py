@@ -1,7 +1,8 @@
 #  -*- coding: utf-8 -*-
 from ConfigParser import SafeConfigParser, ConfigParser
 from config_variables import *
-from os.path import join
+from os.path import join, exists
+from os import makedirs
 import codecs
 
 def read_config(path=SETTINGS_PATH):
@@ -31,6 +32,9 @@ def get_xml_filepath(language_code,filetype):
     if (filetype == STRINGS):
         #Get the root path for the outputs
         output_directory = config.get(OUTPUT_DIRECTORIES_SECTION,STRINGS_OUTPUT_OPTION)
+        # If the directory does not exist, create it. 
+        if( not exists(output_directory)):
+            makedirs(output_directory)
         #Get the path for the filename for the language_code
         xml_filename = config.get(XML_STRINGS_SECTION,language_code)
     else:
@@ -185,6 +189,9 @@ def get_filepath_odontology(odontology_id, filetype):
     if (filetype == LAYOUTS):
         #Get the ouputs directory
         output_directory = get_filepath(LAYOUTS)
+        # If the directory does not exist, create it. 
+        if( not exists(output_directory)):
+            makedirs(output_directory)
         #Get the filetypes file names. 
         section = odontology_id + LAYOUT_FILENAME
         options = config.options(section)
