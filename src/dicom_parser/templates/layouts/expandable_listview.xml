@@ -1,0 +1,7 @@
+<ExpandableListView
+android:id="@+id/leftBreast_list"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_centerVertical="true"
+android:layout_below="@+id/leftBreast_label" >
+</ExpandableListView>

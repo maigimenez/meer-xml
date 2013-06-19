@@ -1,0 +1,25 @@
+{% extends "main.xml"%}
+{% block content %} 
+
+        <!-- Left layout -->
+        <RelativeLayout android:id="@+id/left_layout"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_weight="1" android:background="#eeeeee"
+            android:layout_margin="20dp" android:paddingBottom="20dp"
+            android:paddingTop="25dp" android:paddingLeft="25dp"
+            android:paddingRight="25dp">
+            {% block left_content%} 
+            {% endblock %}
+        </RelativeLayout>
+
+        <!-- Right layout -->
+        <RelativeLayout android:id="@+id/right_layout"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_weight="1" android:background="#eeeeee"
+            android:layout_margin="20dp" android:paddingBottom="20dp"
+            android:paddingTop="25dp" android:paddingLeft="25dp"
+            android:paddingRight="25dp">
+            {% block right_content %}
+            {% endblock %}
+        </RelativeLayout>
+{% endblock %}

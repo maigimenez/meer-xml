@@ -15,8 +15,8 @@ from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    DEFAULT_INPUT, GENERIC_TITLE, NUM, END,
                                    NEXT_LEVEL, DATE, TEXT, STRINGS,
                                    DEFAULT_STRINGS, LEVEL_STRINGS,
-                                   CHILDREN_ARRAYS, DICOM_LEVEL, BOOL, RIGHT,
-                                   SCROLL)
+                                   CHILDREN_ARRAYS, DICOM_LEVEL, BOOL,
+                                   SCROLL, TWO_COLUMNS_ONE_LEVEL)
 
 
 def get_languages(language_code):
@@ -172,6 +172,19 @@ def write_strings(language_code, report):
 ###################################LAYOUTS###################################
 
 
+def get_layout_file(report_level, xml_filename, concept, parent):
+    """ Reuturn filename of current layout
+    based on the concept and its parent. """
+    # Add the concept_value to the layout file and open the file for writting
+    if (int(report_level) == 1):
+        filename = xml_filename
+    else:
+        filename = Template(xml_filename).safe_substitute(
+            CODE=concept.concept_value.lower(),
+            PARENT=parent.lower())
+    return filename
+
+
 def write_template_snippet(layout_file, template_name):
     """ Write a template snippet that does NOT requiere substitution
     at the end of the layout file given
@@ -187,11 +200,11 @@ def write_template_snippet(layout_file, template_name):
     template_file.close()
 
 
-def write_template_substitution(environment, layout_file, template_type,
-                                concept=None, report_level=None,
-                                previous_item=None, language=None):
-    """ Write a template snippet that does requiere substitution
-    to fill the template
+def get_template_substitution(environment, template_type, concept=None,
+                              report_level=None, previous_item=None,
+                              language=None):
+    """ Return a temp snippet that does requiere subtitution
+    and the current item to nest template levels.
 
     """
     print template_type
@@ -223,31 +236,36 @@ def write_template_substitution(environment, layout_file, template_type,
                                           concept_value=concept.concept_value,
                                           previous_item=previous_item)
         current_item = "etext_{0}".format(concept.concept_value)
+    # Bool type attribute
+    elif (template_type == BOOL):
+        localized_concept = concept.concept_name[language]
+        render_template = template.render(concept_name=localized_concept,
+                                          concept_value=concept.concept_value,
+                                          previous_item=previous_item)
+        current_item = "cbox_{0}".format(concept.concept_value)
     elif (template_type == SCROLL):
         render_template = template.render(parent=previous_item)
-    #Write the template instatiated in layout file
-    layout_file.write(render_template.encode('utf-8'))
-    return current_item
+
+    return render_template, current_item
 
 
-def get_layout_file(report_level, xml_filename, concept, parent):
-    """ Reuturn filename of current layout
-    based on the concept and its parent. """
-    # Add the concept_value to the layout file and open the file for writting
-    if (int(report_level) == 1):
-        filename = xml_filename
-    else:
-        filename = Template(xml_filename).safe_substitute(
-            CODE=concept.concept_value.lower(),
-            PARENT=parent.lower())
-    return filename
+def get_attributes_list(environment, attributes,
+                        previous_item, language_code):
+    """ Retrun a list of Android layout xml snipppets for the attributes
+    passed as parameter.
 
-
-def write_attributes_layout(environment, layout_file, attributes,
-                            previous_item, language_code):
-    print len(attributes)
+    Keyword Arguments:
+    environment --jinja2 environment variable.
+    attributes -- DICOM attributes used to generate Android XML Layout
+    previous_item -- Last item ID. Used to nest layout levels.
+    language_code -- code with supported languages.
+                     Used to get the default language.
+    """
+    attributes_layouts = []
+    current_item = ""
+    # Get android xml layout for every attribute
     for attribute in attributes:
-        #print " - {0}".format(attribute.type)
+        # Discriminate if an attributes is boolean
         if (attribute.type == NUM and attribute.is_bool()):
             attribute_type = BOOL
         else:
@@ -259,22 +277,23 @@ def write_attributes_layout(environment, layout_file, attributes,
         if(attribute_type == NUM or attribute_type == DATE or
            attribute_type == TEXT or attribute_type == BOOL):
             # Get the concept name in the default language.
-            # TODO: Check if this is "really" needed.
+            # TODO: Check if this (comments in default language)
+            #is "really" needed.
             default_language = get_language_code('CODE_MEANING', language_code)
-            current_item = write_template_substitution(
+            attribute_layout, current_item = get_template_substitution(
                 environment,
-                layout_file,
-                attribute.type,
+                attribute_type,
                 concept=attribute.concept,
                 previous_item=previous_item,
                 language=default_language)
+            attributes_layouts.append(attribute_layout)
             previous_item = current_item
             print current_item
         else:
             #Throw an error
             current_item = previous_item
     print
-    return current_item
+    return attributes_layouts, current_item
 
 
 #TODO: add the behaviour to support a layout with only attributes too ->
@@ -306,10 +325,10 @@ def write_one_column_layout_children(report_level, xml_filename, report):
             # There are ONLY CHILDREN in this layout
             # Get the template snippet,find the subtitution terms
             # and write the template
-            write_template_substitution(environment, layout_file,
-                                        TREE_TITLE, concept=concept)
-            write_template_substitution(environment, layout_file,
-                                        NEXT_LEVEL, concept=concept)
+            # write_template_substitution(environment, layout_file,
+            #                             TREE_TITLE, concept=concept)
+            # write_template_substitution(environment, layout_file,
+            #                             NEXT_LEVEL, concept=concept)
             #Write layout end, close open xml tags.
             write_template_snippet(layout_file, END)
             print
@@ -324,45 +343,36 @@ def write_two_columns_layout_one_level(level, layout_filename, concept,
     print(" * {0}".format(concept))
     # Set the Environment for the jinja2 templates.
     environment = set_environment(LAYOUT_TEMPLATES_PATH)
-    # Write those templates snippet than does not need substitution
-    # Write the header, main and left layout
-    write_template_snippet(layout_file, HEADER)
-    write_template_snippet(layout_file, MAIN_LEFT)
 
     # There are ONLY ATTRIBUTES in this layout
     if (len(children.attributes) > 0):
-        # Get the template snippet, find the subtitution terms and
-        # write the template
-        write_template_substitution(environment, layout_file,
-                                    GENERIC_TITLE, report_level=level)
+        # Get the template
+        template_name = get_property(LAYOUT_TEMPLATES_SECTION,
+                                     TWO_COLUMNS_ONE_LEVEL)
+        template = environment.get_template(template_name)
+
         # Store previous concept id
-        previous_item = "level_{0}_label".format(level)
-        # Write the scoll for the attributes 
-        write_template_substitution(environment, layout_file,
-                                    SCROLL, previous_item=previous_item)        
+        previous_item = "code_{0}".format(concept.concept_value)
+
         # Split attributes in two columns
         num_attributes = len(children.attributes)
-        first_attributes = children.attributes[0:(num_attributes / 2)]
-        last_attributes = children.attributes[(num_attributes / 2):]
+        left_attributes = children.attributes[0:(num_attributes / 2)]
+        right_attributes = children.attributes[(num_attributes / 2):]
+
         #Write the attributes
-        previous_item = write_attributes_layout(environment, layout_file,
-                                                first_attributes,
-                                                previous_item, language_code)
-        #Write the end of left layout, the right layout
-        write_template_snippet(layout_file, RIGHT)
-        # Write the scoll for the attributes 
-        write_template_substitution(environment, layout_file,
-                                    SCROLL, previous_item=previous_item)        
-
-        previous_item = write_attributes_layout(environment, layout_file,
-                                                last_attributes,
-                                                previous_item, language_code)
-        write_template_snippet(layout_file, END)
+        left_items, previous_item  = get_attributes_list(environment,
+                                                         left_attributes,
+                                                         previous_item,
+                                                         language_code)
+        right_items, previous_item  = get_attributes_list(environment,
+                                                          right_attributes,
+                                                          previous_item,
+                                                          language_code)
+        layout_file.write(template.render(level_code = concept.concept_value,
+                                          left_items=left_items,
+                                          right_items=right_items)
+                          .encode('utf-8'))
         layout_file.close()
-
-    # There are ONLY CHILDREN in this layout
-    else:
-        pass 
 
 
 def write_two_columns_layout_two_levels():
@@ -404,12 +414,8 @@ def write_two_columns_layout(report_level, xml_filename, report,
 def write_layouts(xml_filenames, report, language_code):
     print xml_filenames
     for level, layout_filename in xml_filenames.items():
-       #Get the odontology id of the report
+        #Get the odontology id of the report
         odontology_id = report.get_odontology()
-        #Get the actual level to write its layout
-        #dict_level = report.get_level(int(level))
-        #parent_code = report.get_parent_code(int(level))
-        #print "parent", parent_code, " level: ", level
         #Get the level distribution for this level.
         level_settings = get_layout_settings(odontology_id, level)
         print "[Level {0}] {1}".format(level, level_settings)

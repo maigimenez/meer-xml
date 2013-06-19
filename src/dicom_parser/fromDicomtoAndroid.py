@@ -30,3 +30,4 @@ deepest_level = report.get_deepest_level()
 #WRITE LAYOUTS
 template_engine.write_layouts(xml_filenames.layouts,report,LANGUAGE_CODE)
 #dicom_xml.close()
+#template_engine.write_block_templates()
