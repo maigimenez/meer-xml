@@ -203,7 +203,19 @@ def get_filepath_odontology(odontology_id, filetype):
 
 
 def get_layout_settings(odontology_id, level):
-    """ Return the layout distribution for odontology and level given """
+    """ Return a layout distribution for odontology and level given
+    set by the user in the settings.ini file. (1 column or 2 columns)
+
+    """
     section = odontology_id + LAYOUT_SETTINGS
-    option = LEVEL_TAG + level
-    return get_property(section,option)
+    layout_option = LEVEL_TAG + level
+    return get_property(section,layout_option)
+
+def get_children_settings(odontology_id, level):
+    """ Return children layout distribution for odontology and level given
+    set by the user in the settings.ini file. (ExpandableListView or Listview)
+
+    """
+    section = odontology_id + LAYOUT_SETTINGS
+    children_option = LEVEL_TAG + level + CHILDREN_TAG
+    return get_property(section,children_option)

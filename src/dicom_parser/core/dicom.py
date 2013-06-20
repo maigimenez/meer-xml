@@ -263,7 +263,9 @@ class DictReport(object):
                 if (concept_level.concept_value == concept.concept_value):
                     return children
 
-                    
+    def get_leaf_level(self):
+        """ Return deepest level of the report tree """
+        return max(self.tree.keys())
 
     def get_tree(self):
         """ Return the dicom report in a dictionary """

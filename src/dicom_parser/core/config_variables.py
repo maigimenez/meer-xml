@@ -25,8 +25,11 @@ LAYOUTS = "Layouts"
 LAYOUT_FILENAME = "-Layouts"
 LAYOUT_SETTINGS = "-Layouts Settings"
 LEVEL_TAG = "level_"
+CHILDREN_TAG = "_children" 
 COLUMN_1 = "1 Column"
 COLUMNS_2 = "2 Columns"
+LISTVIEW = "ListView"
+EXPANDABLELISVIEW = "ExpandableListView"
 
 # This variables match with the settings.ini
 # TEMPLATE_TYPES
