@@ -311,9 +311,7 @@ def get_children_list(environment, children_code,
                                                         children_layout,
                                                         concept=children_code,
                                                         previous_item=previous_item)
-    children_layout = []
-    children_layout.append(children)
-    return children_layout, current_item
+    return [children], current_item
                                                            
 
 #TODO: add the behaviour to support a layout with only attributes too ->
