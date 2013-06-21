@@ -28,8 +28,6 @@ LEVEL_TAG = "level_"
 CHILDREN_TAG = "_children" 
 COLUMN_1 = "1 Column"
 COLUMNS_2 = "2 Columns"
-LISTVIEW = "ListView"
-EXPANDABLELISVIEW = "ExpandableListView"
 
 # This variables match with the settings.ini
 # TEMPLATE_TYPES
@@ -73,12 +71,16 @@ BOOL = 'bool'
 DATE = 'date'
 TEXT = 'text'
 SCROLL = 'scroll'
+LISTVIEW = "ListView"
+EXPANDABLELISVIEW = "Expandable ListView"
 # LAYOUT
+ONE_COLUMN = '1 Column'
 TWO_COLUMNS_ONE_LEVEL ='2 Columns 1 Level'
 TWO_COLUMNS_TWO_LEVELS = '2 Columns 2 Levels'
 LAYOUT_TEMPLATES = [END, HEADER, MAIN_LEFT, RIGHT, NEXT_LEVEL, GENERIC_TITLE,
-                    NUM, DATE, TEXT, SCROLL, TWO_COLUMNS_ONE_LEVEL,
-                    TWO_COLUMNS_TWO_LEVELS]
+                    NUM, DATE, TEXT, SCROLL, ONE_COLUMN,
+                    TWO_COLUMNS_ONE_LEVEL, TWO_COLUMNS_TWO_LEVELS,
+                    EXPANDABLELISVIEW, LISTVIEW]
 
 # XML FILETYPES
 STRINGS = 'Strings'

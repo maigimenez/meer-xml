@@ -17,7 +17,9 @@ from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    NEXT_LEVEL, DATE, TEXT, STRINGS,
                                    DEFAULT_STRINGS, LEVEL_STRINGS,
                                    CHILDREN_ARRAYS, DICOM_LEVEL, BOOL,
-                                   SCROLL, TWO_COLUMNS_ONE_LEVEL)
+                                   SCROLL, TWO_COLUMNS_ONE_LEVEL,
+                                   ONE_COLUMN,EXPANDABLELISVIEW,
+                                   LISTVIEW)
 
 
 def get_languages(language_code):
@@ -244,8 +246,14 @@ def get_template_substitution(environment, template_type, concept=None,
                                           concept_value=concept.concept_value,
                                           previous_item=previous_item)
         current_item = "cbox_{0}".format(concept.concept_value)
+    # Scroll 
     elif (template_type == SCROLL):
         render_template = template.render(parent=previous_item)
+    # Listview
+    elif (template_type == LISTVIEW or template_type == EXPANDABLELISVIEW):
+        render_template = template.render(concept_value=concept.concept_value,
+                                          previous_item=previous_item)
+        current_item = "list_{0}".format(concept.concept_value)
 
     return render_template, current_item
 
@@ -297,6 +305,17 @@ def get_attributes_list(environment, attributes,
     return attributes_layouts, current_item
 
 
+def get_children_list(environment, children_code,
+                        previous_item, children_layout):
+    children, current_item = get_template_substitution( environment,
+                                                        children_layout,
+                                                        concept=children_code,
+                                                        previous_item=previous_item)
+    children_layout = []
+    children_layout.append(children)
+    return children_layout, current_item
+                                                           
+
 #TODO: add the behaviour to support a layout with only attributes too ->
 #      -> write_one_column_layout_one_level
 def write_one_column_layout_one_level(report_level, xml_filename, report,
@@ -324,17 +343,32 @@ def write_one_column_layout_one_level(report_level, xml_filename, report,
             
             # There are ONLY CHILDREN in this layout
             if (len(children.children_containers) > 0):
-                pass
+                # Get the template
+                template_name = get_property(LAYOUT_TEMPLATES_SECTION,
+                                             ONE_COLUMN)
+                template = environment.get_template(template_name)
+                # Store previous concept id
+                previous_item = "code_{0}".format(concept.concept_value)
+                items, current_item  = get_children_list(environment,
+                                                         concept,
+                                                         previous_item,
+                                                         children_layout)
+                # Render layout template with correct values. 
+                layout_file.write(template.render(level_code = concept.concept_value,
+                                                  items_list=items)
+                                  .encode('utf-8'))
+                layout_file.close()
 
             # TODO
             # There are ONLY ATTRIBUTES in this layout
             if (len(children.attributes) > 0):
                 pass
+        else:
+            print "Layout {0} already created".format(layout_filename)
 
 
 def write_two_columns_layout_one_level(level, layout_filename, concept,
                                        children, language_code):
-
     if (not isfile(layout_filename)):
         layout_file = open(layout_filename, 'w')
         # print(" * {0}".format(concept))
@@ -397,13 +431,15 @@ def write_two_columns_layout(report_level, xml_filename, report,
                     if(len(children_to_write.attributes) == 0 or
                        len(children_to_write.children_containers) == 0):
                         print "{0}: One Level".format(layout_filename)
-                        # write_two_columns_layout_one_level(report_level,
-                        #                                    layout_filename,
-                        #                                    level_children,
-                        #                                    children_to_write,
-                        #                                    language_code)
+                        write_two_columns_layout_one_level(report_level,
+                                                           layout_filename,
+                                                           level_children,
+                                                           children_to_write,
+                                                           language_code)
                     else:
-                        # TODO: Si hay hijos y atributos el usuario es quien decide 
+                        # TO IMPROVE: 
+                        # Si hay hijos y atributos el usuario es quien decide
+                        # como distribuir el contenido. 
                         print "Two levels"
                         #write_two_columns_layout_two_levels(xml_files,
                         #filename,level,concept,children)

@@ -1,7 +1,7 @@
 
     <!-- Children Arrays -->
     {%- for node in nodes %}
-     <string-array name="code_{{ node['parent_code'] }}_children">
+     <string-array name="list_{{ node['parent_code'] }}">
         {%- for child in node['children'] %}
         <item>{{ child }}</item>
         {%- endfor %}

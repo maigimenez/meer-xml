@@ -23,6 +23,6 @@
         android:paddingBottom="5sp" android:background="@color/lightGrey"
         android:baselineAligned="false">
         {%- block content %}
-        {% endblock -%}
+        {% endblock %}
     </LinearLayout>
 </RelativeLayout>
