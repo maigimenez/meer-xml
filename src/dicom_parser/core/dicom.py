@@ -1,96 +1,12 @@
  #  -*- coding: utf-8 -*-
 from config_variables import *
 from config import get_odontology_level
+from types import *
 
-class Property(object):
-    """This class manages the properties of a concept """
-    def __init__(self):
-        self.max_cardinality = 0
-        self.min_cardinality = 0
-        self.max_value = 0
-        self.min_value = 0
-        self.condition = ""
-
-
-class Concept(object):
-    """ This class manages the concept"""
-    def __init__(self,concept_name={},concept_value=-1):
-        #print "init"
-        self.concept_name = concept_name
-        self.concept_value = concept_value
-
-    def __str__(self):
-        localized_strings = ""
-        for localized_string in self.concept_name.values():
-            localized_strings +=  localized_string + ", "
-        return u"Concept names: {0} - Concept value: {1}".format(
-            localized_strings, self.concept_value).encode('utf-8')
-
-    def __repr__(self):
-        localized_strings = ""
-        for localized_string in self.concept_name.values():
-            localized_strings +=  localized_string + ", "
-        return u"Concept names: {0} - Concept value: {1}".format(
-            localized_strings, self.concept_value).encode('utf-8')
-
-class Data_type(object):
-    """This class manages a data type. 
-    This is the superclass, the  child classes are: date, text and num
-
-    """
-    def __init__(self):
-        self.type = ""
-        self.concept = Concept()
-
-    def __repr__(self):
-        return u"{0}: {1}".format(self.type,self.concept.concept_name)
-
-class Date(Data_type):
-    """Child class of Data_type
-    It stores a date
-
-    """
-    def __init__(self):
-        Data_type.__init__(self)
-        self.type = "date"
-
-
-class Text(Data_type):
-    """Child class of Data_type
-    It stores a text field
-
-    """
-    def __init__(self):
-        Data_type.__init__(self)
-        self.type = "text"
-
-
-class Num(Data_type):
-    """Child class of Data_type
-    It stores a number
-
-    """
-    def __init__(self):
-        Data_type.__init__(self)
-        self.type = "num"
-        self.unit_measurement = Concept()
-
-    def is_bool(self):
-        """ Return if a num data is boolean or not"""
-        unit_type = self.unit_measurement.concept_name.values()
-        if ("Unidades Boleanas" in unit_type or "Boolean Units" in unit_type):
-            return True
-        return False
-
-    def __repr__(self):
-        return u"{0}: {1} - type({2})".format(
-            self.type,self.concept.concept_name,self.unit_measurement.concept_name)
-
-
-class Container(object):
+class SAXContainer(object):
     """This class stores a container tag from xml"""
     def __init__(self,concept=Concept(),level=-1,open_level=True, parent=Concept()):
-        self.concept = Concept(concept.concept_name,concept.concept_value)
+        self.concept = Concept(concept.value,concept.meaning)
         #A list of attributes/nodes (date, num, text)
         self.attributes = []
         self.tree_level = level
@@ -109,12 +25,12 @@ class Container(object):
     """ Pretty print a container"""
     def __repr__(self):
         return u"L{0}: {1} ({2}) p({3}){4}\n".format(
-            self.tree_level,self.concept.concept_name, len(self.attributes),
-            self.parent.concept_name if (self.parent!=None) else "", 
+            self.tree_level,self.concept.meaning, len(self.attributes),
+            self.parent.meaning if (self.parent!=None) else "", 
             "..." if self.open else "" ).encode('utf-8')
 
 
-class Report(object):
+class SAXReport(object):
     """This class manages the report while we are reading it from xml"""
     def __init__(self):
         self.report_type = ""
