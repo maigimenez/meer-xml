@@ -25,9 +25,9 @@ xml_filenames.set_odontology(report.get_odontology())
 #WRITE STRINGS XML
 template_engine.write_strings(LANGUAGE_CODE,report)
 
-deepest_level = report.get_deepest_level()
+#deepest_level = report.get_deepest_level()
 #print xml_filenames.layouts
 #WRITE LAYOUTS
-template_engine.write_layouts(xml_filenames.layouts,report,LANGUAGE_CODE)
+#emplate_engine.write_layouts(xml_filenames.layouts,report,LANGUAGE_CODE)
 #dicom_xml.close()
 #template_engine.write_block_templates()

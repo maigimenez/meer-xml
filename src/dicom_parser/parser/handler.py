@@ -2,8 +2,11 @@
 import sys
 import logging
 import xml.sax
-from core.dicom import (Report, Concept, Container, Date, Text, Num,
+from core.dicom import (SAXReport, SAXContainer,
                         DictReport, DictContainer, Children)
+
+from core.dicomSR import DicomSR, Concept, Container, Date, Text, Num
+
 from core.config import get_language_code
 
 
@@ -32,7 +35,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
         # A list of the code values already writen in strings.xml
         self._code_values = []
         # Report-related variables
-        self._report = Report()
+        self._report = SAXReport()
         self._dict_report = None
 
     def parse(self, xml_file):
@@ -76,9 +79,9 @@ class DicomParser(xml.sax.handler.ContentHandler):
             #Unit measurement tag also has a concept name
             #It explains the unit measurement type (boolean units basically)
             if (self._in_unit_measurement):
-                self._unit_measurement = Concept({}, -1)
+                self._unit_measurement = Concept(-1,{})
             else:
-                self._concept = Concept({}, -1)
+                self._concept = Concept(-1,{})
         if (name == "DATE"):
             self._in_type = True
             self._current_attribute = Date()
@@ -101,9 +104,9 @@ class DicomParser(xml.sax.handler.ContentHandler):
             self._in_data = False
             if (name == "CODE_VALUE"):
                 if(not self._in_unit_measurement):
-                    self._concept.concept_value = self._buffer
+                    self._concept.value = self._buffer
                 else:
-                    self._unit_measurement.concept_value = self._buffer
+                    self._unit_measurement.value = self._buffer
                 # Check if the code value is already written
                 # in the strings.xml file
                 if (self._buffer not in self._code_values):
@@ -117,11 +120,11 @@ class DicomParser(xml.sax.handler.ContentHandler):
                 # (CODE_MEANING)
                 # TODO: pass language code  with a variable (not sys.argv)
                 if (not self._in_unit_measurement):
-                    self._concept.concept_name[
+                    self._concept.meaning[
                         get_language_code(name, sys.argv[2])] = self._buffer
                 #The attribute is a Num type and we store its unit measurement
                 elif(self._in_unit_measurement):
-                    self._unit_measurement.concept_name[
+                    self._unit_measurement.meaning[
                         get_language_code(name, sys.argv[2])] = self._buffer
         if (name == "CONCEPT_NAME"):
             self._in_concept = False
@@ -130,7 +133,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
             if (self._in_level):
                 logging.info(self._concept)
                 self._report.add_container(
-                    Container(self._concept, self._tree_level, True,
+                    SAXContainer(self._concept, self._tree_level, True,
                               self._report.return_parent(self._tree_level)))
                 #TODO: no va al log, s'imprimix per consola igual
                  #logging.info(self._report.imprime())
@@ -212,6 +215,17 @@ class DicomParser(xml.sax.handler.ContentHandler):
                     containers[container.parent].children_containers.\
                     append(container.concept)
 
+    def build_dicom_tree(self):
+        self._dict_report = DicomSR(self._report.report_type,
+                            self._report.id_odontology)
+        #Sort containers list by its tree level. 
+        self._report._containers.sort(key = lambda x: x.tree_level)
+        for container in self._report._containers:
+            dict_concept = Concept(container.concept.value, container.concept.meaning)
+            self._dict_report.add_node(Container(container.tree_level,dict_concept,[],container.attributes),container.parent)
+
+
     def endDocument(self):
         """ Build the report tree and close the string files """
-        self.build_tree()
+      #  self.build_tree()
+        self.build_dicom_tree()

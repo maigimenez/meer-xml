@@ -454,14 +454,14 @@ def write_two_columns_layout(report_level, xml_filename, report,
             print layout_filename
             level = report.get_level(int(report_level))
             print type(level.containers.values()), type(level.containers.keys())
-            if (len(level.containers.attributes) == 0 or
-                len(level.containers.children.children_containers) == 0):
+            #if (len(level.containers.attributes) == 0 or
+            #    len(level.containers.children.children_containers) == 0):
                 #TODO: Root level with 2 columns and 1 level  
-                pass
-            else:
-                write_two_columns_layout_two_level(level,
-                                                   layout_filename,
-                                                   language_code)
+            #    pass
+            #else:
+             #   write_two_columns_layout_two_level(level,
+              #                                     layout_filename,
+               #                                    language_code)
         else:
             print "Layout {0} already created".format(layout_filename)
 
