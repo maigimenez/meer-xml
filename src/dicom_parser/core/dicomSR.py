@@ -1,26 +1,28 @@
  #  -*- coding: utf-8 -*-
-from types import *
-from config_variables import (MULTIPLE_PROPERTIES,DICOM_LEVEL,CHILDREN_ARRAYS)
+from types import Concept
+from config_variables import(MULTIPLE_PROPERTIES, DICOM_LEVEL,
+                             CHILDREN_ARRAYS)
 from config import get_odontology_level
 
 
 class Container(object):
-    def __init__ (self, tree_level, concept=Concept(),properties=[],attributes=[]):
+    def __init__(self, tree_level, concept=Concept(), properties=[],
+                 attributes=[]):
         self.tree_level = tree_level
         self.concept = concept
-        #List of properties for this Container. 
-        #TODO: Items in this list will be Property type 
+        #List of properties for this Container.
+        #TODO: Items in this list will be Property type
         self.properties = properties[:]
         self.attributes = attributes[:]
         #print self.attributes
 
-    #def __getattr__(self,name)
+    # TODO: def __getattr__(self,name)
     def get_code(self):
         return self.concept.value
 
     def get_meaning(self):
         return self.concept.meaning
-    
+
     def get_level(self):
         return self.tree_level
 
@@ -34,20 +36,20 @@ class Container(object):
             str_attributes += " - " + attribute.__str__() + "\n"
         str_attributes = str_attributes[:-1]
         return u"[{0}] {1} (no.attr: {2} - no.prop:{3}): \n{4}".format(
-                self.concept.value, meaning.upper(), len(self.attributes), len(self.properties),
-            str_attributes).encode("utf-8")
+            self.concept.value, meaning.upper(), len(self.attributes),
+            len(self.properties), str_attributes).encode("utf-8")
 
     def __repr__(self):
         return u"[{0}] {1} (no.attr: {2} - no.prop:{3}):".format(
-            self.concept.value, self.concept.meaning, len(self.attributes), len(self.properties))
+            self.concept.value, self.concept.meaning,
+            len(self.attributes), len(self.properties))
 
-#def tree(): return defaultdict(tree)   
 
 class DicomTree(object):
     def __init__(self):
-        self.root = {}  
+        self.root = {}
 
-    def get_container(self,code):
+    def get_container(self, code):
         for container in self.root.keys():
             if (container.get_code() == code):
                 return container
@@ -56,63 +58,65 @@ class DicomTree(object):
 
     def get_parents(self):
         if (self.root):
-            return [parent.get_concept()  for parent in self.root.keys()]
+            return [parent.get_concept() for parent in self.root.keys()]
         else:
             return []
 
     def is_empty(self):
         return self.root == {}
 
-    def print_tree(self,ident,attributes):
-        if self.root=={}:
-            pass
-        else:
-            for data,children in self.root.iteritems():
+    def print_tree(self, ident, attributes):
+        if (self.root):
+            for data, children in self.root.iteritems():
                 meaning = data.concept.meaning.values()[0]
                 str_attributes = "\n"
                 for attribute in data.attributes:
-                     str_attributes += "|" + " "*(ident+2) + " - " + attribute.__str__() + "\n"
+                    str_attributes += ("|" + " " * (ident + 2) + " - "
+                                       + attribute.__str__() + "\n")
                 str_attributes = str_attributes[:-1]
-                if (attributes==False):
+                if (not attributes):
                     print u"{0} [{1}] {2} (no.attr: {3} - no.prop:{4})".format(
-                        "-"*(ident+1), data.concept.value, meaning.upper(), len(data.attributes), len(data.properties))
+                        "-" * (ident + 1), data.concept.value, meaning.upper(),
+                        len(data.attributes), len(data.properties))
                 else:
-                    print u"{0} [{1}] {2} (no.attr: {3} - no.prop:{4}): {5}".format(
-                        "-"*(ident+1), data.concept.value, meaning.upper(), len(data.attributes), len(data.properties),str_attributes)
-                children.print_tree(ident+4,attributes)
+                    print u"{0} [{1}] {2} (no.attr: {3} - no.prop:{4}): {5}"\
+                        .format("-" * (ident + 1), data.concept.value,
+                                meaning.upper(), len(data.attributes),
+                                len(data.properties), str_attributes)
+                children.print_tree(ident + 4, attributes)
 
-    def add_node(self,node,parent):
-        if (parent==None):
-            self.root[node]=DicomTree()  
+    def add_node(self, node, parent):
+        if (parent is None):
+            self.root[node] = DicomTree()
         else:
             codes = [container.get_code() for container in self.root.keys()]
             if parent.value in codes:
                 key = self.get_container(parent.value)
-                self.root[key].root[node]=DicomTree()
-            else:           
+                self.root[key].root[node] = DicomTree()
+            else:
                 for child in self.root.values():
-                    child.add_node(node,parent)
+                    child.add_node(node, parent)
 
-    def get_set_data(self,nodes,attributes):
+    def get_set_data(self, nodes, attributes):
         if (self.root == {}):
-            return (list(set(nodes)),list(set(attributes)))
+            return (list(set(nodes)), list(set(attributes)))
         else:
-            for data,children in self.root.iteritems():
+            for data, children in self.root.iteritems():
                 nodes.append(data)
                 attributes.extend(data.attributes)
-                children.get_set_data(nodes,attributes)
+                children.get_set_data(nodes, attributes)
 
-    def get_flat_tree(self,flat):
+    def get_flat_tree(self, flat):
         if (self.root == {}):
             return flat
         else:
-            for parent,children in self.root.iteritems():
+            for parent, children in self.root.iteritems():
                 flat[parent.get_concept()] = children.get_parents()
                 children.get_flat_tree(flat)
 
 
 class DicomSR(object):
-    def __init__(self, report_type="",id_odontology=-1):
+    def __init__(self, report_type="", id_odontology=-1):
         self.report_type = report_type
         self.id_odontology = id_odontology
         self.report = DicomTree()
@@ -120,10 +124,10 @@ class DicomSR(object):
     def imprime(self):
         """ Pretty print of a report """
         print u"\n ------ {0} ---------- \n".format(self.report_type)
-        self.report.print_tree(0,True)
+        self.report.print_tree(0, True)
 
-    def add_node(self,node,parent):
-        self.report.add_node(node,parent)
+    def add_node(self, node, parent):
+        self.report.add_node(node, parent)
 
     def get_odontology(self):
         """ Return current report odontology """
@@ -149,38 +153,37 @@ class DicomSR(object):
                 level_num = MULTIPLE_PROPERTIES[DICOM_LEVEL][2]
                 code = MULTIPLE_PROPERTIES[DICOM_LEVEL][4]
                 meaning = MULTIPLE_PROPERTIES[DICOM_LEVEL][5]
-                #Init dictinary will hold the substitution. 
+                #Init dictinary will hold the substitution.
                 # Keys are language code and values  contains
                 # values to fill the template
                 for language in languages:
                     substitution_words[language] = {
                         levels_tag: [],
                         attrs_tag: []}
-                # Variables used to store localized items for the templates
-                localized_levels = []
-                localized_lattributes =[]
                 #Get container's concept and its attributes
                 containers = []
                 attributes = []
-                self.report.get_set_data(containers,attributes)
+                self.report.get_set_data(containers, attributes)
                 for container in containers:
                     odontology = get_odontology_level(
-                                        odontology_id=self.get_odontology(),
-                                        tree_level=container.get_level(),
-                                        languages_tag=language)
+                        odontology_id=self.get_odontology(),
+                        tree_level=container.get_level(),
+                        languages_tag=language)
                     for language in languages:
                         aux = {}
                         aux[level_num] = container.get_level()
-                        aux[level_name] = (unicode(odontology,"utf-8"))
+                        aux[level_name] = (unicode(odontology, "utf-8"))
                         aux[code] = container.get_code()
                         aux[meaning] = container.get_meaning()[language]
-                        substitution_words[language][levels_tag].append(aux.copy())
+                        substitution_words[language][levels_tag].\
+                            append(aux.copy())
                 for attribute in attributes:
                     for language in languages:
                         aux = {}
                         aux[code] = attribute.code
-                        aux[meaning] =  attribute.meaning[language]
-                        substitution_words[language][attrs_tag].append(aux.copy())
+                        aux[meaning] = attribute.meaning[language]
+                        substitution_words[language][attrs_tag].\
+                            append(aux.copy())
 
             elif (template_type == CHILDREN_ARRAYS):
                 nodes_tag = MULTIPLE_PROPERTIES[CHILDREN_ARRAYS][0]
@@ -191,13 +194,12 @@ class DicomSR(object):
                 flat = {}
                 self.report.get_flat_tree(flat)
                 #Delete leaf items. They are not needed
-                flat = {key:flat[key] for key in flat if flat[key]} 
-                for parent,children in flat.iteritems():
+                flat = {key: flat[key] for key in flat if flat[key]}
+                for parent, children in flat.iteritems():
                     for language in languages:
-                        aux = {parent_tag:parent.code, children_tag: []}
+                        aux = {parent_tag: parent.code, children_tag: []}
                         for child in children:
                             aux[children_tag].append(child.meaning[language])
                         substitution_words[language][nodes_tag].append(aux)
 
         return substitution_words
-
