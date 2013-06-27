@@ -2,10 +2,11 @@
 import sys
 import logging
 import xml.sax
+from core.types import Date, Num, Text, Concept
 from core.dicom import (SAXReport, SAXContainer,
                         DictReport, DictContainer, Children)
 
-from core.dicomSR import DicomSR, Concept, Container, Date, Text, Num
+from core.dicomSR import DicomSR, Container
 
 from core.config import get_language_code
 

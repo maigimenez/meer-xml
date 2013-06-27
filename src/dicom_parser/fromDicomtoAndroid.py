@@ -28,6 +28,6 @@ template_engine.write_strings(LANGUAGE_CODE,report)
 #deepest_level = report.get_deepest_level()
 #print xml_filenames.layouts
 #WRITE LAYOUTS
-#emplate_engine.write_layouts(xml_filenames.layouts,report,LANGUAGE_CODE)
+template_engine.write_layouts(xml_filenames.layouts,report,LANGUAGE_CODE)
 #dicom_xml.close()
 #template_engine.write_block_templates()

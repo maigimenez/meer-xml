@@ -183,7 +183,7 @@ def get_layout_file(report_level, xml_filename, concept=None, parent=None):
         filename = xml_filename
     else:
         filename = Template(xml_filename).safe_substitute(
-            CODE=concept.concept_value.lower(),
+            CODE=concept.lower(),
             PARENT=parent.lower())
     return filename
 
@@ -219,41 +219,41 @@ def get_template_substitution(environment, template_type, concept=None,
     current_item = ""
     # Title of a tree section
     if (template_type == TREE_TITLE):
-        render_template = template.render(level=concept.concept_value)
+        render_template = template.render(level=concept.value)
         # TODO: find a better way to do this. Dependent on the template
         # using a regex to find "#+id/    \n", and not hardcoded here.
-        current_item = "level_{0}_label".format(concept.concept_value)
+        current_item = "level_{0}_label".format(concept.value)
     # Title of a generic section
     elif (template_type == GENERIC_TITLE):
         render_template = template.render(level=report_level)
         current_item = "level_{0}_label".format(report_level)
     # Listview for next (deeper) level of the dicom tree.
     elif (template_type == NEXT_LEVEL):
-        render_template = template.render(code=concept.concept_value,
-                                          parent_code=concept.concept_value)
-        current_item = "children_{0}_list".format(concept.concept_value)
+        render_template = template.render(code=concept.value,
+                                          parent_code=concept.value)
+        current_item = "children_{0}_list".format(concept.value)
     # Num type attribute
     elif (template_type == NUM or template_type == TEXT):
-        localized_concept = concept.concept_name[language]
+        localized_concept = concept.meaning[language]
         render_template = template.render(concept_name=localized_concept,
-                                          concept_value=concept.concept_value,
+                                          concept_value=concept.value,
                                           previous_item=previous_item)
-        current_item = "etext_{0}".format(concept.concept_value)
+        current_item = "etext_{0}".format(concept.value)
     # Bool type attribute
     elif (template_type == BOOL):
-        localized_concept = concept.concept_name[language]
+        localized_concept = concept.meaning[language]
         render_template = template.render(concept_name=localized_concept,
-                                          concept_value=concept.concept_value,
+                                          concept_value=concept.value,
                                           previous_item=previous_item)
-        current_item = "cbox_{0}".format(concept.concept_value)
+        current_item = "cbox_{0}".format(concept.value)
     # Scroll 
     elif (template_type == SCROLL):
         render_template = template.render(parent=previous_item)
     # Listview
     elif (template_type == LISTVIEW or template_type == EXPANDABLELISVIEW):
-        render_template = template.render(concept_value=concept.concept_value,
+        render_template = template.render(concept_value=concept.value,
                                           previous_item=previous_item)
-        current_item = "list_{0}".format(concept.concept_value)
+        current_item = "list_{0}".format(concept.value)
 
     return render_template, current_item
 
@@ -316,7 +316,7 @@ def get_children_list(environment, children_code,
 
 #TODO: add the behaviour to support a layout with only attributes too ->
 #      -> write_one_column_layout_one_level
-def write_one_column_layout_one_level(report_level, xml_filename, report,
+def write_one_column_layout_one_level(layout_filename, container, children,
                                       children_layout):
     """ Write a layout with one columns where there are only children
 
@@ -326,165 +326,192 @@ def write_one_column_layout_one_level(report_level, xml_filename, report,
     dict_level -- DICOM report where information is to write in the xml layout
 
     """
-    dict_level = report.get_level(int(report_level))
-    #print dict_level
-    for concept, children in dict_level.containers.iteritems():
-        parent = report.get_parent_code(int(report_level), concept)
-        layout_filename = get_layout_file(report_level, xml_filename, concept,
-                                          parent)
-        #If the concept have already generate a layout don't do it again.
-        if (not isfile(layout_filename)):
-            layout_file = open(layout_filename, 'w')
-            #print(" * {0} \n {1}".format(concept, layout_filename))
-            # Set the Environment for the jinja2 templates.
-            environment = set_environment(LAYOUT_TEMPLATES_PATH)
-            
-            # There are ONLY CHILDREN in this layout
-            if (len(children.children_containers) > 0):
-                # Get the template
-                template_name = get_property(LAYOUT_TEMPLATES_SECTION,
-                                             ONE_COLUMN)
-                template = environment.get_template(template_name)
-                # Store previous concept id
-                previous_item = "code_{0}".format(concept.concept_value)
-                items, current_item  = get_children_list(environment,
-                                                         concept,
-                                                         previous_item,
-                                                         children_layout)
-                # Render layout template with correct values. 
-                layout_file.write(template.render(level_code = concept.concept_value,
-                                                  items_list=items)
-                                  .encode('utf-8'))
-                layout_file.close()
-
-            # TODO
-            # There are ONLY ATTRIBUTES in this layout
-            if (len(children.attributes) > 0):
-                pass
-        else:
-            print "Layout {0} already created".format(layout_filename)
-
-
-def write_two_columns_layout_one_level(level, layout_filename, concept,
-                                       children, language_code):
+    #If the concept have already generate a layout don't do it again.
     if (not isfile(layout_filename)):
         layout_file = open(layout_filename, 'w')
-        # print(" * {0}".format(concept))
         # Set the Environment for the jinja2 templates.
         environment = set_environment(LAYOUT_TEMPLATES_PATH)
 
-        # There are ONLY ATTRIBUTES in this layout
-        if (len(children.attributes) > 0):
+        # There are ONLY CHILDREN in this layout
+        if (len(children) > 0):
             # Get the template
             template_name = get_property(LAYOUT_TEMPLATES_SECTION,
-                                         TWO_COLUMNS_ONE_LEVEL)
+                                         ONE_COLUMN)
             template = environment.get_template(template_name)
-
             # Store previous concept id
-            previous_item = "code_{0}".format(concept.concept_value)
+            previous_item = "code_{0}".format(container.get_code())
+            items, current_item  = get_children_list(environment,
+                                                     container.get_concept(),
+                                                     previous_item,
+                                                     children_layout)
 
-            # Split attributes in two columns
-            num_attributes = len(children.attributes)
-            left_attributes = children.attributes[0:(num_attributes / 2)]
-            right_attributes = children.attributes[(num_attributes / 2):]
-
-            # Get the attributes list
-            left_items, previous_item  = get_attributes_list(environment,
-                                                             left_attributes,
-                                                             previous_item,
-                                                             language_code)
-            right_items, previous_item  = get_attributes_list(environment,
-                                                              right_attributes,
-                                                              previous_item,
-                                                              language_code)
             # Render layout template with correct values. 
-            layout_file.write(template.render(level_code = concept.concept_value,
-                                              left_items=left_items,
-                                              right_items=right_items)
+            layout_file.write(template.render(level_code = container.get_code(),
+                                              items_list=items)
                               .encode('utf-8'))
             layout_file.close()
+
+        # TODO: There are ONLY ATTRIBUTES in this layout
+        if (len(container.attributes)>0):
+            pass
     else:
         print "Layout {0} already created".format(layout_filename)
+
+
+def write_two_columns_layout_one_level(layout_filename, concept, children,
+                                       children_layout, language_code):
+    layout_file = open(layout_filename, 'w')
+    # print(" * {0}".format(concept))
+    # Set the Environment for the jinja2 templates.
+    environment = set_environment(LAYOUT_TEMPLATES_PATH)
+
+    # There are ONLY ATTRIBUTES in this layout
+    if (len(concept.attributes) > 0):
+        # Get the template
+        template_name = get_property(LAYOUT_TEMPLATES_SECTION,
+                                     TWO_COLUMNS_ONE_LEVEL)
+        template = environment.get_template(template_name)
+
+        # Store previous concept id
+        previous_item = "code_{0}".format(concept.get_code())
+
+        # Split attributes in two columns
+        num_attributes = len(concept.attributes)
+        left_attributes = concept.attributes[0:(num_attributes / 2)]
+        right_attributes = concept.attributes[(num_attributes / 2):]
+
+        # Get the attributes list
+        left_items, previous_item  = get_attributes_list(environment,
+                                                         left_attributes,
+                                                         previous_item,
+                                                         language_code)
+        right_items, previous_item  = get_attributes_list(environment,
+                                                          right_attributes,
+                                                          previous_item,
+                                                          language_code)
+        # Render layout template with correct values. 
+        layout_file.write(template.render(level_code = concept.get_code(),
+                                          left_items=left_items,
+                                          right_items=right_items)
+                          .encode('utf-8'))
+        layout_file.close()
 
 
 def write_two_columns_layout_two_levels():
     pass
 
 
-def write_two_columns_layout(report_level, xml_filename, report,
-                             language_code, children_layout):
-    parent_level = report.get_level(int(report_level) - 1)
-    # If parent_level is None we are in the root level.
-    if (parent_level is not None):
-        # For every node in this level, generate its layout. 
-        for parent, dict_level in parent_level.containers.iteritems():
-            for level_children in dict_level.children_containers:
-                layout_filename = get_layout_file(report_level, xml_filename,
-                                                  level_children,
-                                                  parent.concept_value)
-                #If the concept have already generate a layout don't replicate.
-                if (not isfile(layout_filename)):
-                    # Get the level to write its layout
-                    level_to_write = report.get_children(
-                        int(report_level), level_children)
-                    if(len(level_to_write.attributes) == 0 or
-                       len(level_to_write.children_containers) == 0):
-                        print "{0}: One Level".format(layout_filename)
-                        write_two_columns_layout_one_level(report_level,
-                                                           layout_filename,
-                                                           level_children,
-                                                           level_to_write,
-                                                           language_code)
-                    else:
-                        # TO IMPROVE: 
-                        # Si hay hijos y atributos el usuario es quien decide
-                        # como distribuir el contenido. 
-                        print "Two levels"
-                        #write_two_columns_layout_two_levels(xml_files,
-                        #filename,level,concept,children)
-                else:
-                    print "Layout {0} already created".format(layout_filename)
-            print
-
-    # Root level
-    else:
-        layout_filename = get_layout_file(report_level, xml_filename)
-        #If the concept have already generate a layout don't replicate.
-        if (not isfile(layout_filename)):
-            print layout_filename
-            level = report.get_level(int(report_level))
-            print type(level.containers.values()), type(level.containers.keys())
-            #if (len(level.containers.attributes) == 0 or
-            #    len(level.containers.children.children_containers) == 0):
-                #TODO: Root level with 2 columns and 1 level  
-            #    pass
-            #else:
-             #   write_two_columns_layout_two_level(level,
-              #                                     layout_filename,
-               #                                    language_code)
+def write_two_columns_layout(layout_filename, container, children,
+                             children_layout,language_code):
+    #print container.concept, children
+    #If the concept have already generate a layout don't replicate.
+    if (not isfile(layout_filename)):
+        if(len(container.attributes) == 0 or
+           len(children) == 0):
+            #print "{0}: One Level".format(layout_filename)
+            write_two_columns_layout_one_level(layout_filename,
+                                               container,
+                                               children,
+                                               children_layout,
+                                               language_code)
         else:
-            print "Layout {0} already created".format(layout_filename)
+            pass
+            #print "Two levels"
+    else:
+        print "Layout {0} already created".format(layout_filename)
 
 
+
+    # # If parent_level is None we are in the root level.
+    # if (parent_level is not None):
+    #     # For every node in this level, generate its layout. 
+    #     for parent, dict_level in parent_level.containers.iteritems():
+    #         for level_children in dict_level.children_containers:
+    #             layout_filename = get_layout_file(report_level, xml_filename,
+    #                                               level_children,
+    #                                                parent.concept_value)
+    #             #If the concept have already generate a layout don't replicate.
+    #             if (not isfile(layout_filename)):
+    #                 # Get the level to write its layout
+    #                 level_to_write = report.get_children(
+    #                     int(report_level), level_children)
+    #                 if(len(level_to_write.attributes) == 0 or
+    #                    len(level_to_write.children_containers) == 0):
+    #                     print "{0}: One Level".format(layout_filename)
+    #                     write_two_columns_layout_one_level(report_level,
+    #                                                        layout_filename,
+    #                                                        level_children,
+    #                                                        level_to_write,
+    #                                                        language_code)
+    #                 else:
+    #                     # TO IMPROVE: 
+    #                     # Si hay hijos y atributos el usuario es quien decide
+    #                     # como distribuir el contenido. 
+    #                     print "Two levels"
+    #                     #write_two_columns_layout_two_levels(xml_files,
+    #                     #filename,level,concept,children)
+    #             else:
+    #                 print "Layout {0} already created".format(layout_filename)
+    #         print
+
+    # # Root level
+    # else:
+    #     layout_filename = get_layout_file(report_level, xml_filename)
+    #     #If the concept have already generate a layout don't replicate.
+    #     if (not isfile(layout_filename)):
+    #         print layout_filename
+    #         level = report.get_level(int(report_level))
+    #         print type(level.containers.values()), type(level.containers.keys())
+    #         #if (len(level.containers.attributes) == 0 or
+    #         #    len(level.containers.children.children_containers) == 0):
+    #             #TODO: Root level with 2 columns and 1 level  
+    #         #    pass
+    #         #else:
+    #          #   write_two_columns_layout_two_level(level,
+    #           #                                     layout_filename,
+    #            #                                    language_code)
+    #     else:
+    #         print "Layout {0} already created".format(layout_filename)
+
+def get_parent_code(flat,container):
+    for parent,children in flat.iteritems():
+        for child in children:
+            if (container == child):
+                return parent.get_code()
+    return None
 
 def write_layouts(xml_filenames, report, language_code):
-    print xml_filenames
-    for level, layout_filename in xml_filenames.items():
-        #Get the odontology id of the report and the layout settings
-        odontology_id = report.get_odontology()
-        level_layout = get_layout_settings(odontology_id, level)
-        # If I am at deepest level there isn't children layout distribution
-        if (int(level) == report.get_leaf_level()):
-            children_layout = None            
+    #print xml_filenames
+    flat = report.get_flat_data()
+    #Get the odontology id of the report
+    odontology_id = report.get_odontology()
+    #Write layout for every file 
+    for container,children in flat.iteritems():
+        level_layout = get_layout_settings(odontology_id,
+                                           str(container.tree_level))
+        # Get the preferred children distribution, if there are children
+        if(children):
+            children_layout= get_children_settings(odontology_id,
+                                                   str(container.tree_level))
         else:
-            children_layout  = get_children_settings(odontology_id, level)
-        print "[Level {0}] {1}".format(level, level_layout)
+            children_layout = None
+        #print 
+        #print "[Level {0}] {1}".format(container.tree_level, level_layout)
+        # Get the filename for this container. It depends on its parent
+        parent = get_parent_code(flat,container)
+        layout_filename_template = xml_filenames[str(container.tree_level)]
+        layout_filename = get_layout_file(str(container.tree_level),
+                                          layout_filename_template,
+                                          container.get_code(),
+                                          parent)
+        #print layout_filename
+
         if (level_layout == COLUMN_1):
             # TODO: Discriminate between layouts with children,
             # attributes or both.
-            write_one_column_layout_one_level(level, layout_filename, report,
-                                             children_layout)
+            write_one_column_layout_one_level(layout_filename, container,
+                                              children, children_layout)
         elif (level_layout == COLUMNS_2):
-            write_two_columns_layout(level, layout_filename, report,
-                                     language_code, children_layout)
-        print
+            pass
+            write_two_columns_layout(layout_filename, container, children,
+                                     children_layout,language_code)

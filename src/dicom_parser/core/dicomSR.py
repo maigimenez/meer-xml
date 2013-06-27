@@ -58,7 +58,7 @@ class DicomTree(object):
 
     def get_parents(self):
         if (self.root):
-            return [parent.get_concept() for parent in self.root.keys()]
+            return [parent for parent in self.root.keys()]
         else:
             return []
 
@@ -111,7 +111,7 @@ class DicomTree(object):
             return flat
         else:
             for parent, children in self.root.iteritems():
-                flat[parent.get_concept()] = children.get_parents()
+                flat[parent] = children.get_parents()
                 children.get_flat_tree(flat)
 
 
@@ -132,6 +132,11 @@ class DicomSR(object):
     def get_odontology(self):
         """ Return current report odontology """
         return self.id_odontology
+
+    def get_flat_data(self):
+        flat = {}
+        self.report.get_flat_tree(flat)
+        return flat
 
     def get_data_form_report(self, languages, template_type):
         """ Return data from the report in a dictionary
@@ -197,9 +202,9 @@ class DicomSR(object):
                 flat = {key: flat[key] for key in flat if flat[key]}
                 for parent, children in flat.iteritems():
                     for language in languages:
-                        aux = {parent_tag: parent.code, children_tag: []}
+                        aux = {parent_tag: parent.get_code(), children_tag: []}
                         for child in children:
-                            aux[children_tag].append(child.meaning[language])
+                            aux[children_tag].append(child.get_meaning()[language])
                         substitution_words[language][nodes_tag].append(aux)
 
         return substitution_words

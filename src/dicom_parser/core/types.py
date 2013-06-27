@@ -91,7 +91,7 @@ class Num(Data_type):
 
     def is_bool(self):
         """ Return if a num data is boolean or not"""
-        unit_type = self.unit_measurement.concept_name.values()
+        unit_type = self.unit_measurement.meaning.values()
         if ("Unidades Boleanas" in unit_type or "Boolean Units" in unit_type):
             return True
         return False
