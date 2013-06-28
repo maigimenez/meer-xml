@@ -99,11 +99,16 @@ class DicomTree(object):
 
     def get_set_data(self, nodes, attributes):
         if (self.root == {}):
-            return (list(set(nodes)), list(set(attributes)))
+            return (nodes,attributes)
         else:
             for data, children in self.root.iteritems():
-                nodes.append(data)
-                attributes.extend(data.attributes)
+                node_codes = [node.get_code() for node in nodes]
+                attribute_codes = [attr.code for attr in attributes]
+                if (data.get_code() not in node_codes):
+                    nodes.append(data)
+                for attribute in data.attributes:
+                    if (attribute.code not in attribute_codes):
+                        attributes.append(attribute)
                 children.get_set_data(nodes, attributes)
 
     def get_flat_tree(self, flat):
@@ -169,6 +174,8 @@ class DicomSR(object):
                 containers = []
                 attributes = []
                 self.report.get_set_data(containers, attributes)
+                # for c in containers:
+                #     print c.get_code()
                 for container in containers:
                     odontology = get_odontology_level(
                         odontology_id=self.get_odontology(),
