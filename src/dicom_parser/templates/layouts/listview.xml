@@ -1,0 +1,9 @@
+
+                        <!-- Children list -->
+                        <ListView
+                            android:id="@+id/list_{{ concept_value }}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_below="@id/{{ previous_item }}" >
+                        </ListView>
