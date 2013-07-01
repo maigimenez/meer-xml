@@ -80,9 +80,9 @@ class DicomParser(xml.sax.handler.ContentHandler):
             #Unit measurement tag also has a concept name
             #It explains the unit measurement type (boolean units basically)
             if (self._in_unit_measurement):
-                self._unit_measurement = Concept(-1,"",{})
+                self._unit_measurement = Concept(-1, "", {})
             else:
-                self._concept = Concept(-1,"",{})
+                self._concept = Concept(-1, "", {})
         if (name == "DATE"):
             self._in_type = True
             self._current_attribute = Date()
@@ -94,7 +94,13 @@ class DicomParser(xml.sax.handler.ContentHandler):
             self._current_attribute = Num()
         if (name == "UNIT_MEASUREMENT"):
             self._in_unit_measurement = True
-        if (name == "CODE_VALUE" or "CODE_MEANING" or "CODE_MEANING2" or name=="CODE_SCHEMA"):
+        if (name == "CODE_VALUE" or name == "CODE_SCHEMA"):
+            self._in_data = True
+            self._buffer = ''
+        if (name == "CODE_MEANING"):
+            self._in_data = True
+            self._buffer = ''
+        if (name == "CODE_MEANING2"):
             self._in_data = True
             self._buffer = ''
 
@@ -107,7 +113,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
             else:
                 self._unit_measurement.value = self._buffer
 
-        if( name == "CODE_MEANING" or name == "CODE_MEANING2"):
+        if (name == "CODE_MEANING" or name == "CODE_MEANING2"):
             self._in_data = False
             # If it's a unit measurement this is the end of a concept
             # If there are 2 languages (CODE_MEANING and CODE_MEANING2) in
@@ -121,7 +127,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
             elif(self._in_unit_measurement):
                 self._unit_measurement.meaning[
                     get_language_code(name, sys.argv[2])] = self._buffer
-        
+
         if (name == "CODE_SCHEMA"):
             self._in_data = False
             if(not self._in_unit_measurement):
@@ -137,7 +143,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
                 logging.info(self._concept)
                 self._report.add_container(
                     SAXContainer(self._concept, self._tree_level, True,
-                              self._report.return_parent(self._tree_level)))
+                                 self._report.return_parent(self._tree_level)))
                 #TODO: no va al log, s'imprimix per consola igual
                  #logging.info(self._report.imprime())
             if (self._in_type is False):
@@ -225,11 +231,13 @@ class DicomParser(xml.sax.handler.ContentHandler):
 
     def build_dicom_tree(self):
         self._dict_report = DicomSR(self._report.report_type,
-                            self._report.id_odontology)
-        #Sort containers list by its tree level. 
-        self._report._containers.sort(key = lambda x: x.tree_level)
+                                    self._report.id_odontology)
+        #Sort containers list by its tree level.
+        self._report._containers.sort(key=lambda x: x.tree_level)
         for container in self._report._containers:
-            self._dict_report.add_node(Container(container.tree_level,container.concept,[],container.attributes),container.parent)
+            self._dict_report.add_node(
+                Container(container.tree_level, container.concept, [], container.attributes),
+                container.parent)
 
     def endDocument(self):
         """ Build the report tree and close the string files """
