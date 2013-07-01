@@ -11,14 +11,13 @@ from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    TEMPLATES_ROOT_PATH, TEMPLATE_PACKAGE,
                                    TEMPLATE_BY_REPORT, TEMPLATE_BY_ID,
                                    COLUMN_1, COLUMNS_2, LAYOUT_TEMPLATES_PATH,
-                                   HEADER, MAIN_LEFT, TREE_TITLE,
-                                   LAYOUT_TEMPLATES_SECTION, DEFAULT,
-                                   DEFAULT_INPUT, GENERIC_TITLE, NUM, END,
+                                   TREE_TITLE, LAYOUT_TEMPLATES_SECTION,
+                                   DEFAULT, DEFAULT_INPUT, GENERIC_TITLE, NUM,
                                    NEXT_LEVEL, DATE, TEXT, STRINGS,
                                    DEFAULT_STRINGS, LEVEL_STRINGS,
                                    CHILDREN_ARRAYS, DICOM_LEVEL, BOOL,
-                                   SCROLL, TWO_COLUMNS_ONE_LEVEL,
-                                   ONE_COLUMN,EXPANDABLELISVIEW,
+                                   SCROLL, TWO_COLUMNS,
+                                   ONE_COLUMN, EXPANDABLELISVIEW,
                                    LISTVIEW)
 
 
@@ -210,7 +209,6 @@ def get_template_substitution(environment, template_type, concept=None,
     and the current item to nest template levels.
 
     """
-    print "???", previous_item, template_type
     #print template_type
     template_name = get_property(LAYOUT_TEMPLATES_SECTION, template_type)
     template = environment.get_template(template_name)
@@ -235,7 +233,6 @@ def get_template_substitution(environment, template_type, concept=None,
         current_item = "children_{0}_list".format(concept.value)
     # NUM type attribute & TEXT type attribute
     elif (template_type == NUM or template_type == TEXT):
-        print "***", previous_item
         localized_concept = concept.meaning[language]
         render_template = template.render(concept_name=localized_concept,
                                           concept_value=concept.value,
@@ -255,7 +252,7 @@ def get_template_substitution(environment, template_type, concept=None,
                                           concept_value=concept.value,
                                           previous_item=previous_item)
         current_item = "etext_{0}".format(concept.value)
-    # SCROLL 
+    # SCROLL
     elif (template_type == SCROLL):
         render_template = template.render(parent=previous_item)
     # LISTVIEW & EXPANDABLELISVIEW
@@ -279,7 +276,6 @@ def get_attributes_list(environment, attributes,
     language_code -- code with supported languages.
                      Used to get the default language.
     """
-    print "!!!", previous_item
     attributes_layouts = []
     current_item = ""
     # Get android xml layout for every attribute
@@ -316,15 +312,15 @@ def get_attributes_list(environment, attributes,
 
 
 def get_children_list(environment, children_code,
-                        previous_item, children_layout):
+                      previous_item, children_layout):
     print children_code
-    print "***", previous_item
-    children, current_item = get_template_substitution( environment,
-                                                        children_layout,
-                                                        concept=children_code,
-                                                        previous_item=previous_item)
+    children, current_item = get_template_substitution(
+        environment,
+        children_layout,
+        concept=children_code,
+        previous_item=previous_item)
     return [children], current_item
-                                                           
+
 
 #TODO: add the behaviour to support a layout with only attributes too ->
 #      -> write_one_column_layout_one_level
@@ -358,144 +354,108 @@ def write_one_column_layout_one_level(layout_filename, container, children,
                                                      previous_item,
                                                      children_layout)
 
-            # Render layout template with correct values. 
-            layout_file.write(template.render(level_code = container.get_code(),
+            # Render layout template with correct values.
+            layout_file.write(template.render(level_code=container.get_code(),
                                               items_list=items)
                               .encode('utf-8'))
             layout_file.close()
 
         # TODO: There are ONLY ATTRIBUTES in this layout
-        if (len(container.attributes)>0):
+        if (len(container.attributes) > 0):
             pass
     else:
         print "Layout {0} already created".format(layout_filename)
 
 
-def write_two_columns_layout_one_level(layout_filename, container, children,
-                                       children_layout, language_code):
-    layout_file = open(layout_filename, 'w')
-    print(" * {0}".format(container))
-    # Set the Environment for the jinja2 templates.
-    environment = set_environment(LAYOUT_TEMPLATES_PATH)
-
-    # There are ONLY ATTRIBUTES in this layout
-    if (len(container.attributes) > 0):
-        # Get the template
-        template_name = get_property(LAYOUT_TEMPLATES_SECTION,
-                                     TWO_COLUMNS_ONE_LEVEL)
-        template = environment.get_template(template_name)
-
-        # Store previous concept id
-        previous_item = "code_{0}".format(container.get_code())
-
-        # Split attributes in two columns
-        num_attributes = len(container.attributes)
-        left_attributes = container.attributes[0:(num_attributes / 2)]
-        right_attributes = container.attributes[(num_attributes / 2):]
-
-        # Get the attributes list
-        left_items, previous_item  = get_attributes_list(environment,
-                                                         left_attributes,
-                                                         previous_item,
-                                                         language_code)
-        right_items, previous_item  =  get_attributes_list(environment,
-                                                         children,
-                                                         previous_item,
-                                                         language_code)
-        # Render layout template with correct values. 
-        layout_file.write(template.render(level_code = container.get_code(),
-                                          left_items=left_items,
-                                          right_items=right_items)
-                          .encode('utf-8'))
-        layout_file.close()
-
-
-def write_two_columns_layout_two_levels(layout_filename, container, children,
-                                        children_layout, language_code):
-    layout_file = open(layout_filename, 'w')
-    print(" * {0}".format(container))
-    # Set the Environment for the jinja2 templates.
-    environment = set_environment(LAYOUT_TEMPLATES_PATH)
-
-    # There are ONLY ATTRIBUTES in this layout
-    if (len(container.attributes) > 0):
-        # Get the template
-        template_name = get_property(LAYOUT_TEMPLATES_SECTION,
-                                     TWO_COLUMNS_ONE_LEVEL)
-        template = environment.get_template(template_name)
-
-        # Store previous concept id
-        previous_item = "code_{0}".format(container.get_code())
-
-        # Get the attributes list
-        left_items, previous_item  = get_attributes_list(environment,
-                                                         container.attributes,
-                                                         previous_item,
-                                                         language_code)
-        right_items, previous_item = get_children_list(environment,
-                                                        container.get_concept(),
-                                                        previous_item,
-                                                        children_layout)
-        # Render layout template with correct values. 
-        layout_file.write(template.render(level_code = container.get_code(),
-                                          left_items=left_items,
-                                          right_items=right_items)
-                          .encode('utf-8'))
-        layout_file.close()
-
-
 def write_two_columns_layout(layout_filename, container, children,
-                             children_layout,language_code):
+                             children_layout, language_code):
     #print container.concept, children
     #If the concept have already generate a layout don't replicate.
     if (not isfile(layout_filename)):
-        if(len(container.attributes) == 0 or
-           len(children) == 0):
-            print "{0}: One Level".format(layout_filename)
-            write_two_columns_layout_one_level(layout_filename,
-                                               container,
-                                               children,
-                                               children_layout,
-                                               language_code)
-        else:
-            print "{0}: Two Levels".format(layout_filename)
-            write_two_columns_layout_two_levels(layout_filename,
-                                               container,
-                                               children,
-                                               children_layout,
-                                               language_code)
+        layout_file = open(layout_filename, 'w')
+        print(" * {0}".format(container))
+        # Set the Environment for the jinja2 templates.
+        environment = set_environment(LAYOUT_TEMPLATES_PATH)
 
+        # Get the template
+        template_name = get_property(LAYOUT_TEMPLATES_SECTION,
+                                     TWO_COLUMNS)
+        template = environment.get_template(template_name)
+
+        # Store previous concept id
+        previous_item = "code_{0}".format(container.get_code())
+
+        # There are ONLY ATTRIBUTES in this layout
+        if (len(container.attributes) > 0 and len(children) == 0):
+            # Split attributes in two columns
+            num_attributes = len(container.attributes)
+            left_attributes = container.attributes[0:(num_attributes / 2)]
+            right_attributes = container.attributes[(num_attributes / 2):]
+            # Get the attributes list
+            left_items, previous_item  = get_attributes_list(environment,
+                                                             left_attributes,
+                                                             previous_item,
+                                                             language_code)
+            right_items, previous_item = get_attributes_list(environment,
+                                                             right_attributes,
+                                                             previous_item,
+                                                             language_code)
+        # There are ATTRIBUTES and CHILDREN in this layout
+        elif((len(container.attributes) > 0) and (len(children) > 0)):
+            attributes = container.attributes
+            concept = container.get_concept()
+            # Get the attributes list
+            left_items, previous_item  = get_attributes_list(environment,
+                                                             attributes,
+                                                             previous_item,
+                                                             language_code)
+            right_items, previous_item = get_children_list(environment,
+                                                           concept,
+                                                           previous_item,
+                                                           children_layout)
+        try:
+            # Render layout template with correct values.
+            layout_file.write(template.render(level_code=container.get_code(),
+                                              left_items=left_items,
+                                              right_items=right_items)
+                              .encode('utf-8'))
+            layout_file.close()
+
+        except NameError:
+            layout_file.close()
+            print "Error generating layout items for layout {0}".format(
+                layout_filename)
     else:
         print "Layout {0} already created".format(layout_filename)
 
 
-
-def get_parent_code(flat,container):
-    for parent,children in flat.iteritems():
+def get_parent_code(flat, container):
+    for parent, children in flat.iteritems():
         for child in children:
             if (container == child):
                 return parent.get_code()
     return None
+
 
 def write_layouts(xml_filenames, report, language_code):
     #print xml_filenames
     flat = report.get_flat_data()
     #Get the odontology id of the report
     odontology_id = report.get_odontology()
-    #Write layout for every file 
-    for container,children in flat.iteritems():
+    #Write layout for every file
+    for container, children in flat.iteritems():
         level_layout = get_layout_settings(odontology_id,
                                            str(container.tree_level))
         # Get the preferred children distribution, if there are children
         if(children):
-            children_layout= get_children_settings(odontology_id,
-                                                   str(container.tree_level))
+            children_layout = get_children_settings(odontology_id,
+                                                    str(container.tree_level))
         else:
             children_layout = None
-        print 
+        print
         print "[Level {0}] {1}".format(container.tree_level, level_layout)
         # Get the filename for this container. It depends on its parent
-        parent = get_parent_code(flat,container)
+        parent = get_parent_code(flat, container)
         layout_filename_template = xml_filenames[str(container.tree_level)]
         layout_filename = get_layout_file(str(container.tree_level),
                                           layout_filename_template,
@@ -511,4 +471,4 @@ def write_layouts(xml_filenames, report, language_code):
         elif (level_layout == COLUMNS_2):
             pass
             write_two_columns_layout(layout_filename, container, children,
-                                     children_layout,language_code)
+                                     children_layout, language_code)

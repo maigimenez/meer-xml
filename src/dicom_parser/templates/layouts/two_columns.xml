@@ -8,8 +8,27 @@
             android:layout_margin="20dp" android:paddingBottom="20dp"
             android:paddingTop="25dp" android:paddingLeft="25dp"
             android:paddingRight="25dp">
-            {% block left_content%} 
-            {% endblock %}
+                <TextView android:id="@+id/code_{{ level_code }}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="20dp"
+                    android:text="@string/code_{{ level_code }}"				
+                    android:textAppearance="@android:style/TextAppearance.Large" />
+
+                    <ScrollView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_below="@id/code_{{ level_code }}">
+                        <RelativeLayout 
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent">
+                            {% for left_item in left_items -%}
+                                {{ left_item }}
+                            {% endfor -%}
+                        </RelativeLayout>
+                    </ScrollView>
         </RelativeLayout>
 
         <!-- Right layout -->
@@ -18,8 +37,18 @@
             android:layout_weight="1" android:background="#eeeeee"
             android:layout_margin="20dp" android:paddingBottom="20dp"
             android:paddingTop="25dp" android:paddingLeft="25dp"
-            android:paddingRight="25dp">
-            {% block right_content %}
-            {% endblock %}
+            android:paddingRight="25dp">            
+                <ScrollView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_below="@id/code_{{ level_code }}">
+                    <RelativeLayout 
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+                        {% for item in right_items -%}
+                            {{ item }}
+                        {% endfor -%}
+                    </RelativeLayout>
+                </ScrollView>
         </RelativeLayout>
 {% endblock %}
