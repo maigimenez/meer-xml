@@ -3,11 +3,8 @@ import sys
 import logging
 import xml.sax
 from core.types import Date, Num, Text, Concept
-from core.dicom import (SAXReport, SAXContainer,
-                        DictReport, DictContainer, Children)
-
+from core.dicom import SAXReport, SAXContainer
 from core.dicomSR import DicomSR, Container
-
 from core.config import get_language_code
 
 
@@ -196,47 +193,16 @@ class DicomParser(xml.sax.handler.ContentHandler):
         if (self._in_data):
             self._buffer += chars
 
-    def build_tree(self):
-        """ Build a dictionary tree using the information read in the file.
-        Return this dictionary report """
-        self._dict_report = DictReport(self._report.report_type,
-                                       self._report.id_odontology)
-        logging.info(
-            u"Dictionary report  type: {0} ({1})".format(
-                self._dict_report.report_type,
-                self._dict_report.id_odontology).encode('utf-8'))
-        for container in self._report._containers:
-            #If the level doesn't exist I created it
-            if (container.tree_level not in self._dict_report.tree):
-                self._dict_report.tree[container.tree_level] = DictContainer()
-            #We assume that concept is unique in the xml file
-            self._dict_report.tree[container.tree_level].containers[
-                container.concept] = Children()
-            #TODO: check if this structure is the most suitable
-            self._dict_report.tree[container.tree_level].containers[
-                container.concept].attributes = container.attributes
-            #If we are not in the root, this container has a parent
-            if(container.tree_level - 1 > 0):
-                #If parent level does not exist we create it
-                if (container.tree_level - 1 not in self._dict_report.tree):
-                    self._dict_report.tree[
-                        container.tree_level - 1] = DictContainer()
-                    if(container.parent not in self._dict_report.tree[
-                            container.tree_level - 1].containers):
-                        self._dict_report.tree[container.tree_level - 1].\
-                            containers[container.parent] = Children()
-                self._dict_report.tree[container.tree_level - 1].\
-                    containers[container.parent].children_containers.\
-                    append(container.concept)
-
     def build_dicom_tree(self):
+        """ Build a DicomSR tree using the information read in the file."""
         self._dict_report = DicomSR(self._report.report_type,
                                     self._report.id_odontology)
         #Sort containers list by its tree level.
         self._report._containers.sort(key=lambda x: x.tree_level)
         for container in self._report._containers:
             self._dict_report.add_node(
-                Container(container.tree_level, container.concept, [], container.attributes),
+                Container(container.tree_level, container.concept,
+                          [], container.attributes),
                 container.parent)
 
     def endDocument(self):
