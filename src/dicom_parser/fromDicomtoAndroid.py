@@ -7,8 +7,8 @@ from core.files import AndroidFiles
 #read_config()
 LANGUAGE_CODE = sys.argv[2]
 
+# OUTPUT STRINGS
 #Set which files are going to be used as output for the parser
-#Strings
 xml_filenames = AndroidFiles()
 xml_filenames.set_languages(LANGUAGE_CODE)
 
@@ -18,6 +18,7 @@ report.imprime()
 print
 print
 
+# OUTPUT LAYOUTS
 # Write the filenames of the layouts and
 # the activities based on the report odontology
 xml_filenames.set_odontology(report.get_odontology())
@@ -27,3 +28,6 @@ template_engine.write_strings(LANGUAGE_CODE, report)
 
 #WRITE LAYOUTS
 template_engine.write_layouts(xml_filenames.layouts, report, LANGUAGE_CODE)
+
+#WRITE JAVA MODEL
+#template_engine.write_model(xml_filenames.model, report, LANGUAGE_CODE)

@@ -472,3 +472,6 @@ def write_layouts(xml_filenames, report, language_code):
             pass
             write_two_columns_layout(layout_filename, container, children,
                                      children_layout, language_code)
+
+def write_model(java_filenames, report,language_code):
+    pass
