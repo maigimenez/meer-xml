@@ -80,9 +80,9 @@ class DicomParser(xml.sax.handler.ContentHandler):
             #Unit measurement tag also has a concept name
             #It explains the unit measurement type (boolean units basically)
             if (self._in_unit_measurement):
-                self._unit_measurement = Concept(-1,{})
+                self._unit_measurement = Concept(-1,"",{})
             else:
-                self._concept = Concept(-1,{})
+                self._concept = Concept(-1,"",{})
         if (name == "DATE"):
             self._in_type = True
             self._current_attribute = Date()
@@ -94,39 +94,41 @@ class DicomParser(xml.sax.handler.ContentHandler):
             self._current_attribute = Num()
         if (name == "UNIT_MEASUREMENT"):
             self._in_unit_measurement = True
-        if (name == "CODE_VALUE" or "CODE_MEANING" or "CODE_MEANING2"):
+        if (name == "CODE_VALUE" or "CODE_MEANING" or "CODE_MEANING2" or name=="CODE_SCHEMA"):
             self._in_data = True
             self._buffer = ''
 
     def endElement(self, name):
         """ Store data read in the report internal variable """
-        if(name == "CODE_VALUE" or name == "CODE_MEANING"
-           or name == "CODE_MEANING2"):
+        if (name == "CODE_VALUE"):
             self._in_data = False
-            if (name == "CODE_VALUE"):
-                if(not self._in_unit_measurement):
-                    self._concept.value = self._buffer
-                else:
-                    self._unit_measurement.value = self._buffer
-                # Check if the code value is already written
-                # in the strings.xml file
-                if (self._buffer not in self._code_values):
-                    self._code_values.append(self._buffer)
-                else:
-                    self._repeated = True
-            elif (name == "CODE_MEANING" or name == "CODE_MEANING2"):
-                # If it's a unit measurement this is the end of a concept
-                # If there are 2 languages (CODE_MEANING and CODE_MEANING2) in
-                # the report tree It's stored concept name of the main langage
-                # (CODE_MEANING)
-                # TODO: pass language code  with a variable (not sys.argv)
-                if (not self._in_unit_measurement):
-                    self._concept.meaning[
-                        get_language_code(name, sys.argv[2])] = self._buffer
-                #The attribute is a Num type and we store its unit measurement
-                elif(self._in_unit_measurement):
-                    self._unit_measurement.meaning[
-                        get_language_code(name, sys.argv[2])] = self._buffer
+            if(not self._in_unit_measurement):
+                self._concept.value = self._buffer
+            else:
+                self._unit_measurement.value = self._buffer
+
+        if( name == "CODE_MEANING" or name == "CODE_MEANING2"):
+            self._in_data = False
+            # If it's a unit measurement this is the end of a concept
+            # If there are 2 languages (CODE_MEANING and CODE_MEANING2) in
+            # the report tree It's stored concept name of the main langage
+            # (CODE_MEANING)
+            # TODO: pass language code  with a variable (not sys.argv)
+            if (not self._in_unit_measurement):
+                self._concept.meaning[
+                    get_language_code(name, sys.argv[2])] = self._buffer
+            #The attribute is a Num type and we store its unit measurement
+            elif(self._in_unit_measurement):
+                self._unit_measurement.meaning[
+                    get_language_code(name, sys.argv[2])] = self._buffer
+        
+        if (name == "CODE_SCHEMA"):
+            self._in_data = False
+            if(not self._in_unit_measurement):
+                self._concept.schema = self._buffer
+            else:
+                self._unit_measurement.schema = self._buffer
+
         if (name == "CONCEPT_NAME"):
             self._in_concept = False
             #This is the end of a concept name tag, if in_level is true
@@ -144,10 +146,12 @@ class DicomParser(xml.sax.handler.ContentHandler):
             logging.info("* End tree level: {0}".format(self._tree_level))
             self._tree_level -= 1
             self.currentLevel = None
+
         if (name == "CHILDS"):
             logging.info("* End of child-level: {0}".format(self._child_level))
             self._report.close_level(self._child_level)
             self._child_level -= 1
+
         if (name == "DATE"):
             self._current_attribute.concept = self._concept
             logging.info(
@@ -156,6 +160,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
             self._concept = None
             self._report.add_attribute(
                 self._child_level, self._current_attribute)
+
         if (name == "TEXT"):
             self._current_attribute.concept = self._concept
             logging.info(
@@ -164,6 +169,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
                 self._child_level, self._current_attribute)
             self._in_type = False
             self._concept = None
+
         if (name == "NUM"):
             self._current_attribute.concept = self._concept
             self._current_attribute.unit_measurement = self._unit_measurement
@@ -175,6 +181,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
                 self._child_level, self._current_attribute)
             self._in_type = False
             self._concept = None
+
         if (name == "UNIT_MEASUREMENT"):
             self._in_unit_measurement = False
 
@@ -222,11 +229,10 @@ class DicomParser(xml.sax.handler.ContentHandler):
         #Sort containers list by its tree level. 
         self._report._containers.sort(key = lambda x: x.tree_level)
         for container in self._report._containers:
-            dict_concept = Concept(container.concept.value, container.concept.meaning)
-            self._dict_report.add_node(Container(container.tree_level,dict_concept,[],container.attributes),container.parent)
-
+            self._dict_report.add_node(Container(container.tree_level,container.concept,[],container.attributes),container.parent)
 
     def endDocument(self):
         """ Build the report tree and close the string files """
       #  self.build_tree()
         self.build_dicom_tree()
+        #self._report.imprime()

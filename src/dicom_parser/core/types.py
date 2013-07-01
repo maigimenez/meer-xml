@@ -10,29 +10,24 @@ class Property(object):
 class Concept(object):
     """ This class manages the concept"""
     #TODO: Add CODE_SCHEMA support
-    #def __init__(self,value=-1,schema="", meaning={}):
-    def __init__(self,value=-1, meaning={}):
+    def __init__(self,value=-1,schema="", meaning={}):
         self.value = value
-        #self.schema = schema
+        self.schema = schema
         self.meaning = meaning
 
     def __str__(self):
         localized_strings = ""
         for localized_string in self.meaning.values():
             localized_strings +=  localized_string + ", "
-        # return u"Concept names: {0} - Concept value: {1}-{2}".format(
-        #     localized_strings, self.schema, self.value).encode('utf-8')
-        return u"Concept names: {0} - Concept value: {1}".format(
-            localized_strings, self.value).encode('utf-8')
+        return u"Concept names: {0} - Concept value: {1}-{2}".format(
+            localized_strings, self.schema, self.value).encode('utf-8')
 
     def __repr__(self):
         localized_strings = ""
         for localized_string in self.meaning.values():
             localized_strings +=  localized_string + ", "
-        # return u"Concept names: {0} - Concept value: {1}-{2}".format(
-        #     localized_strings, self.schema, self.value).encode('utf-8')
-        return u"Concept names: {0} - Concept value: {1}".format(
-            localized_strings, self.value).encode('utf-8')
+        return u"Concept names: {0} - Concept value: {1}-{2}".format(
+            localized_strings, self.schema, self.value).encode('utf-8')
 
     def __getattribute__(self,name):
         if (name=='code' or name=='value'):

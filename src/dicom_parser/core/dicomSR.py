@@ -35,13 +35,14 @@ class Container(object):
         for attribute in self.attributes:
             str_attributes += " - " + attribute.__str__() + "\n"
         str_attributes = str_attributes[:-1]
-        return u"[{0}] {1} (no.attr: {2} - no.prop:{3}): \n{4}".format(
-            self.concept.value, meaning.upper(), len(self.attributes),
-            len(self.properties), str_attributes).encode("utf-8")
+        return u"[{0}_{1}] {2} (no.attr: {3} - no.prop:{4}): \n{5}".format(
+            self.concept.schema, self.concept.value, meaning.upper(),
+            len(self.attributes), len(self.properties), str_attributes)\
+            .encode("utf-8")
 
     def __repr__(self):
-        return u"[{0}] {1} (no.attr: {2} - no.prop:{3}):".format(
-            self.concept.value, self.concept.meaning,
+        return u"[{0}_{1}] {2} (no.attr: {3} - no.prop:{4}):".format(
+            self.concept.schema, self.concept.value, self.concept.meaning,
             len(self.attributes), len(self.properties))
 
 
@@ -75,14 +76,16 @@ class DicomTree(object):
                                        + attribute.__str__() + "\n")
                 str_attributes = str_attributes[:-1]
                 if (not attributes):
-                    print u"{0} [{1}] {2} (no.attr: {3} - no.prop:{4})".format(
-                        "-" * (ident + 1), data.concept.value, meaning.upper(),
-                        len(data.attributes), len(data.properties))
+                    print u"{0} [{1}_{2}] {3} (no.attr: {4} - no.prop:{5})"\
+                        .format("-" * (ident + 1), data.concept.schema,
+                                data.concept.value, meaning.upper(),
+                                len(data.attributes), len(data.properties))
                 else:
-                    print u"{0} [{1}] {2} (no.attr: {3} - no.prop:{4}): {5}"\
-                        .format("-" * (ident + 1), data.concept.value,
-                                meaning.upper(), len(data.attributes),
-                                len(data.properties), str_attributes)
+                    print u"{0} [{1}_{2}] {3} (no.attr: {4} - no.prop:{5}): {6}"\
+                        .format("-" * (ident + 1), data.concept.schema,
+                                data.concept.value, meaning.upper(),
+                                len(data.attributes), len(data.properties),
+                                str_attributes)
                 children.print_tree(ident + 4, attributes)
 
     def add_node(self, node, parent):

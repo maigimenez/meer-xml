@@ -6,7 +6,7 @@ from types import *
 class SAXContainer(object):
     """This class stores a container tag from xml"""
     def __init__(self,concept=Concept(),level=-1,open_level=True, parent=Concept()):
-        self.concept = Concept(concept.value,concept.meaning)
+        self.concept = Concept(concept.value,concept.schema,concept.meaning)
         #A list of attributes/nodes (date, num, text)
         self.attributes = []
         self.tree_level = level
@@ -24,8 +24,9 @@ class SAXContainer(object):
 
     """ Pretty print a container"""
     def __repr__(self):
-        return u"L{0}: {1} ({2}) p({3}){4}\n".format(
-            self.tree_level,self.concept.meaning, len(self.attributes),
+        return u"L{0} {1}_{2}: {3} ({4}) p({5}){6}\n".format(
+            self.tree_level, self.concept.schema, self.concept.value,
+            self.concept.meaning, len(self.attributes),
             self.parent.meaning if (self.parent!=None) else "", 
             "..." if self.open else "" ).encode('utf-8')
 
@@ -80,13 +81,15 @@ class SAXReport(object):
         """ Prettqy print of a report """
         print u"\n ******** {0} ********* \n".format(self.report_type)
         for container in self._containers:
-            print u"(L{0}) {1} ({2}):".format(
+            print u"(L{0} {1}_{2}) {3} ({4}):".format(
                 container.tree_level,
-                container.concept.concept_name.values(),
+                container.concept.schema,
+                container.concept.value,
+                container.concept.meaning.values(),
                 len(container.attributes)).encode('utf-8')
             for attr in container.attributes:
                 print u"    - {0} ({1})".format(
-                    attr.concept.concept_name,
+                    attr.concept.meaning,
                     attr.type).encode('utf-8')
             print 
         
@@ -133,7 +136,7 @@ class DictReport(object):
                 num_attrs = len(children.attributes)
                 print u"(L{0}) {1} (no.attr: {2} - no.child:{3}):".format(
                     level,
-                    concept.concept_name,
+                    concept.meaning,
                     num_attrs,
                     num_children).encode('utf-8')
                 if(num_attrs > 0):
