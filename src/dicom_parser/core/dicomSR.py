@@ -81,7 +81,8 @@ class DicomTree(object):
                                 data.concept.value, meaning.upper(),
                                 len(data.attributes), len(data.properties))
                 else:
-                    print u"{0} [{1}_{2}] {3} (no.attr: {4} - no.prop:{5}): {6}"\
+                    print u"{0} [{1}_{2}] {3} "\
+                        "(no.attr: {4} - no.prop:{5}): {6}"\
                         .format("-" * (ident + 1), data.concept.schema,
                                 data.concept.value, meaning.upper(),
                                 len(data.attributes), len(data.properties),
@@ -102,7 +103,7 @@ class DicomTree(object):
 
     def get_set_data(self, nodes, attributes):
         if (self.root == {}):
-            return (nodes,attributes)
+            return (nodes, attributes)
         else:
             for data, children in self.root.iteritems():
                 node_codes = [node.get_code() for node in nodes]
@@ -214,7 +215,8 @@ class DicomSR(object):
                     for language in languages:
                         aux = {parent_tag: parent.get_code(), children_tag: []}
                         for child in children:
-                            aux[children_tag].append(child.get_meaning()[language])
+                            aux[children_tag].append(
+                                child.get_meaning()[language])
                         substitution_words[language][nodes_tag].append(aux)
 
         return substitution_words
