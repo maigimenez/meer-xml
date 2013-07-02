@@ -5,7 +5,7 @@ from string import Template
 from core.config import (get_template_filename, get_property,
                          get_xml_filepath, get_substitution_dictionary,
                          get_layout_settings, get_language_code,
-                         get_children_settings)
+                         get_children_settings, get_template_model_file)
 from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    STRING_TEMPLATES_PATH, TEMPLATES_SECTION,
                                    TEMPLATES_ROOT_PATH, TEMPLATE_PACKAGE,
@@ -18,7 +18,9 @@ from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    CHILDREN_ARRAYS, DICOM_LEVEL, BOOL,
                                    SCROLL, TWO_COLUMNS,
                                    ONE_COLUMN, EXPANDABLELISVIEW,
-                                   LISTVIEW)
+                                   LISTVIEW, MODEL_TEMPLATES_PATH,
+                                   MODEL_TEMPLATES_SECTION, CLASS,
+                                   ANDROID_PACKAGES,PACKAGE_MODEL)
 
 
 def get_languages(language_code):
@@ -429,12 +431,12 @@ def write_two_columns_layout(layout_filename, container, children,
         print "Layout {0} already created".format(layout_filename)
 
 
-def get_parent_code(flat, container):
+def get_parent_code_schema(flat, container):
     for parent, children in flat.iteritems():
         for child in children:
             if (container == child):
-                return parent.get_code()
-    return None
+                return parent.get_code(), parent.get_schema()
+    return None,None
 
 
 def write_layouts(xml_filenames, report, language_code):
@@ -455,13 +457,13 @@ def write_layouts(xml_filenames, report, language_code):
         print
         print "[Level {0}] {1}".format(container.tree_level, level_layout)
         # Get the filename for this container. It depends on its parent
-        parent = get_parent_code(flat, container)
+        parent_code, parent_schema = get_parent_code_schema(flat, container)
         layout_filename_template = xml_filenames[str(container.tree_level)]
         layout_filename = get_layout_file(str(container.tree_level),
                                           layout_filename_template,
                                           container.get_code(),
-                                          parent)
-        #print layout_filename
+                                          parent_code)
+        print layout_filename
 
         if (level_layout == COLUMN_1):
             # TODO: Discriminate between layouts with children,
@@ -473,5 +475,77 @@ def write_layouts(xml_filenames, report, language_code):
             write_two_columns_layout(layout_filename, container, children,
                                      children_layout, language_code)
 
+##########################################JAVA ##################################################
+
+def get_model_file(java_filename, value, schema, parent_value, parent_schema):
+    """ Return filename of current container.
+    
+    Keyword arguments:
+    value -- code for this container
+    schema -- schema of this container
+    parent_value -- code of this container's parent container
+    parent_schema -- schema of this container's parent container
+
+    """
+    # If this is root container its class has no parents.  
+    if ((parent_schema == None) or (parent_value == None)):
+        parent_schema = ""
+        parent_value = ""
+
+    filename = Template(java_filename).safe_substitute(
+        SCHEMA=schema.lower(),
+        CODE=value.lower(),
+        PARENT_SCHEMA=parent_schema.lower(),
+        PARENT_CODE=parent_value.lower())
+    return filename
+
+
 def write_model(java_filenames, report,language_code):
-    pass
+    print
+    print
+    print 
+    template_model_file = get_template_model_file()
+    flat = report.get_flat_data()
+    for container,children in flat.iteritems():
+        # Build this container java filename using its parent codes and its own
+        parent_code, parent_schema = get_parent_code_schema(flat, container)
+        model_filename = get_model_file(template_model_file,
+                                        container.get_code(),
+                                        container.get_schema(),
+                                        parent_code,parent_schema)
+
+        if (not isfile(model_filename)):
+            print "* {0} \n -> {1}".format(container,model_filename)
+            print
+            model_file = open(model_filename, 'w')
+
+            # If this is root container its class has no parents.  
+            if ((parent_schema == None) or (parent_code == None)):
+                parent_schema = ""
+                parent_code = ""
+
+            # Set the Environment for the jinja2 templates and get the template
+            environment = set_environment(MODEL_TEMPLATES_PATH)
+            template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
+            template = environment.get_template(template_name)
+
+            package = get_property(ANDROID_PACKAGES,PACKAGE_MODEL)
+            class_name = (container.get_schema().lower() + '_' + 
+                          container.get_code().lower() + '_' +
+                          parent_schema.lower() + '_' +
+                          parent_code.lower())
+            attributes = []
+            model_file.write(template.render(package=package,
+                                             class_name=class_name,
+                                             attributes=attributes))
+            model_file.close()
+        else:
+            print "Java class {0} already created".format(model_filename)
+        #print container.get_concept().value, container.get_concept().schema
+        #for attribute in container.attributes:
+        #    print type(attribute)
+        #print len(container.attributes)
+        #if (children):
+        #    print type(children[0])
+        #print
+

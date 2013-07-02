@@ -24,7 +24,7 @@ print
 xml_filenames.set_odontology(report.get_odontology())
 
 #WRITE STRINGS XML
-template_engine.write_strings(LANGUAGE_CODE, report)
+#template_engine.write_strings(LANGUAGE_CODE, report)
 
 #WRITE LAYOUTS
 template_engine.write_layouts(xml_filenames.layouts, report, LANGUAGE_CODE)

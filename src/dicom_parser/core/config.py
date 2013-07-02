@@ -219,3 +219,11 @@ def get_children_settings(odontology_id, level):
     section = odontology_id + LAYOUT_SETTINGS
     children_option = LEVEL_TAG + level + CHILDREN_TAG
     return get_property(section,children_option)
+
+def get_template_model_file():
+    """ Return filename for java model """
+    output_directory = get_filepath(MODEL_OUTOUT_OPTION)
+    model_template = get_property(TEMPLATES_SECTION,MODEL_FILE)
+    if (not exists(output_directory)):
+        makedirs(output_directory)
+    return join(output_directory,model_template)

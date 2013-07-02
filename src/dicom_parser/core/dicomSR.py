@@ -20,6 +20,9 @@ class Container(object):
     def get_code(self):
         return self.concept.value
 
+    def get_schema(self):
+        return self.concept.schema
+
     def get_meaning(self):
         return self.concept.meaning
 
@@ -150,7 +153,7 @@ class DicomSR(object):
     def get_data_form_report(self, languages, template_type):
         """ Return data from the report in a dictionary
 
-        Keyword:
+        Keyword arguments:
         language_code -- language for the data returned
         template_type -- indicates the template type and
                          therefore the information to extract from the report.
