@@ -53,6 +53,9 @@ class Data_type(object):
         else:
             return object.__getattribute__(self,name)
 
+    def get_schema_code(self,separator='_'):
+        return self.concept.schema + separator + self.concept.code
+
     def __repr__(self):
         return u"{0}: {1}".format(self.type,self.concept.meaning)
 

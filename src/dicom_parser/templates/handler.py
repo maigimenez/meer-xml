@@ -20,7 +20,8 @@ from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    ONE_COLUMN, EXPANDABLELISVIEW,
                                    LISTVIEW, MODEL_TEMPLATES_PATH,
                                    MODEL_TEMPLATES_SECTION, CLASS,
-                                   ANDROID_PACKAGES,PACKAGE_MODEL)
+                                   ANDROID_PACKAGES,PACKAGE_MODEL,
+                                   BOOL_JAVA, STRING_JAVA, INT_JAVA,TEXT,DATE,DATE_JAVA)
 
 
 def get_languages(language_code):
@@ -477,27 +478,20 @@ def write_layouts(xml_filenames, report, language_code):
 
 ##########################################JAVA ##################################################
 
-def get_model_file(java_filename, value, schema, parent_value, parent_schema):
-    """ Return filename of current container.
-    
-    Keyword arguments:
-    value -- code for this container
-    schema -- schema of this container
-    parent_value -- code of this container's parent container
-    parent_schema -- schema of this container's parent container
-
-    """
+def get_class_name(schema, code, parent_schema, parent_code):
+    """ Builds class name of a container """
     # If this is root container its class has no parents.  
-    if ((parent_schema == None) or (parent_value == None)):
-        parent_schema = ""
-        parent_value = ""
+    if ((parent_schema == None) or (parent_code == None)):
+        return (schema.lower().capitalize() + '_' + 
+                code.lower())
+    return (schema.lower().capitalize() + '_' + 
+            code.lower() + '_' +
+            parent_schema.lower() + '_' +
+            parent_code.lower())
 
-    filename = Template(java_filename).safe_substitute(
-        SCHEMA=schema.lower(),
-        CODE=value.lower(),
-        PARENT_SCHEMA=parent_schema.lower(),
-        PARENT_CODE=parent_value.lower())
-    return filename
+def get_model_file(java_filename, class_name):
+    """ Return filename of current container."""
+    return Template(java_filename).safe_substitute(CLASS_NAME=class_name)
 
 
 def write_model(java_filenames, report,language_code):
@@ -509,32 +503,53 @@ def write_model(java_filenames, report,language_code):
     for container,children in flat.iteritems():
         # Build this container java filename using its parent codes and its own
         parent_code, parent_schema = get_parent_code_schema(flat, container)
+        class_name = get_class_name(container.get_schema(),
+                                    container.get_code(),
+                                    parent_schema,parent_code)
         model_filename = get_model_file(template_model_file,
-                                        container.get_code(),
-                                        container.get_schema(),
-                                        parent_code,parent_schema)
-
+                                        class_name)
         if (not isfile(model_filename)):
-            print "* {0} \n -> {1}".format(container,model_filename)
-            print
+            #print "* {0} \n -> {1}".format(container,model_filename)
+            #print
             model_file = open(model_filename, 'w')
-
-            # If this is root container its class has no parents.  
-            if ((parent_schema == None) or (parent_code == None)):
-                parent_schema = ""
-                parent_code = ""
 
             # Set the Environment for the jinja2 templates and get the template
             environment = set_environment(MODEL_TEMPLATES_PATH)
-            template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
-            template = environment.get_template(template_name)
+
 
             package = get_property(ANDROID_PACKAGES,PACKAGE_MODEL)
-            class_name = (container.get_schema().lower() + '_' + 
-                          container.get_code().lower() + '_' +
-                          parent_schema.lower() + '_' +
-                          parent_code.lower())
+
             attributes = []
+
+            # Render this container attributers
+            for attribute in container.attributes:
+                print attribute.concept
+                print attribute.type
+                render_template = ""
+                attribute_name = attribute.get_schema_code().lower()
+                # BOOL ATTRIBUTE
+                if (attribute.type == NUM and attribute.is_bool()):
+                    template_name = get_property(MODEL_TEMPLATES_SECTION, BOOL_JAVA)
+                # NUM ATTRIBUTE
+                elif (attribute.type == NUM and not attribute.is_bool()):
+                    template_name = get_property(MODEL_TEMPLATES_SECTION, INT_JAVA)
+                # TEXT ATTRIBUTE
+                elif(attribute.type==TEXT):
+                    template_name = get_property(MODEL_TEMPLATES_SECTION, STRING_JAVA)
+                # DATE ATTRIBUTE
+                elif(attribute.type==DATE):
+                    template_name = get_property(MODEL_TEMPLATES_SECTION, DATE_JAVA)
+                template = environment.get_template(template_name)
+                render_template = template.render(name=attribute_name)
+                print render_template, attribute_name
+                attributes.append(render_template)
+
+            # Render class attributes for this container's children
+            # for child in children:
+            #     print child
+
+            template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
+            template = environment.get_template(template_name)
             model_file.write(template.render(package=package,
                                              class_name=class_name,
                                              attributes=attributes))
