@@ -91,7 +91,8 @@ BOOL_JAVA = 'Boolean'
 INT_JAVA = 'Integer'
 STRING_JAVA = 'String'
 DATE_JAVA = 'Date'
-
+CUSTOM_JAVA = 'Custom'
+ 
 # XML FILETYPES
 STRINGS = 'Strings'
 
