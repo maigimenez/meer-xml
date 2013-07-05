@@ -21,7 +21,8 @@ from core.config_variables import (I18N_INPUT, I18N, STRING_TEMPLATES,
                                    LISTVIEW, MODEL_TEMPLATES_PATH,
                                    MODEL_TEMPLATES_SECTION, CLASS,
                                    ANDROID_PACKAGES,PACKAGE_MODEL,
-                                   BOOL_JAVA, STRING_JAVA, INT_JAVA,TEXT,DATE,DATE_JAVA)
+                                   BOOL_JAVA, STRING_JAVA, INT_JAVA,TEXT,DATE,DATE_JAVA,
+                                   CUSTOM_JAVA)
 
 
 def get_languages(language_code):
@@ -316,7 +317,6 @@ def get_attributes_list(environment, attributes,
 
 def get_children_list(environment, children_code,
                       previous_item, children_layout):
-    print children_code
     children, current_item = get_template_substitution(
         environment,
         children_layout,
@@ -339,7 +339,7 @@ def write_one_column_layout_one_level(layout_filename, container, children,
     """
     #If the concept have already generate a layout don't do it again.
     if (not isfile(layout_filename)):
-        print(" * {0}".format(container))
+        #print(" * {0}".format(container))
         layout_file = open(layout_filename, 'w')
         # Set the Environment for the jinja2 templates.
         environment = set_environment(LAYOUT_TEMPLATES_PATH)
@@ -465,14 +465,12 @@ def write_layouts(xml_filenames, report, language_code):
                                           container.get_code(),
                                           parent_code)
         print layout_filename
-
         if (level_layout == COLUMN_1):
             # TODO: Discriminate between layouts with children,
             # attributes or both.
             write_one_column_layout_one_level(layout_filename, container,
                                               children, children_layout)
         elif (level_layout == COLUMNS_2):
-            pass
             write_two_columns_layout(layout_filename, container, children,
                                      children_layout, language_code)
 
@@ -523,10 +521,10 @@ def write_model(java_filenames, report,language_code):
 
             # Render this container attributers
             for attribute in container.attributes:
-                print attribute.concept
-                print attribute.type
+                #print attribute.concept
+                #print attribute.type
                 render_template = ""
-                attribute_name = attribute.get_schema_code().lower()
+                attribute_name = attribute.concept.get_schema_code().lower()
                 # BOOL ATTRIBUTE
                 if (attribute.type == NUM and attribute.is_bool()):
                     template_name = get_property(MODEL_TEMPLATES_SECTION, BOOL_JAVA)
@@ -541,12 +539,19 @@ def write_model(java_filenames, report,language_code):
                     template_name = get_property(MODEL_TEMPLATES_SECTION, DATE_JAVA)
                 template = environment.get_template(template_name)
                 render_template = template.render(name=attribute_name)
-                print render_template, attribute_name
+                #print render_template, attribute_name
                 attributes.append(render_template)
 
             # Render class attributes for this container's children
-            # for child in children:
-            #     print child
+            for child in children:
+                attribute_variable = child.concept.get_schema_code().lower()
+                class_name = attribute_variable.capitalize()
+                template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_JAVA)
+                template = environment.get_template(template_name)
+                render_template = template.render(custom_class=class_name,
+                                                  custom_variable=attribute_variable)
+                attributes.append(render_template)
+
 
             template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
             template = environment.get_template(template_name)

@@ -35,6 +35,9 @@ class Concept(object):
         else:
             return object.__getattribute__(self,name)
 
+    def get_schema_code(self,separator='_'):
+        return self.schema + separator + self.code
+
 
 class Data_type(object):
     """This class manages a data type. 
@@ -52,9 +55,6 @@ class Data_type(object):
             return self.concept.meaning
         else:
             return object.__getattribute__(self,name)
-
-    def get_schema_code(self,separator='_'):
-        return self.concept.schema + separator + self.concept.code
 
     def __repr__(self):
         return u"{0}: {1}".format(self.type,self.concept.meaning)
