@@ -109,12 +109,12 @@ class DicomTree(object):
             return (nodes, attributes)
         else:
             for data, children in self.root.iteritems():
-                node_codes = [node.get_code() for node in nodes]
-                attribute_codes = [attr.code for attr in attributes]
-                if (data.get_code() not in node_codes):
+                written_codes = [node.get_code() for node in nodes]
+                written_codes.extend([attr.code for attr in attributes])
+                if (data.get_code() not in written_codes):
                     nodes.append(data)
                 for attribute in data.attributes:
-                    if (attribute.code not in attribute_codes):
+                    if (attribute.code not in written_codes):
                         attributes.append(attribute)
                 children.get_set_data(nodes, attributes)
 
