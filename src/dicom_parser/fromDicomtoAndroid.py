@@ -14,9 +14,9 @@ xml_filenames.set_languages(LANGUAGE_CODE)
 
 # PARSE
 report = parser.DicomParser().parse(sys.argv[1])
-report.imprime()
-print
-print
+#report.imprime()
+#print
+#print
 
 # OUTPUT LAYOUTS
 # Write the filenames of the layouts and
@@ -24,10 +24,13 @@ print
 xml_filenames.set_odontology(report.get_odontology())
 
 #WRITE STRINGS XML
-#template_engine.write_strings(LANGUAGE_CODE, report)
+template_engine.write_strings(LANGUAGE_CODE, report)
 
 #WRITE LAYOUTS
 template_engine.write_layouts(xml_filenames.layouts, report, LANGUAGE_CODE)
 
-#WRITE JAVA MODEL
+# WRITE JAVA MODEL
 template_engine.write_model(xml_filenames.model, report, LANGUAGE_CODE)
+
+# WRITE ANDROID ACTIVITIES
+template_engine.write_activities(xml_filenames.activities, report)

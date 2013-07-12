@@ -36,3 +36,10 @@ nosetests.xml
 
 # Documentation purpose files
 todocument/
+
+# Output files & Logs
+outputs/
+*.log
+
+# Sublime project files
+*.sublime-*
