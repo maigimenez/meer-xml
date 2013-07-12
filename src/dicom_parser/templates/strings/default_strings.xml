@@ -4,4 +4,7 @@
     <string name="validate">{{ validate }}</string>
     <string name="change">{{ change }}</string>
     <string name="next_level">{{ next_level }}</string>
+    <string name="patient_id">{{ patient_id }}</string>
+
+    <string name="patient_name">{{ patient_name }}</string>
 
