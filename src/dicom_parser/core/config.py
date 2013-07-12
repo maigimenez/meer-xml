@@ -4,6 +4,66 @@ from config_variables import *
 from os.path import join, exists
 from os import makedirs
 import codecs
+from jinja2 import Environment, PackageLoader
+from string import Template
+
+def get_class_name(schema, code, parent_schema, parent_code):
+    """ Builds class name of a container """
+    # If this is root container its class has no parents.  
+    if ((parent_schema == None) or (parent_code == None)):
+        return (schema.lower().capitalize() + '_' + 
+                code.lower())
+    return (parent_schema.lower().capitalize() + '_' + 
+            parent_code.lower() + '_' +
+            schema.lower() + '_' +
+            code.lower())
+
+def get_model_file(java_filename, class_name):
+    """ Return filename of current container."""
+    return Template(java_filename).safe_substitute(CLASS_NAME=class_name)
+
+
+
+def instantiate_filename(report_level, xml_filename, 
+                         concept=None, parent=None):
+    """ Reuturn filename of current layout
+    based on the concept and its parent. """
+    # Add the concept_value to the layout file and open the file for writting
+    if (int(report_level) == 1):
+        filename = xml_filename
+    else:
+        filename = Template(xml_filename).safe_substitute(
+            CODE=concept.lower(),
+            PARENT=parent.lower())
+    return filename
+
+def set_environment(template_type):
+    """ Set the jinja2 environment given a template type
+    (string,layouts,activities or java classe).
+
+    """
+    #Get the template_type path
+    template_root = get_property(TEMPLATES_SECTION, TEMPLATES_ROOT_PATH)
+    template_folder = get_property(TEMPLATES_SECTION, template_type)
+    path = join(template_root, template_folder)
+    #Check if the template directory exists
+    if not exists(path):
+        raise TemplateNotFound('Path \'{0}\' does not exists '.format(path))
+    elif (template_folder == ''):
+        raise TemplateNotFound(
+            'Not valid template type \'{0}\''.format(template_type))
+    #Set the environment
+    env = Environment(loader=PackageLoader(TEMPLATE_PACKAGE, template_folder))
+    return env
+
+
+def get_languages(language_code):
+    """ Return the languages supported  based on the language_code """
+    if (language_code == I18N_INPUT):
+        return I18N
+    elif (language_code == DEFAULT_INPUT):
+        return DEFAULT
+    return None
 
 def read_config(path=SETTINGS_PATH):
     """ Read the config file """
@@ -186,21 +246,26 @@ def get_filepath_odontology(odontology_id, filetype):
     """
     config = read_config()
     # Get layouts filepath
+    #Get the ouputs directory
+    output_directory = get_filepath(filetype)
+    # If the directory does not exist, create it. 
+    if( not exists(output_directory)):
+        makedirs(output_directory)
+    #Get the filetypes file names. 
+    section = odontology_id + ODONTOLOGY_FILENAMES
+    options = config.options(section)
+    filenames = {}
+    #Get files extension
     if (filetype == LAYOUTS):
-        #Get the ouputs directory
-        output_directory = get_filepath(LAYOUTS)
-        # If the directory does not exist, create it. 
-        if( not exists(output_directory)):
-            makedirs(output_directory)
-        #Get the filetypes file names. 
-        section = odontology_id + LAYOUT_FILENAME
-        options = config.options(section)
-        layouts = {}
-        for option in options:
-            level = option.replace(LEVEL_TAG,'')
-            layouts[level] = join( output_directory,config.get(section,option))
-        return layouts
+        extension = config.get(EXTENSIONS_SECTION,XML_EXTENSION)
+    if (filetype == ACTIVITIES):
+        extension = config.get(EXTENSIONS_SECTION,JAVA_EXTENSION)
 
+    for option in options:
+        level = option.replace(LEVEL_TAG,'')
+        filenames[level] = join( output_directory,config.get(section,option)+extension)
+    return filenames
+    
 
 def get_layout_settings(odontology_id, level):
     """ Return a layout distribution for odontology and level given

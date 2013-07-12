@@ -70,8 +70,6 @@ class AndroidFiles(object):
         self.strings = {}
         #There is no point for the variable model to be a dictionary here. We don't need the key
         self.model = []
-        #Set the model classes. At this point we know that at least we will need a settings class.
-        #self.model.append(SETTINGS_CLASS)
         self.activities={}
 
 
@@ -80,8 +78,13 @@ class AndroidFiles(object):
     #   self.activities = ACTIVITIES_DICTIONARY[int(id_odontology)]        
     
     def set_odontology(self,id_odontology):
-        """ Set the filenames for of layouts and android activities using the report odontology id """
+        """ Set the filenames for of layouts and android activities using the 
+        report odontology id.
+        We are using templates, then this template variables will be 
+        instanciated with the report values. 
+        """
         self.layouts = get_filepath_odontology(id_odontology,LAYOUTS)
+        self.activities = get_filepath_odontology(id_odontology,ACTIVITIES)
 
     #TODO: Move this to config.py
     def set_languages(self,languages=""):

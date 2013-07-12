@@ -20,6 +20,11 @@ PROPERTIES_OPTION = "Properties"
 # Properties
 EXTENSIONS_SECTION = 'Extensions'
 PROPERTIES_EXTENSION = 'Properties'
+XML_EXTENSION = 'Xml'
+JAVA_EXTENSION = 'Java'
+
+#LAYOUTS AND ACTIVITIES 
+ODONTOLOGY_FILENAMES= "-Filenames"
 
 # LAYOUTS
 LAYOUTS = "Layouts"
@@ -30,6 +35,9 @@ CHILDREN_TAG = "_children"
 COLUMN_1 = "1 Column"
 COLUMNS_2 = "2 Columns"
 
+#ACTIVITIES
+ACTIVITIES="Activities"
+
 # This variables match with the settings.ini
 # TEMPLATE_TYPES
 TEMPLATE_PACKAGE = 'templates'
@@ -38,6 +46,7 @@ TEMPLATES_ROOT_PATH = 'Templates Path'
 
 STRING_TEMPLATES_SECTION = 'String Templates'
 STRING_TEMPLATES_PATH = 'String Templates Path'
+PATIENT_ID = 'RADLEX-RID13159'
 
 LAYOUT_TEMPLATES_SECTION = 'Layout Templates'
 LAYOUT_TEMPLATES_PATH = 'Layout Templates Path'
@@ -45,6 +54,9 @@ LAYOUT_TEMPLATES_PATH = 'Layout Templates Path'
 MODEL_TEMPLATES_PATH = 'Model Templates Path'
 MODEL_TEMPLATES_SECTION = 'Model Templates'
 MODEL_FILE = 'Model File'
+
+ACTIVITIES_TEMPLATES_PATH = 'Activity Templates Path'
+ACTIVITIES_TEMPLATES_SECTION = 'Activity Templates'
 
 # STRING TEMPLATES
 DEFAULT_STRINGS = 'default_strings'
@@ -93,9 +105,14 @@ STRING_JAVA = 'String'
 DATE_JAVA = 'Date'
 CUSTOM_JAVA = 'Custom'
  
+#JAVA ACTIVITIES
+ACTIVITY = 'Activity'
+
 # XML FILETYPES
 STRINGS = 'Strings'
 
 #ANDROID
 ANDROID_PACKAGES = 'Android Packages'
 PACKAGE_MODEL = 'Model'
+BASE_MODEL = 'Base'
+IMPORT_DATE = 'Import Date'
