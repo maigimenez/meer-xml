@@ -78,8 +78,8 @@ def write_layouts(xml_filenames, report, language_code):
                                                     str(container.tree_level))
         else:
             children_layout = None
-        print
-        print "[Level {0}] {1}".format(container.tree_level, level_layout)
+        #print
+        #print "[Level {0}] {1}".format(container.tree_level, level_layout)
         # Get the filename for this container. It depends on its parent
         parent_code, parent_schema = get_parent_code_schema(flat, container)
         layout_filename_template = xml_filenames[str(container.tree_level)]
@@ -87,7 +87,7 @@ def write_layouts(xml_filenames, report, language_code):
                                                layout_filename_template,
                                                container.get_code(),
                                                parent_code)
-        print layout_filename
+        #print layout_filename
         if (level_layout == COLUMN_1):
             # TODO: Discriminate between layouts with children,
             # attributes or both.
@@ -101,9 +101,6 @@ def write_layouts(xml_filenames, report, language_code):
 
 
 def write_model(java_filenames, report,language_code):
-    print
-    print
-    print 
     template_model_file = get_template_model_file()
     flat = report.get_flat_data()
     
@@ -117,10 +114,8 @@ def write_model(java_filenames, report,language_code):
         class_name = get_class_name(container.get_schema(),
                                     container.get_code(),
                                     parent_schema,parent_code)
-        print "****", class_name
         model_filename = get_model_file(template_model_file,
                                         class_name)
-        print model_filename
         if (not isfile(model_filename)):
             #print "* {0} \n -> {1}".format(container,model_filename)
             #print
@@ -150,7 +145,6 @@ def write_model(java_filenames, report,language_code):
                     template_import = environment.get_template(import_temp_name)
                     render_import_template = template_import.render()
                     imports.append(render_import_template)
-                    print render_import_template
 
                 template = environment.get_template(template_name)
                 render_template = template.render(name=attribute_name)
@@ -160,15 +154,18 @@ def write_model(java_filenames, report,language_code):
 
             # Render class attributes for this container's children
             for child in children:
+                # Create the class name 
                 attribute_variable = child.concept.get_schema_code().lower()
-                child_class_name = attribute_variable.capitalize()
+                parent_class = (container.get_schema().lower().capitalize() + 
+                                '_' + container.get_code().lower())
+                child_class_name = parent_class + '_' + attribute_variable
+
                 template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_JAVA)
                 template = environment.get_template(template_name)
                 render_template = template.render(custom_class=child_class_name,
                                                   custom_variable=attribute_variable)
                 attributes.append(render_template)
 
-            print "!!!!!", class_name
             template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
             template = environment.get_template(template_name)
             model_file.write(template.render(package=package,

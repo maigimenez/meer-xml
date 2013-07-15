@@ -194,7 +194,7 @@ def write_two_columns_layout(layout_filename, container, children,
     #If the concept have already generate a layout don't replicate.
     if (not isfile(layout_filename)):
         layout_file = open(layout_filename, 'w')
-        print(" * {0}".format(container))
+        #   print(" * {0}".format(container))
         # Set the Environment for the jinja2 templates.
         environment = set_environment(LAYOUT_TEMPLATES_PATH)
 
