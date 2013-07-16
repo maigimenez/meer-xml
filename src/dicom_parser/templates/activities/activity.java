@@ -10,8 +10,8 @@ public class {{ activity_name }} extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.{{ layout_file }});
-        {% if childview is defined %}
-        	{{ childview }}
+        {% if childview is defined -%}
+        {{ childview }}
         {% endif %}
     }
 

@@ -81,12 +81,18 @@ def write_layouts(xml_filenames, report, language_code):
         #print
         #print "[Level {0}] {1}".format(container.tree_level, level_layout)
         # Get the filename for this container. It depends on its parent
+        child_name = (container.get_schema() + '_' +
+                      container.get_code())
         parent_code, parent_schema = get_parent_code_schema(flat, container)
+        if (parent_code):
+            parent_name = (parent_schema + '_' + parent_code)
+        else:
+            parent_name = None
         layout_filename_template = xml_filenames[str(container.tree_level)]
         layout_filename = instantiate_filename(str(container.tree_level),
                                                layout_filename_template,
-                                               container.get_code(),
-                                               parent_code)
+                                               child_name,
+                                               parent_name)
         #print layout_filename
         if (level_layout == COLUMN_1):
             # TODO: Discriminate between layouts with children,
@@ -186,25 +192,27 @@ def write_activities(activities_filenames, report):
 
     #Write layout for every file
     for container, children in flat.iteritems():
-        print "[Level {0}]".format(container.tree_level)
+        print
+        print
         # Get the filenames for this container. It depends on its parent
-        parent_code, parent_schema = get_parent_code_schema(flat, container)
         activity_filename_template = activities_filenames[str(container.tree_level)]
+        child_name = (container.get_schema() + '_' +
+                      container.get_code())
+        parent_code, parent_schema = get_parent_code_schema(flat, container)
+        if (parent_code):
+            parent_name = (parent_schema + '_' + parent_code)
+        else:
+            parent_name = None
+
         activity_filename = instantiate_filename(str(container.tree_level),
                                                activity_filename_template,
-                                               container.get_code(),
-                                               parent_code)
+                                               child_name,
+                                               parent_name)
 
-        layout_filename = instantiate_filename(str(container.tree_level),
-                                               activity_filename_template,
-                                               container.get_code(),
-                                               parent_code)
-        layout_id = layout_filename.split('/')[-1].split('.')[0]
+        layout_id = activity_filename.split('/')[-1].split('.')[0].lower()
 
         package = get_property(ANDROID_PACKAGES,BASE_MODEL)
-        activity_name = get_class_name(container.get_schema(),
-                                    container.get_code(),
-                                    parent_schema,parent_code)
+        activity_name = activity_filename.split('/')[-1].split('.')[0]  
         if(children):
             children_layout = get_children_settings(odontology_id,
                                                     str(container.tree_level))
@@ -213,26 +221,29 @@ def write_activities(activities_filenames, report):
         print
         print "[Level {0}] {1}".format(container.tree_level, children_layout)
         print activity_filename, package, activity_name
-        print
 
         if (not isfile(activity_filename)):
             activity_file = open(activity_filename, 'w')
-
+            render_children = None
             #If there are children, will be a listview or an expandable listview to load
             if (children_layout):
                 template_name =  get_property(ACTIVITIES_TEMPLATES_SECTION,children_layout)
                 template = environment.get_template(template_name)
-
-                render_template = template.render(string_array=layout_id)
-                print template_name
+                render_children = template.render(string_array=layout_id)
 
             template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,ACTIVITY)
             template = environment.get_template(template_name)
-            activity_file.write(template.render(package_name=package,
+            print render_children
+            if (render_children):
+                activity_file.write(template.render(package_name=package,
+                                            activity_name=activity_name,
+                                            layout_file=layout_id,
+                                            childview=render_children))
+            else:
+                activity_file.write(template.render(package_name=package,
                                             activity_name=activity_name,
                                             layout_file=layout_id))
             print template_name
-
             activity_file.close()
         else:
             print "Activity {0} already created".format(activity_filename)              

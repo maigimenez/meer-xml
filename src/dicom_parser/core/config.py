@@ -29,8 +29,10 @@ def instantiate_filename(report_level, xml_filename,
     """ Reuturn filename of current layout
     based on the concept and its parent. """
     # Add the concept_value to the layout file and open the file for writting
+    print xml_filename
     if (int(report_level) == 1):
-        filename = xml_filename
+        filename = Template(xml_filename).safe_substitute(
+            CODE=concept.lower())    
     else:
         filename = Template(xml_filename).safe_substitute(
             CODE=concept.lower(),
@@ -258,12 +260,19 @@ def get_filepath_odontology(odontology_id, filetype):
     #Get files extension
     if (filetype == LAYOUTS):
         extension = config.get(EXTENSIONS_SECTION,XML_EXTENSION)
-    if (filetype == ACTIVITIES):
+    elif (filetype == ACTIVITIES):
         extension = config.get(EXTENSIONS_SECTION,JAVA_EXTENSION)
-
+        # For every level build the filename. 
     for option in options:
         level = option.replace(LEVEL_TAG,'')
-        filenames[level] = join( output_directory,config.get(section,option)+extension)
+        #Get the filename. If it's an activity it need to be capitalize.
+        if (filetype == LAYOUTS):
+            filename = config.get(section,option)+extension
+        elif (filetype == ACTIVITIES):
+            template_name = config.get(section,option)
+            template_capitalize = template_name[0].upper() + template_name[1:]
+            filename = template_capitalize+extension
+        filenames[level] = join( output_directory,filename)
     return filenames
     
 
