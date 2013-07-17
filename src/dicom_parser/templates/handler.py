@@ -229,7 +229,8 @@ def write_activities(activities_filenames, report):
             if (children_layout):
                 template_name =  get_property(ACTIVITIES_TEMPLATES_SECTION,children_layout)
                 template = environment.get_template(template_name)
-                render_children = template.render(string_array=layout_id)
+                child_list = layout_id.split('_')[-1].upper()
+                render_children = template.render(string_array=child_list)
 
             template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,ACTIVITY)
             template = environment.get_template(template_name)
