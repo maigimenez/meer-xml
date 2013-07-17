@@ -1,0 +1,8 @@
+        <activity
+            android:name="{{package_name}}.{{activity_name}}"
+            android:label="summary"
+            android:windowSoftInputMode={{keyboad_options}}} >
+            {% if launcher is defined %}
+                {{launcher}}
+            {% endif %}
+        </activity>

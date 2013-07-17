@@ -1,0 +1,25 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.i3m.meer"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="15" />
+    
+    <supports-screens 
+        android:largeScreens="true" 
+        android:xlargeScreens="true"
+        android:smallScreens="false"/>
+
+    <application
+        android:label="meer"
+        android:icon="@drawable/ic_launcher"
+        android:theme="@style/dicomTheme" >
+        {% for activity in activities %}
+            {{activity}}
+        {% endfor %}
+        
+    </application>
+
+</manifest>
