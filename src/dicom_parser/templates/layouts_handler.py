@@ -248,7 +248,6 @@ def write_two_columns_layout(layout_filename, container, children,
                                                         previous_item,
                                                         children_layout)
             left_content = attributes_template.render(items=left_items)
-            print right_content
         try:
             # Render layout template with correct values.
             layout_file.write(template.render(level_code=container.get_code(),

@@ -29,7 +29,6 @@ def instantiate_filename(report_level, xml_filename,
     """ Reuturn filename of current layout
     based on the concept and its parent. """
     # Add the concept_value to the layout file and open the file for writting
-    print xml_filename
     if (int(report_level) == 1):
         filename = Template(xml_filename).safe_substitute(
             CODE=concept.lower())    
