@@ -79,7 +79,7 @@ def write_layouts(xml_filenames, report, language_code):
         else:
             children_layout = None
         #print
-        #print "[Level {0}] {1}".format(container.tree_level, level_layout)
+        print "[Level {0}] {1}".format(container.tree_level, level_layout)
         # Get the filename for this container. It depends on its parent
         child_name = (container.get_schema() + '_' +
                       container.get_code())

@@ -90,6 +90,7 @@ TEXT = 'text'
 SCROLL = 'scroll'
 LISTVIEW = "ListView"
 EXPANDABLELISVIEW = "Expandable ListView"
+ATTRIBUTES = 'Attributes'
 # LAYOUT
 ONE_COLUMN = '1 Column'
 TWO_COLUMNS ='2 Columns'

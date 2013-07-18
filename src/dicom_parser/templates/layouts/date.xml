@@ -1,10 +1,13 @@
+
 			<!-- Date {{ concept_name }}-->
 			<TextView android:id="@+id/label_{{ concept_value }}"
 				android:text="@string/code_{{ concept_value }}"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="20dp"
-				android:layout_below="@id/{{ previous_item }}"/>
+				{%- if first_attribute %}
+				android:layout_below="@id/{{ previous_item }}"
+                {% endif -%}/>
 
 			<Button android:id="@+id/button_{{ concept_value }}"
 				android:text="@string/change"

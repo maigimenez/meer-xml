@@ -3,5 +3,7 @@
                         <CheckBox android:id="@+id/cbox_{{ concept_value }}"
                             android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:text="@string/code_{{ concept_value }}"
+                            {%- if first_attribute %}
                             android:layout_alignLeft="@id/{{ previous_item }}" 
-                            android:layout_below="@id/{{ previous_item }}" />
+                            android:layout_below="@id/{{ previous_item }}"
+                            {%- endif -%}/>

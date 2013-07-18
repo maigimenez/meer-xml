@@ -19,17 +19,6 @@
                 android:textAppearance="@android:style/TextAppearance.Large" />
                 {% block center_content%}
                 {% endblock -%}
-                <ScrollView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_below="@id/code_{{ level_code }}">
-                    <RelativeLayout 
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
-                        {% for item in items_list -%}
-                            {{ item }}
-                        {% endfor %}  
-                    </RelativeLayout>
-                </ScrollView>}
+{{content}}
             </RelativeLayout>
 {% endblock %}
