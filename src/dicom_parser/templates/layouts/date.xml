@@ -5,7 +5,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="20dp"
-				{%- if first_attribute %}
+				{%- if not first_attribute %}
 				android:layout_below="@id/{{ previous_item }}"
                 {% endif -%}/>
 

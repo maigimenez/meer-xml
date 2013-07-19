@@ -3,9 +3,9 @@
                         <TextView android:id="@+id/label_{{ concept_value }}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            {%- if first_attribute %}
+                            {%- if not first_attribute %}
                             android:layout_below="@id/{{ previous_item }}"
-                            {%- endif -%}
+                            {%- endif %}
                             android:text="@string/code_{{ concept_value }}"
                             android:layout_marginLeft="20dp" />
 

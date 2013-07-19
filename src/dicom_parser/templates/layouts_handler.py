@@ -58,7 +58,8 @@ def get_template_substitution(environment, template_type, concept=None,
         localized_concept = concept.meaning[language]
         render_template = template.render(concept_name=localized_concept,
                                           concept_value=concept.value,
-                                          previous_item=previous_item)
+                                          previous_item=previous_item,
+                                          first_attribute=first)
         current_item = "etext_{0}".format(concept.value)
     # BOOL type attribute
     elif (template_type == BOOL):
@@ -73,7 +74,8 @@ def get_template_substitution(environment, template_type, concept=None,
         localized_concept = concept.meaning[language]
         render_template = template.render(concept_name=localized_concept,
                                           concept_value=concept.value,
-                                          previous_item=previous_item)
+                                          previous_item=previous_item,
+                                          first_attribute=first)
         current_item = "etext_{0}".format(concept.value)
     # SCROLL
     elif (template_type == SCROLL):
@@ -127,14 +129,15 @@ def get_attributes_list(environment, attributes,
                 previous_item=previous_item,
                 language=default_language,
                 first=first_attribute)
+            if (first_attribute):
+                print attribute_layout
             attributes_layouts.append(attribute_layout)
             previous_item = current_item
-            #print current_item
         else:
             #Throw an error
             current_item = previous_item
-    #print
-    first_attribute = False
+        #print
+        first_attribute = False
     return attributes_layouts, current_item
 
 
@@ -143,8 +146,7 @@ def get_children(environment, children_code,
     children, current_item = get_template_substitution(
         environment,
         children_layout,
-        concept=children_code,
-        previous_item=previous_item)
+        concept=children_code)
     return children, current_item
 
 
@@ -213,7 +215,7 @@ def write_two_columns_layout(layout_filename, container, children,
                 get_property(LAYOUT_TEMPLATES_SECTION, ATTRIBUTES))
 
         # Store previous concept id
-        previous_item = "code_{0}".format(container.get_code())
+        layout_prev_item = "code_{0}".format(container.get_code())
         left_content = ""
         right_content = ""
         # There are ONLY ATTRIBUTES in this layout
@@ -226,14 +228,17 @@ def write_two_columns_layout(layout_filename, container, children,
             # Get the attributes list
             left_items, previous_item  = get_attributes_list(environment,
                                                              left_attributes,
-                                                             previous_item,
+                                                             layout_prev_item,
                                                              language_code)
+            left_content = attributes_template.render(previous_item=layout_prev_item,
+                                                      items=left_items)
             right_items, previous_item = get_attributes_list(environment,
                                                              right_attributes,
                                                              previous_item,
                                                              language_code)
-            left_content = attributes_template.render(items=left_items)
-            right_content = attributes_template.render(items=right_items)
+
+            right_content = attributes_template.render(previous_item='right_layout',
+                                                       items=right_items)
         # There are ATTRIBUTES and CHILDREN in this layout
         elif((len(container.attributes) > 0) and (len(children) > 0)):
             attributes = container.attributes
@@ -241,13 +246,14 @@ def write_two_columns_layout(layout_filename, container, children,
             # Get the attributes list
             left_items, previous_item  = get_attributes_list(environment,
                                                              attributes,
-                                                             previous_item,
+                                                             layout_prev_item,
                                                              language_code)
+            left_content = attributes_template.render(previous_item=layout_prev_item,
+                                                      items=left_items)
             right_content, previous_item = get_children(environment,
                                                         concept,
                                                         previous_item,
                                                         children_layout)
-            left_content = attributes_template.render(items=left_items)
         try:
             # Render layout template with correct values.
             layout_file.write(template.render(level_code=container.get_code(),
