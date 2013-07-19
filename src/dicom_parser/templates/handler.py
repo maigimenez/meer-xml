@@ -22,6 +22,7 @@ from core.config_variables import (I18N_INPUT, I18N,
 
 from strings_handler import write_template
 from layouts_handler import write_two_columns_layout, write_one_column_layout_one_level
+from activities_handler import write_manifest
 
 def write_strings(language_code, report):
     """ Write all needed strings in report for all supported languages.
@@ -184,14 +185,23 @@ def write_model(java_filenames, report,language_code):
 
 def write_activities(activities_filenames, report):
     flat = report.get_flat_data()
+
     #Get the odontology id of the report
     odontology_id = report.get_odontology()
 
     # Set the Environment for the jinja2 templates and get the template
     environment = set_environment(ACTIVITIES_TEMPLATES_PATH)
 
+    # Get report root container. This will be the launcher activity.             
+    report_root = report.get_report_root()[0].get_schema_code()
+    activities = []
+    launcher_activity = ""
+
+    package = get_property(ANDROID_PACKAGES,BASE_MODEL)
+
     #Write layout for every file
     for container, children in flat.iteritems():
+        activity = {}
         print
         print
         # Get the filenames for this container. It depends on its parent
@@ -203,25 +213,37 @@ def write_activities(activities_filenames, report):
             parent_name = (parent_schema + '_' + parent_code)
         else:
             parent_name = None
-
         activity_filename = instantiate_filename(str(container.tree_level),
                                                activity_filename_template,
                                                child_name,
                                                parent_name)
-
+        # Get the layout id and the activity name. It matches partially 
+        # with the activity filename.
         layout_id = activity_filename.split('/')[-1].split('.')[0].lower()
+        activity_name = activity_filename.split('/')[-1].split('.')[0]
 
-        package = get_property(ANDROID_PACKAGES,BASE_MODEL)
-        activity_name = activity_filename.split('/')[-1].split('.')[0]  
+        # Store info to write the Android Manifest
+        # Check if this activity is the launcher
+        if (container.get_schema_code() == report_root):
+            activity['launcher'] = True
+        else:
+            activity['launcher'] = False
+        activity['name'] = activity_name
+        activities.append(activity)
+
+        # Get children layout if there are childrens in this container.
         if(children):
             children_layout = get_children_settings(odontology_id,
                                                     str(container.tree_level))
         else:
             children_layout = None
+
+        # Log purpose info
         print
         print "[Level {0}] {1}".format(container.tree_level, children_layout)
         print activity_filename, package, activity_name
 
+        # Write activity file 
         if (not isfile(activity_filename)):
             activity_file = open(activity_filename, 'w')
             render_children = None
@@ -234,7 +256,8 @@ def write_activities(activities_filenames, report):
 
             template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,ACTIVITY)
             template = environment.get_template(template_name)
-            print render_children
+            #TODO: Find a better way to solve this. 
+            # Problem: if childview is None jinja is defined does not work 
             if (render_children):
                 activity_file.write(template.render(package_name=package,
                                             activity_name=activity_name,
@@ -247,4 +270,9 @@ def write_activities(activities_filenames, report):
             print template_name
             activity_file.close()
         else:
-            print "Activity {0} already created".format(activity_filename)              
+            print "Activity {0} already created".format(activity_filename)
+    print
+    print
+
+    print launcher_activity , type(launcher_activity)
+    write_manifest(package,activities,launcher_activity)

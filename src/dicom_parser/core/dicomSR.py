@@ -32,6 +32,9 @@ class Container(object):
     def get_concept(self):
         return self.concept
 
+    def get_schema_code(self,sep='_'):
+        return self.concept.schema + sep + self.concept.value
+
     def __str__(self):
         meaning = self.concept.meaning.values()[0]
         str_attributes = ""
@@ -52,6 +55,9 @@ class Container(object):
 class DicomTree(object):
     def __init__(self):
         self.root = {}
+
+    def get_root(self):
+        return self.root.keys()
 
     def get_container(self, code):
         for container in self.root.keys():
@@ -149,6 +155,9 @@ class DicomSR(object):
         flat = {}
         self.report.get_flat_tree(flat)
         return flat
+
+    def get_report_root(self):
+        return self.report.get_root()
 
     def get_data_form_report(self, languages, template_type):
         """ Return data from the report in a dictionary

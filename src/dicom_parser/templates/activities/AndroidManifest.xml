@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.i3m.meer"
+    package="{{package_name}}"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -16,9 +16,19 @@
         android:label="meer"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/dicomTheme" >
-        {% for activity in activities %}
-            {{activity}}
-        {% endfor %}
+        {%- for activity in activities %}
+        <activity
+            android:name="{{package_name}}.{{activity.name}}"
+            android:label="summary"
+            android:windowSoftInputMode="adjustPan">
+            {%- if activity.launcher %}
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            {%- endif %}
+        </activity>
+        {%- endfor %}
         
     </application>
 

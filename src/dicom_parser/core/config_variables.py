@@ -37,6 +37,7 @@ COLUMNS_2 = "2 Columns"
 
 #ACTIVITIES
 ACTIVITIES="Activities"
+ACTIVITY = 'Activity'
 
 # This variables match with the settings.ini
 # TEMPLATE_TYPES
@@ -105,9 +106,6 @@ INT_JAVA = 'Integer'
 STRING_JAVA = 'String'
 DATE_JAVA = 'Date'
 CUSTOM_JAVA = 'Custom'
- 
-#JAVA ACTIVITIES
-ACTIVITY = 'Activity'
 
 # XML FILETYPES
 STRINGS = 'Strings'
@@ -117,3 +115,4 @@ ANDROID_PACKAGES = 'Android Packages'
 PACKAGE_MODEL = 'Model'
 BASE_MODEL = 'Base'
 IMPORT_DATE = 'Import Date'
+MANIFEST = 'Manifest'
