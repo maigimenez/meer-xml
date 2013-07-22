@@ -1,18 +1,18 @@
  #  -*- coding: utf-8 -*-
-from types import Concept
+from types import Concept, Property
 from config_variables import(MULTIPLE_PROPERTIES, DICOM_LEVEL,
                              CHILDREN_ARRAYS)
 from config import get_odontology_level
 
 
 class Container(object):
-    def __init__(self, tree_level, concept=Concept(), properties=[],
+    def __init__(self, tree_level, concept=Concept(), properties=Property(),
                  attributes=[]):
         self.tree_level = tree_level
         self.concept = concept
         #List of properties for this Container.
         #TODO: Items in this list will be Property type
-        self.properties = properties[:]
+        self.properties = properties
         self.attributes = attributes[:]
         #print self.attributes
 
@@ -85,16 +85,16 @@ class DicomTree(object):
                                        + attribute.__str__() + "\n")
                 str_attributes = str_attributes[:-1]
                 if (not attributes):
-                    print u"{0} [{1}_{2}] {3} (no.attr: {4} - no.prop:{5})"\
+                    print u"{0} [{1}_{2}] {3} (no.attr: {4} ) (prop: {5})"\
                         .format("-" * (ident + 1), data.concept.schema,
                                 data.concept.value, meaning.upper(),
-                                len(data.attributes), len(data.properties))
+                                len(data.attributes), data.properties)
                 else:
                     print u"{0} [{1}_{2}] {3} "\
-                        "(no.attr: {4} - no.prop:{5}): {6}"\
+                        "(no.attr: {4} ) (prop:{5}): {6}"\
                         .format("-" * (ident + 1), data.concept.schema,
                                 data.concept.value, meaning.upper(),
-                                len(data.attributes), len(data.properties),
+                                len(data.attributes), data.properties,
                                 str_attributes)
                 children.print_tree(ident + 4, attributes)
 

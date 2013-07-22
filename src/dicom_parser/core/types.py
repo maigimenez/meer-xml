@@ -3,13 +3,19 @@ class Property(object):
     def __init__(self):
         self.max_cardinality = 0
         self.min_cardinality = 0
-        self.max_value = 0
-        self.min_value = 0
         self.condition = ""
+        self.xquery = ""
+        self.default_value = None
+
+    def set_cardinality(self,max_value=1,min_value=1):
+        self.max_cardinality = max_value
+        self.min_cardinality = min_value
+
+    def __repr__(self):
+        return "max:{0} - min:{1} | condition:{2} ? {3} | default = {4} ".format(self.max_cardinality, self.min_cardinality, self.condition, self.xquery, self.default_value)
 
 class Concept(object):
     """ This class manages the concept"""
-    #TODO: Add CODE_SCHEMA support
     def __init__(self,value=-1,schema="", meaning={}):
         self.value = value
         self.schema = schema
@@ -47,6 +53,7 @@ class Data_type(object):
     def __init__(self):
         self.type = ""
         self.concept = Concept()
+        self.properties = Property()
 
     def __getattribute__(self,name):
         if (name=='code'):
@@ -60,7 +67,8 @@ class Data_type(object):
         return u"{0}: {1}".format(self.type,self.concept.meaning)
 
     def __str__(self):
-        return u"{0}: {1}".format(self.type,self.concept.meaning.values()[0])
+        return u"{0}: {1} ({2})".format(self.type,self.concept.meaning.values()[0],
+            self.properties)
 
 
 class Date(Data_type):

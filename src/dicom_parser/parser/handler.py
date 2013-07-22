@@ -2,7 +2,7 @@
 import sys
 import logging
 import xml.sax
-from core.types import Date, Num, Text, Concept
+from core.types import Date, Num, Text, Concept, Property
 from core.dicom import SAXReport, SAXContainer
 from core.dicomSR import DicomSR, Container
 from core.config import get_language_code
@@ -26,10 +26,12 @@ class DicomParser(xml.sax.handler.ContentHandler):
         self._in_level = False
         self._repeated = False
         self._in_unit_measurement = False
+        self._in_property = False
         #Store information read from xml
         self._current_attribute = None
         self._concept = None
         self._unit_measurement = None
+        self._property = None
         # A list of the code values already writen in strings.xml
         self._code_values = []
         # Report-related variables
@@ -100,6 +102,18 @@ class DicomParser(xml.sax.handler.ContentHandler):
         if (name == "CODE_MEANING2"):
             self._in_data = True
             self._buffer = ''
+        if (name == "PROPERTIES"):
+            self._in_property = True
+            self._property = Property()
+        if (name == "CARDINALITY"):
+            self._property.set_cardinality(attrs.get('max',''),
+                                           attrs.get('min',''))
+        if (name == "CONDITION_TYPE"):
+            self._property.condition = attrs.get('type','')
+        if (name == "EXPRESION_CONDITION"):
+            self._property.xquery = attrs.get('xquery','')
+        if (name == "DEFAULT_VALUE"):
+            self._property.default_value = attrs.get('value','')
 
     def endElement(self, name):
         """ Store data read in the report internal variable """
@@ -134,17 +148,19 @@ class DicomParser(xml.sax.handler.ContentHandler):
 
         if (name == "CONCEPT_NAME"):
             self._in_concept = False
+
             #This is the end of a concept name tag, if in_level is true
             #this concept will be the level ID
-            if (self._in_level):
-                logging.info(self._concept)
-                self._report.add_container(
-                    SAXContainer(self._concept, self._tree_level, True,
-                                 self._report.return_parent(self._tree_level)))
+            # if (self._in_level):
+            #     print self._concept, type(self._concept)
+            #     logging.info(self._concept)
+            #     self._report.add_container(
+            #         SAXContainer(self._concept, self._tree_level, True,
+            #                      self._report.return_parent(self._tree_level)))
                 #TODO: no va al log, s'imprimix per consola igual
                  #logging.info(self._report.imprime())
-            if (self._in_type is False):
-                self._concept = None
+            #if (self._in_type is False):
+            #    self._concept = None
         if (name == "CONTAINER"):
             logging.info("* End tree level: {0}".format(self._tree_level))
             self._tree_level -= 1
@@ -157,36 +173,64 @@ class DicomParser(xml.sax.handler.ContentHandler):
 
         if (name == "DATE"):
             self._current_attribute.concept = self._concept
+            self._current_attribute.properties = self._property
             logging.info(
-                "    -> Date: {0}".format(self._current_attribute.concept))
-            self._in_type = False
-            self._concept = None
+                "    -> Date: {0} * {1}".format(self._current_attribute.concept,
+                                                self._current_attribute.properties))
             self._report.add_attribute(
                 self._child_level, self._current_attribute)
+            self._in_type = False
+            self._concept = None
+            self._property = None
 
         if (name == "TEXT"):
             self._current_attribute.concept = self._concept
+            self._current_attribute.properties = self._property
             logging.info(
-                "    -> Text: {0}".format(self._current_attribute.concept))
+                "    -> Text: {0} * {1}".format(self._current_attribute.concept,
+                                                self._current_attribute.properties))
             self._report.add_attribute(
                 self._child_level, self._current_attribute)
             self._in_type = False
             self._concept = None
+            self._property = None
 
         if (name == "NUM"):
             self._current_attribute.concept = self._concept
             self._current_attribute.unit_measurement = self._unit_measurement
+            self._current_attribute.properties = self._property
             logging.info(
-                "    -> Num: {0} * {1}".format(
+                "    -> Num: {0} * {1} * {2}".format(
                     self._current_attribute.concept,
-                    self._current_attribute.unit_measurement))
+                    self._current_attribute.unit_measurement,
+                    self._current_attribute.properties))
             self._report.add_attribute(
                 self._child_level, self._current_attribute)
             self._in_type = False
             self._concept = None
+            self._property = None
 
         if (name == "UNIT_MEASUREMENT"):
             self._in_unit_measurement = False
+
+        if (name == "PROPERTIES"):
+            self._in_property = False
+            #This is the end of a concept name tag, if in_level is true
+            #this concept will be the level ID
+            if (self._in_level):
+                #print self._concept
+                #print self._property.max_value, self._property.min_value
+                logging.info(self._concept)
+                self._report.add_container(
+                    SAXContainer(self._concept, self._tree_level, True,
+                                 self._report.return_parent(self._tree_level),
+                                 self._property))
+                #TODO: no va al log, s'imprimix per consola igual
+                 #logging.info(self._report.imprime())
+            # If this is not a type (date, text or num), this is concept's end
+            if (not self._in_type):
+                self._concept = None
+                self._property = None
 
     def characters(self, chars):
         """ Store the characters read in a buffer """
@@ -202,11 +246,10 @@ class DicomParser(xml.sax.handler.ContentHandler):
         for container in self._report._containers:
             self._dict_report.add_node(
                 Container(container.tree_level, container.concept,
-                          [], container.attributes),
+                          container.properties, container.attributes),
                 container.parent)
 
     def endDocument(self):
         """ Build the report tree and close the string files """
-      #  self.build_tree()
         self.build_dicom_tree()
         #self._report.imprime()
