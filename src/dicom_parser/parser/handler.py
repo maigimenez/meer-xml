@@ -106,8 +106,8 @@ class DicomParser(xml.sax.handler.ContentHandler):
             self._in_property = True
             self._property = Property()
         if (name == "CARDINALITY"):
-            self._property.set_cardinality(attrs.get('max',''),
-                                           attrs.get('min',''))
+            self._property.set_cardinality(int(attrs.get('max','')),
+                                           int(attrs.get('min','')))
         if (name == "CONDITION_TYPE"):
             self._property.condition = attrs.get('type','')
         if (name == "EXPRESION_CONDITION"):
