@@ -1,4 +1,4 @@
-#  -*- coding: utf-8 -*-
+ #  -*- coding: utf-8 -*-
 from jinja2 import Environment, PackageLoader, TemplateNotFound
 from os.path import join, exists, isfile
 from core.config import (get_xml_filepath, get_substitution_dictionary,
@@ -18,7 +18,8 @@ from core.config_variables import (I18N_INPUT, I18N,
                                    ANDROID_PACKAGES,PACKAGE_MODEL,
                                    BOOL_JAVA, STRING_JAVA, INT_JAVA,DATE_JAVA,
                                    CUSTOM_JAVA,BASE_MODEL, LISTVIEW, EXPANDABLELISVIEW,
-                                   ACTIVITIES_TEMPLATES_SECTION, ACTIVITY, IMPORT_DATE)
+                                   ACTIVITIES_TEMPLATES_SECTION, ACTIVITY, IMPORT_DATE,
+                                   CUSTOM_ARRAY, IMPORT_ARRAY)
 
 from strings_handler import write_template
 from layouts_handler import write_two_columns_layout, write_one_column_layout_one_level
@@ -120,10 +121,13 @@ def write_model(java_filenames, report,language_code):
         parent_code, parent_schema = get_parent_code_schema(flat, container)
         class_name = get_class_name(container.get_schema(),
                                     container.get_code(),
-                                    parent_schema,parent_code)
+                                    parent_schema,parent_code).replace('-','_')
         model_filename = get_model_file(template_model_file,
                                         class_name)
         if (not isfile(model_filename)):
+            # Boolean variables, preventing multiple imports
+            import_date = False
+            import_array = False
             #print "* {0} \n -> {1}".format(container,model_filename)
             #print
             model_file = open(model_filename, 'w')
@@ -148,10 +152,12 @@ def write_model(java_filenames, report,language_code):
                 # DATE ATTRIBUTE
                 elif(attribute.type==DATE):
                     template_name = get_property(MODEL_TEMPLATES_SECTION, DATE_JAVA)
-                    import_temp_name = get_property(MODEL_TEMPLATES_SECTION,IMPORT_DATE) 
-                    template_import = environment.get_template(import_temp_name)
-                    render_import_template = template_import.render()
-                    imports.append(render_import_template)
+                    if(not import_date):
+                        import_temp_name = get_property(MODEL_TEMPLATES_SECTION,IMPORT_DATE) 
+                        template_import = environment.get_template(import_temp_name)
+                        render_import_template = template_import.render()
+                        imports.append(render_import_template)
+                        import_date = True
 
                 template = environment.get_template(template_name)
                 render_template = template.render(name=attribute_name)
@@ -166,8 +172,19 @@ def write_model(java_filenames, report,language_code):
                 parent_class = (container.get_schema().lower().capitalize() + 
                                 '_' + container.get_code().lower())
                 child_class_name = parent_class + '_' + attribute_variable
-
-                template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_JAVA)
+                child_class_name = child_class_name.replace('-','_')
+                # This child is an array.
+                if (child.properties.max_cardinality == -1 ):
+                    print child_class_name
+                    # template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_ARRAY)
+                    # if (not import_array):
+                    #     import_temp_name = get_property(MODEL_TEMPLATES_SECTION,IMPORT_ARRAY) 
+                    #     template_import = environment.get_template(import_temp_name)
+                    #     render_import_template = template_import.render()
+                    #     imports.append(render_import_template)
+                    #     import_array = True
+                else:
+                    template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_JAVA)
                 template = environment.get_template(template_name)
                 render_template = template.render(custom_class=child_class_name,
                                                   custom_variable=attribute_variable)

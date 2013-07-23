@@ -106,7 +106,8 @@ INT_JAVA = 'Integer'
 STRING_JAVA = 'String'
 DATE_JAVA = 'Date'
 CUSTOM_JAVA = 'Custom'
-
+CUSTOM_ARRAY = 'Custom Array'
+IMPORT_ARRAY = 'Import Array'
 # XML FILETYPES
 STRINGS = 'Strings'
 

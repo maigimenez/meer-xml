@@ -19,8 +19,8 @@ report = parser.DicomParser().parse(sys.argv[1])
 #print
 
 # OUTPUT LAYOUTS
-# Write the filenames of the layouts and
-# the activities based on the report odontology
+# Write the file names of the layouts and
+# the activities based on the report ontology
 xml_filenames.set_odontology(report.get_odontology())
 
 #WRITE STRINGS XML
