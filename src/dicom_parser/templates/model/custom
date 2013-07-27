@@ -1,1 +1,1 @@
-       {{ custom_class }} {{ custom_variable }};
+    {{ custom_class }} {{ custom_variable }};

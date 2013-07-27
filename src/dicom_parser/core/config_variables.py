@@ -108,6 +108,10 @@ DATE_JAVA = 'Date'
 CUSTOM_JAVA = 'Custom'
 CUSTOM_ARRAY = 'Custom Array'
 IMPORT_ARRAY = 'Import Array'
+CHILD_CLASS = '_Child'
+CHILD_STRING = 'String instance;'
+GROUP_CLASS = '_Group'
+GROUP_STRING = '\tString group_name;'
 # XML FILETYPES
 STRINGS = 'Strings'
 
@@ -117,3 +121,4 @@ PACKAGE_MODEL = 'Model'
 BASE_MODEL = 'Base'
 IMPORT_DATE = 'Import Date'
 MANIFEST = 'Manifest'
+

@@ -3,7 +3,7 @@ from types import Concept, Property
 from config_variables import(MULTIPLE_PROPERTIES, DICOM_LEVEL,
                              CHILDREN_ARRAYS)
 from config import get_odontology_level
-
+from collections import deque
 
 class Container(object):
     def __init__(self, tree_level, concept=Concept(), properties=Property(),
@@ -43,14 +43,13 @@ class Container(object):
         str_attributes = str_attributes[:-1]
         return u"[{0}_{1}] {2} (no.attr: {3} - no.prop:{4}): \n{5}".format(
             self.concept.schema, self.concept.value, meaning.upper(),
-            len(self.attributes), len(self.properties), str_attributes)\
+            len(self.attributes), self.properties, str_attributes)\
             .encode("utf-8")
 
     def __repr__(self):
         return u"[{0}_{1}] {2} (no.attr: {3} - no.prop:{4}):".format(
             self.concept.schema, self.concept.value, self.concept.meaning,
-            len(self.attributes), len(self.properties))
-
+            len(self.attributes),self.properties)
 
 class DicomTree(object):
     def __init__(self):
@@ -131,7 +130,16 @@ class DicomTree(object):
             for parent, children in self.root.iteritems():
                 flat[parent] = children.get_parents()
                 children.get_flat_tree(flat)
-
+    
+    def depthFirst(self):
+        '''Sequentially yield nodes in an unguided depth-first fashion'''
+        q = deque([self])
+        while len(q) > 0:
+            node = q.pop()
+            yield node.root
+            for i in node.children:
+                q.append(node.children[i])
+        return
 
 class DicomSR(object):
     def __init__(self, report_type="", id_odontology=-1):

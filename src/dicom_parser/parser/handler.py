@@ -248,6 +248,7 @@ class DicomParser(xml.sax.handler.ContentHandler):
                 Container(container.tree_level, container.concept,
                           container.properties, container.attributes),
                 container.parent)
+            #print self._dict_report.report
 
     def endDocument(self):
         """ Build the report tree and close the string files """
