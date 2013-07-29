@@ -106,14 +106,14 @@ class DicomParser(xml.sax.handler.ContentHandler):
             self._in_property = True
             self._property = Property()
         if (name == "CARDINALITY"):
-            self._property.set_cardinality(int(attrs.get('max','')),
-                                           int(attrs.get('min','')))
+            self._property.set_cardinality(int(attrs.get('max', '')),
+                                           int(attrs.get('min', '')))
         if (name == "CONDITION_TYPE"):
-            self._property.condition = attrs.get('type','')
+            self._property.condition = attrs.get('type', '')
         if (name == "EXPRESION_CONDITION"):
-            self._property.xquery = attrs.get('xquery','')
+            self._property.xquery = attrs.get('xquery', '')
         if (name == "DEFAULT_VALUE"):
-            self._property.default_value = attrs.get('value','')
+            self._property.default_value = attrs.get('value', '')
 
     def endElement(self, name):
         """ Store data read in the report internal variable """
@@ -148,19 +148,9 @@ class DicomParser(xml.sax.handler.ContentHandler):
 
         if (name == "CONCEPT_NAME"):
             self._in_concept = False
+            #TODO: no va al log, s'imprimix per consola igual
+            #logging.info(self._report.imprime())
 
-            #This is the end of a concept name tag, if in_level is true
-            #this concept will be the level ID
-            # if (self._in_level):
-            #     print self._concept, type(self._concept)
-            #     logging.info(self._concept)
-            #     self._report.add_container(
-            #         SAXContainer(self._concept, self._tree_level, True,
-            #                      self._report.return_parent(self._tree_level)))
-                #TODO: no va al log, s'imprimix per consola igual
-                 #logging.info(self._report.imprime())
-            #if (self._in_type is False):
-            #    self._concept = None
         if (name == "CONTAINER"):
             logging.info("* End tree level: {0}".format(self._tree_level))
             self._tree_level -= 1
@@ -175,8 +165,9 @@ class DicomParser(xml.sax.handler.ContentHandler):
             self._current_attribute.concept = self._concept
             self._current_attribute.properties = self._property
             logging.info(
-                "    -> Date: {0} * {1}".format(self._current_attribute.concept,
-                                                self._current_attribute.properties))
+                "    -> Date: {0} * {1}"
+                .format(self._current_attribute.concept,
+                        self._current_attribute.properties))
             self._report.add_attribute(
                 self._child_level, self._current_attribute)
             self._in_type = False
@@ -187,8 +178,9 @@ class DicomParser(xml.sax.handler.ContentHandler):
             self._current_attribute.concept = self._concept
             self._current_attribute.properties = self._property
             logging.info(
-                "    -> Text: {0} * {1}".format(self._current_attribute.concept,
-                                                self._current_attribute.properties))
+                "    -> Text: {0} * {1}"
+                .format(self._current_attribute.concept,
+                        self._current_attribute.properties))
             self._report.add_attribute(
                 self._child_level, self._current_attribute)
             self._in_type = False
