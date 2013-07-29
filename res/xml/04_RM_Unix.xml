@@ -1,0 +1,3574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DICOM_SR Description="Resonancia Magnética" IDOntology="7">
+  <CONTAINER>
+    <CONCEPT_NAME>
+      <CODE_VALUE>RID10312</CODE_VALUE>
+      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+      <CODE_MEANING>Resonancia Magnética</CODE_MEANING>
+      <CODE_MEANING2>Magnetic Resonance Imaging</CODE_MEANING2>
+    </CONCEPT_NAME>
+    <PROPERTIES>
+      <CARDINALITY max="1" min="1"/>
+      <CONDITION_TYPE type="M"/>
+      <EXPRESION_CONDITION xquery=""/>
+    </PROPERTIES>
+    <CHILDS>
+      <DATE>
+        <CONCEPT_NAME>
+          <CODE_VALUE>399651003</CODE_VALUE>
+          <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+          <CODE_MEANING>Fecha Informe</CODE_MEANING>
+          <CODE_MEANING2>Date of Report</CODE_MEANING2>
+        </CONCEPT_NAME>
+        <PROPERTIES>
+          <CARDINALITY max="1" min="1"/>
+          <CONDITION_TYPE type="M"/>
+          <EXPRESION_CONDITION xquery=""/>
+          <DEFAULT_VALUE value=""/>
+        </PROPERTIES>
+      </DATE>
+      <TEXT>
+        <CONCEPT_NAME>
+          <CODE_VALUE>118522005</CODE_VALUE>
+          <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+          <CODE_MEANING>Identificador</CODE_MEANING>
+          <CODE_MEANING2>Identifier</CODE_MEANING2>
+        </CONCEPT_NAME>
+        <PROPERTIES>
+          <CARDINALITY max="1" min="1"/>
+          <CONDITION_TYPE type="M"/>
+          <EXPRESION_CONDITION xquery=""/>
+          <DEFAULT_VALUE value=""/>
+        </PROPERTIES>
+      </TEXT>
+      <TEXT>
+        <CONCEPT_NAME>
+          <CODE_VALUE>RID13159</CODE_VALUE>
+          <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+          <CODE_MEANING>Identificador del Paciente</CODE_MEANING>
+          <CODE_MEANING2>Patient Identifier</CODE_MEANING2>
+        </CONCEPT_NAME>
+        <PROPERTIES>
+          <CARDINALITY max="1" min="1"/>
+          <CONDITION_TYPE type="M"/>
+          <EXPRESION_CONDITION xquery=""/>
+          <DEFAULT_VALUE value=""/>
+        </PROPERTIES>
+      </TEXT>
+      <TEXT>
+        <CONCEPT_NAME>
+          <CODE_VALUE>TRMM0017</CODE_VALUE>
+          <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+          <CODE_MEANING>Identificador Estudio DICOM Asociado</CODE_MEANING>
+          <CODE_MEANING2>Dicom Study Associated Identifier</CODE_MEANING2>
+        </CONCEPT_NAME>
+        <PROPERTIES>
+          <CARDINALITY max="1" min="1"/>
+          <CONDITION_TYPE type="M"/>
+          <EXPRESION_CONDITION xquery=""/>
+          <DEFAULT_VALUE value=""/>
+        </PROPERTIES>
+      </TEXT>
+      <CONTAINER>
+        <CONCEPT_NAME>
+          <CODE_VALUE>RID29896</CODE_VALUE>
+          <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+          <CODE_MEANING>Mama Derecha</CODE_MEANING>
+          <CODE_MEANING2>Right Female Breast</CODE_MEANING2>
+        </CONCEPT_NAME>
+        <PROPERTIES>
+          <CARDINALITY max="1" min="1"/>
+          <CONDITION_TYPE type="M"/>
+          <EXPRESION_CONDITION xquery=""/>
+        </PROPERTIES>
+        <CHILDS>
+          <CONTAINER>
+            <CONCEPT_NAME>
+              <CODE_VALUE>RID3874</CODE_VALUE>
+              <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+              <CODE_MEANING>Nodulo / Masa</CODE_MEANING>
+              <CODE_MEANING2>Mass</CODE_MEANING2>
+            </CONCEPT_NAME>
+            <PROPERTIES>
+              <CARDINALITY max="-1" min="0"/>
+              <CONDITION_TYPE type="M"/>
+              <EXPRESION_CONDITION xquery=""/>
+            </PROPERTIES>
+            <CHILDS>
+              <TEXT>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>118522005</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Identificador</CODE_MEANING>
+                  <CODE_MEANING2>Identifier</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                </PROPERTIES>
+              </TEXT>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0014</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Presente en Estudio Previo</CODE_MEANING>
+                  <CODE_MEANING2>Present in a Previous Study</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <DATE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0013</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Fecha Estudio Previo</CODE_MEANING>
+                  <CODE_MEANING2>Date of Previous Study</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                </PROPERTIES>
+              </DATE>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29929</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Supero-Externo (CSE) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Upper Outer Quadrant of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29935</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Infero-Externo (CIE) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Lower Outer Quadrant of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29932</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Supero-Interno (CSI) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Upper Inner Quadrant of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29938</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Infero-Interno (CII) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Lower Inner Quadrant of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29947</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Externa (LIE) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Lateral Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29941</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercuadrántica Superior (LIS) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Superior Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29953</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Inferior (LIInf) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Subareolar Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29944</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Interna (LIInt) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Medial Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29950</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Retroareolar de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Central Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29907</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Pezón de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Nipple of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29918</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Areola de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Areola of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0001</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Prolongación Axilar de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Tail of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0003</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Axila de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Region of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0005</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Surco Inframamario de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Inframammary Sulcus of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0007</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Surco Intermamario de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Intermammary Sulcus of Right Female Breast </CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0015</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Distancia al Pezón</CODE_MEANING>
+                  <CODE_MEANING2>Distance to the Nipple</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372299002</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Craneo-Caudal)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 1</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372300005</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Latero-Lateral)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 2</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372301009</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Antero-Posterior)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 3</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID28825</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Forma o Morfología</CODE_MEANING>
+                  <CODE_MEANING2>Morphology</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID29214</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Indeterminada Amorfa</CODE_MEANING>
+                      <CODE_MEANING2>Amorphous Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34256</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Indeterminada Heterogenea Grosera</CODE_MEANING>
+                      <CODE_MEANING2>Coarse Heterogeneous Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34257</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Alta Sospecha de Malignidad (Pleomórficas Finas)</CODE_MEANING>
+                      <CODE_MEANING2>Fine Pleomorphic Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34255</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Alta Sospecha de Malignidad (Líneas Finas / Ramificadas)</CODE_MEANING>
+                      <CODE_MEANING2>Fine Linear Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34253</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Vascular</CODE_MEANING>
+                      <CODE_MEANING2>Vascular Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34252</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Cutáneas</CODE_MEANING>
+                      <CODE_MEANING2>Skin Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34251</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Redondeada / Benigna Puntiformes</CODE_MEANING>
+                      <CODE_MEANING2>Round Calcification / Punctate Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34250</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna con Centro Radiotransparente</CODE_MEANING>
+                      <CODE_MEANING2>Lucent-Centered Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34249</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Lecha Cálcica</CODE_MEANING>
+                      <CODE_MEANING2>Milk of Calcium Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34248</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Voluminosa en Forma de Vara</CODE_MEANING>
+                      <CODE_MEANING2>Large Rod-like Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID29213</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Grosera</CODE_MEANING>
+                      <CODE_MEANING2>Coarse Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID29212</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna en Cáscara de Huevo o en Anillo</CODE_MEANING>
+                      <CODE_MEANING2>Eggshell Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34246</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Distrófica</CODE_MEANING>
+                      <CODE_MEANING2>Dystrophic Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID5972</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Borde o Márgenes</CODE_MEANING>
+                  <CODE_MEANING2>Margin</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID5713</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Espiculados</CODE_MEANING>
+                      <CODE_MEANING2>Spiculated Margin</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID29215</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Irregular</CODE_MEANING>
+                      <CODE_MEANING2>Irregular Mass</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34355</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Not circumscribed margin</CODE_MEANING>
+                      <CODE_MEANING2>No Circunscritos</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34419</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Realce Interno</CODE_MEANING>
+                  <CODE_MEANING2>Internal Enhancement Pattern</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34303</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Realce en Anillo</CODE_MEANING>
+                      <CODE_MEANING2>Rim Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34307</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Septos Internos que Realzan</CODE_MEANING>
+                      <CODE_MEANING2>Enhancing Internal Septation</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34306</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Septos Internos que no Realzan</CODE_MEANING>
+                      <CODE_MEANING2>Dark Internal Septation</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34308</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Realce Central</CODE_MEANING>
+                      <CODE_MEANING2>Central Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34305</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Heterogeneo</CODE_MEANING>
+                      <CODE_MEANING2>Heterogeneous Mass Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34304</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Homogéneo</CODE_MEANING>
+                      <CODE_MEANING2>Homogeneous Mass Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID11081</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cinética/Curvas</CODE_MEANING>
+                  <CODE_MEANING2>Delayed Phase</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34333</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO III: Lavado o Washout</CODE_MEANING>
+                      <CODE_MEANING2>Washout Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34332</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO II: Meseta o Plateau</CODE_MEANING>
+                      <CODE_MEANING2>Plateau Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34331</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO I: Contínua o Progresiva</CODE_MEANING>
+                      <CODE_MEANING2>Persistent Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+            </CHILDS>
+          </CONTAINER>
+          <CONTAINER>
+            <CONCEPT_NAME>
+              <CODE_VALUE>RID34342</CODE_VALUE>
+              <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+              <CODE_MEANING>Realce NO-Masa</CODE_MEANING>
+              <CODE_MEANING2>Non-mass like Enhancement</CODE_MEANING2>
+            </CONCEPT_NAME>
+            <PROPERTIES>
+              <CARDINALITY max="-1" min="0"/>
+              <CONDITION_TYPE type="M"/>
+              <EXPRESION_CONDITION xquery=""/>
+            </PROPERTIES>
+            <CHILDS>
+              <TEXT>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>118522005</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Identificador</CODE_MEANING>
+                  <CODE_MEANING2>Identifier</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                </PROPERTIES>
+              </TEXT>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0014</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Presente en Estudio Previo</CODE_MEANING>
+                  <CODE_MEANING2>Present in a Previous Study</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <DATE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0013</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Fecha Estudio Previo</CODE_MEANING>
+                  <CODE_MEANING2>Date of Previous Study</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                </PROPERTIES>
+              </DATE>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29929</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Supero-Externo (CSE) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Upper Outer Quadrant of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29935</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Infero-Externo (CIE) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Lower Outer Quadrant of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29932</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Supero-Interno (CSI) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Upper Inner Quadrant of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29938</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Infero-Interno (CII) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Lower Inner Quadrant of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29947</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Externa (LIE) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Lateral Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29941</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercuadrántica Superior (LIS) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Superior Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29953</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Inferior (LIInf) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Subareolar Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29944</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Interna (LIInt) de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Medial Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29950</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Retroareolar de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Central Region of Right Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29907</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Pezón de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Nipple of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29918</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Areola de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Areola of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0001</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Prolongación Axilar de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Tail of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0003</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Axila de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Region of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0005</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Surco Inframamario de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Inframammary Sulcus of Right Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0007</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Surco Intermamario de la Mama Derecha</CODE_MEANING>
+                  <CODE_MEANING2>Intermammary Sulcus of Right Female Breast </CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0015</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Distancia al Pezón</CODE_MEANING>
+                  <CODE_MEANING2>Distance to the Nipple</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372299002</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Craneo-Caudal)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 1</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372300005</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Latero-Lateral)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 2</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372301009</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Antero-Posterior)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 3</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0020</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Distribución Espacial</CODE_MEANING>
+                  <CODE_MEANING2>Spatial Distribution</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34340</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Multiples Regiones</CODE_MEANING>
+                      <CODE_MEANING2>Multiple Region Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34341</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Difuso</CODE_MEANING>
+                      <CODE_MEANING2>Difuse Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34339</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Regional</CODE_MEANING>
+                      <CODE_MEANING2>Regional Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34338</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Segmentario</CODE_MEANING>
+                      <CODE_MEANING2>Segmental Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34337</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Ductal</CODE_MEANING>
+                      <CODE_MEANING2>Ductal Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34336</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Lineal</CODE_MEANING>
+                      <CODE_MEANING2>Linear Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34335</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Focal</CODE_MEANING>
+                      <CODE_MEANING2>Focal Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34419</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Realce Interno</CODE_MEANING>
+                  <CODE_MEANING2>Internal Enhancement Pattern</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34303</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Realce en Anillo</CODE_MEANING>
+                      <CODE_MEANING2>Rim Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34307</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Septos Internos que Realzan</CODE_MEANING>
+                      <CODE_MEANING2>Enhancing Internal Septation</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34306</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Septos Internos que no Realzan</CODE_MEANING>
+                      <CODE_MEANING2>Dark Internal Septation</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34308</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Realce Central</CODE_MEANING>
+                      <CODE_MEANING2>Central Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34305</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Heterogeneo</CODE_MEANING>
+                      <CODE_MEANING2>Heterogeneous Mass Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34304</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Homogéneo</CODE_MEANING>
+                      <CODE_MEANING2>Homogeneous Mass Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID11081</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cinética/Curvas</CODE_MEANING>
+                  <CODE_MEANING2>Delayed Phase</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34333</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO III: Lavado o Washout</CODE_MEANING>
+                      <CODE_MEANING2>Washout Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34332</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO II: Meseta o Plateau</CODE_MEANING>
+                      <CODE_MEANING2>Plateau Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34331</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO I: Contínua o Progresiva</CODE_MEANING>
+                      <CODE_MEANING2>Persistent Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34301</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Foco</CODE_MEANING>
+                  <CODE_MEANING2>Focus</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34302</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Focos</CODE_MEANING>
+                  <CODE_MEANING2>Foci</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+            </CHILDS>
+          </CONTAINER>
+          <CONTAINER>
+            <CONCEPT_NAME>
+              <CODE_VALUE>TRMM0011</CODE_VALUE>
+              <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+              <CODE_MEANING>Hallazgos Asociados</CODE_MEANING>
+              <CODE_MEANING2>Associated Findings</CODE_MEANING2>
+            </CONCEPT_NAME>
+            <PROPERTIES>
+              <CARDINALITY max="1" min="1"/>
+              <CONDITION_TYPE type="M"/>
+              <EXPRESION_CONDITION xquery=""/>
+            </PROPERTIES>
+            <CHILDS>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0021</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Lesión Asociada Extramamaria</CODE_MEANING>
+                  <CODE_MEANING2>Extra-mammary Associated Lesion</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34272</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Adenopatías Axilares</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Adenopathy</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID1518</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Adenopatías en Cadena Mamaria Interna</CODE_MEANING>
+                  <CODE_MEANING2>Parasternal Lymph Node</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34263</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Adenopatías Intramamarias</CODE_MEANING>
+                  <CODE_MEANING2>Intramammary lymph node group</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID5425</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuerpo Extraño</CODE_MEANING>
+                  <CODE_MEANING2>Foreign Body</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34271</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Edema Mamario</CODE_MEANING>
+                  <CODE_MEANING2>Trabecular Thickening</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34322</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Hematoma</CODE_MEANING>
+                  <CODE_MEANING2>Hematoma/Blood Signal</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34270</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Engrosamiento de Piel</CODE_MEANING>
+                  <CODE_MEANING2>Skin thickening</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34318</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Invasión de Piel</CODE_MEANING>
+                  <CODE_MEANING2>Skin Invasion</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34320</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Invasión de Pared Torácica</CODE_MEANING>
+                  <CODE_MEANING2>Chest Wall Invasion</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34319</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Invasión Pectoral</CODE_MEANING>
+                  <CODE_MEANING2>Pectoralis Muscle Invasion</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID3890</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Quiste Simple</CODE_MEANING>
+                  <CODE_MEANING2>Cyst (Simple)</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34383</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Retracción de Piel</CODE_MEANING>
+                  <CODE_MEANING2>Skin Retraction</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34269</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Retracción o Inversión del Pezón</CODE_MEANING>
+                  <CODE_MEANING2>Nipple Retraction</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34315</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Alta Intensidad en los Conductos Mamarios Precontrate</CODE_MEANING>
+                  <CODE_MEANING2>Pre-contrast High Duct Signal</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34321</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Vacío de Señal Anormal</CODE_MEANING>
+                  <CODE_MEANING2>Abnormal Signal Void</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+            </CHILDS>
+          </CONTAINER>
+        </CHILDS>
+      </CONTAINER>
+      <CONTAINER>
+        <CONCEPT_NAME>
+          <CODE_VALUE>RID29897</CODE_VALUE>
+          <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+          <CODE_MEANING>Mama Izquierda</CODE_MEANING>
+          <CODE_MEANING2>Left Female Breast</CODE_MEANING2>
+        </CONCEPT_NAME>
+        <PROPERTIES>
+          <CARDINALITY max="1" min="1"/>
+          <CONDITION_TYPE type="M"/>
+          <EXPRESION_CONDITION xquery=""/>
+        </PROPERTIES>
+        <CHILDS>
+          <CONTAINER>
+            <CONCEPT_NAME>
+              <CODE_VALUE>RID3874</CODE_VALUE>
+              <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+              <CODE_MEANING>Nodulo / Masa</CODE_MEANING>
+              <CODE_MEANING2>Mass</CODE_MEANING2>
+            </CONCEPT_NAME>
+            <PROPERTIES>
+              <CARDINALITY max="-1" min="0"/>
+              <CONDITION_TYPE type="M"/>
+              <EXPRESION_CONDITION xquery=""/>
+            </PROPERTIES>
+            <CHILDS>
+              <TEXT>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>118522005</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Identificador</CODE_MEANING>
+                  <CODE_MEANING2>Identifier</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                </PROPERTIES>
+              </TEXT>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0014</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Presente en Estudio Previo</CODE_MEANING>
+                  <CODE_MEANING2>Present in a Previous Study</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <DATE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0013</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Fecha Estudio Previo</CODE_MEANING>
+                  <CODE_MEANING2>Date of Previous Study</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                </PROPERTIES>
+              </DATE>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29930</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Supero-Externo (CSE) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Upper Outer Quadrant of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29936</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Infero-Externo (CIE) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Lower Outer Quadrant of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29933</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Supero-Interno (CSI) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Upper Inner Quadrant of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29939</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Infero-Interno (CII) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Lower Inner Quadrant of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29948</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Externa (LIE) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Lateral Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29942</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercuadrántica Superior (LIS) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Superior Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29954</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Inferior (LIInf) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Subareolar Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29945</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Interna (LIInt) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Medial Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29951</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Retroareolar de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Central Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29908</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Pezón de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Nipple of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29919</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Areola de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Areola of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0002</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Prolongación Axilar de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Tail of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0004</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Axila de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Region of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0006</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Surco Inframamario de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Inframammary Sulcus  of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0008</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Surco Intermamario de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Intermammary Sulcus  of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0015</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Distancia al Pezón</CODE_MEANING>
+                  <CODE_MEANING2>Distance to the Nipple</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372299002</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Craneo-Caudal)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 1</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372300005</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Latero-Lateral)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 2</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372301009</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Antero-Posterior)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 3</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID28825</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Forma o Morfología</CODE_MEANING>
+                  <CODE_MEANING2>Morphology</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID29214</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Indeterminada Amorfa</CODE_MEANING>
+                      <CODE_MEANING2>Amorphous Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34256</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Indeterminada Heterogenea Grosera</CODE_MEANING>
+                      <CODE_MEANING2>Coarse Heterogeneous Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34257</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Alta Sospecha de Malignidad (Pleomórficas Finas)</CODE_MEANING>
+                      <CODE_MEANING2>Fine Pleomorphic Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34255</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Alta Sospecha de Malignidad (Líneas Finas / Ramificadas)</CODE_MEANING>
+                      <CODE_MEANING2>Fine Linear Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34253</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Vascular</CODE_MEANING>
+                      <CODE_MEANING2>Vascular Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34252</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Cutáneas</CODE_MEANING>
+                      <CODE_MEANING2>Skin Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34251</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Redondeada / Benigna Puntiformes</CODE_MEANING>
+                      <CODE_MEANING2>Round Calcification / Punctate Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34250</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna con Centro Radiotransparente</CODE_MEANING>
+                      <CODE_MEANING2>Lucent-Centered Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34249</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Lecha Cálcica</CODE_MEANING>
+                      <CODE_MEANING2>Milk of Calcium Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34248</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Voluminosa en Forma de Vara</CODE_MEANING>
+                      <CODE_MEANING2>Large Rod-like Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID29213</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Grosera</CODE_MEANING>
+                      <CODE_MEANING2>Coarse Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID29212</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna en Cáscara de Huevo o en Anillo</CODE_MEANING>
+                      <CODE_MEANING2>Eggshell Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34246</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Benigna Distrófica</CODE_MEANING>
+                      <CODE_MEANING2>Dystrophic Calcification</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID5972</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Borde o Márgenes</CODE_MEANING>
+                  <CODE_MEANING2>Margin</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID5713</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Espiculados</CODE_MEANING>
+                      <CODE_MEANING2>Spiculated Margin</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID29215</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Irregular</CODE_MEANING>
+                      <CODE_MEANING2>Irregular Mass</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34355</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Not circumscribed margin</CODE_MEANING>
+                      <CODE_MEANING2>No Circunscritos</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34419</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Realce Interno</CODE_MEANING>
+                  <CODE_MEANING2>Internal Enhancement Pattern</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34303</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Realce en Anillo</CODE_MEANING>
+                      <CODE_MEANING2>Rim Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34307</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Septos Internos que Realzan</CODE_MEANING>
+                      <CODE_MEANING2>Enhancing Internal Septation</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34306</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Septos Internos que no Realzan</CODE_MEANING>
+                      <CODE_MEANING2>Dark Internal Septation</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34308</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Realce Central</CODE_MEANING>
+                      <CODE_MEANING2>Central Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34305</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Heterogeneo</CODE_MEANING>
+                      <CODE_MEANING2>Heterogeneous Mass Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34304</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Homogéneo</CODE_MEANING>
+                      <CODE_MEANING2>Homogeneous Mass Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID11081</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cinética/Curvas</CODE_MEANING>
+                  <CODE_MEANING2>Delayed Phase</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34333</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO III: Lavado o Washout</CODE_MEANING>
+                      <CODE_MEANING2>Washout Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34332</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO II: Meseta o Plateau</CODE_MEANING>
+                      <CODE_MEANING2>Plateau Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34331</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO I: Contínua o Progresiva</CODE_MEANING>
+                      <CODE_MEANING2>Persistent Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+            </CHILDS>
+          </CONTAINER>
+          <CONTAINER>
+            <CONCEPT_NAME>
+              <CODE_VALUE>RID34342</CODE_VALUE>
+              <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+              <CODE_MEANING>Realce NO-Masa</CODE_MEANING>
+              <CODE_MEANING2>Non-mass like Enhancement</CODE_MEANING2>
+            </CONCEPT_NAME>
+            <PROPERTIES>
+              <CARDINALITY max="-1" min="0"/>
+              <CONDITION_TYPE type="M"/>
+              <EXPRESION_CONDITION xquery=""/>
+            </PROPERTIES>
+            <CHILDS>
+              <TEXT>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>118522005</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Identificador</CODE_MEANING>
+                  <CODE_MEANING2>Identifier</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                </PROPERTIES>
+              </TEXT>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0014</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Presente en Estudio Previo</CODE_MEANING>
+                  <CODE_MEANING2>Present in a Previous Study</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <DATE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0013</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Fecha Estudio Previo</CODE_MEANING>
+                  <CODE_MEANING2>Date of Previous Study</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                </PROPERTIES>
+              </DATE>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29930</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Supero-Externo (CSE) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Upper Outer Quadrant of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29936</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Infero-Externo (CIE) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Lower Outer Quadrant of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29933</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Supero-Interno (CSI) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Upper Inner Quadrant of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29939</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuadrante Infero-Interno (CII) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Lower Inner Quadrant of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29948</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Externa (LIE) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Lateral Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29942</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercuadrántica Superior (LIS) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Superior Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29954</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Inferior (LIInf) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Subareolar Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29945</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Línea Intercudrántica Interna (LIInt) de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Medial Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29951</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Retroareolar de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Central Region of Left Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29908</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Pezón de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Nipple of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID29919</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Areola de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Areola of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0002</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Prolongación Axilar de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Tail of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0004</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Axila de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Region of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0006</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Surco Inframamario de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Inframammary Sulcus  of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0008</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Surco Intermamario de la Mama Izquierda</CODE_MEANING>
+                  <CODE_MEANING2>Intermammary Sulcus  of Left Female Breast</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0015</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Distancia al Pezón</CODE_MEANING>
+                  <CODE_MEANING2>Distance to the Nipple</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372299002</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Craneo-Caudal)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 1</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372300005</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Latero-Lateral)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 2</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>372301009</CODE_VALUE>
+                  <CODE_SCHEMA>SNOMED-CT</CODE_SCHEMA>
+                  <CODE_MEANING>Tamaño (Antero-Posterior)</CODE_MEANING>
+                  <CODE_MEANING2>Tumor size, dimension 3</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="U"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value=""/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000002</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Milimetros</CODE_MEANING>
+                      <CODE_MEANING2>Milimeters</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0020</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Distribución Espacial</CODE_MEANING>
+                  <CODE_MEANING2>Spatial Distribution</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34340</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Multiples Regiones</CODE_MEANING>
+                      <CODE_MEANING2>Multiple Region Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34341</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Difuso</CODE_MEANING>
+                      <CODE_MEANING2>Difuse Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34339</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Regional</CODE_MEANING>
+                      <CODE_MEANING2>Regional Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34338</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Segmentario</CODE_MEANING>
+                      <CODE_MEANING2>Segmental Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34337</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Ductal</CODE_MEANING>
+                      <CODE_MEANING2>Ductal Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34336</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Lineal</CODE_MEANING>
+                      <CODE_MEANING2>Linear Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34335</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Focal</CODE_MEANING>
+                      <CODE_MEANING2>Focal Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34419</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Realce Interno</CODE_MEANING>
+                  <CODE_MEANING2>Internal Enhancement Pattern</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34303</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Realce en Anillo</CODE_MEANING>
+                      <CODE_MEANING2>Rim Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34307</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Septos Internos que Realzan</CODE_MEANING>
+                      <CODE_MEANING2>Enhancing Internal Septation</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34306</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Septos Internos que no Realzan</CODE_MEANING>
+                      <CODE_MEANING2>Dark Internal Septation</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34308</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Realce Central</CODE_MEANING>
+                      <CODE_MEANING2>Central Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34305</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Heterogeneo</CODE_MEANING>
+                      <CODE_MEANING2>Heterogeneous Mass Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34304</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>Homogéneo</CODE_MEANING>
+                      <CODE_MEANING2>Homogeneous Mass Enhancement</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <CODE>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID11081</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cinética/Curvas</CODE_MEANING>
+                  <CODE_MEANING2>Delayed Phase</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_CODE_VALUE code_meaning="" code_meaning2="" code_schema="" code_value=""/>
+                  <CODE_VALUES>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34333</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO III: Lavado o Washout</CODE_MEANING>
+                      <CODE_MEANING2>Washout Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34332</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO II: Meseta o Plateau</CODE_MEANING>
+                      <CODE_MEANING2>Plateau Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>RID34331</CODE_VALUE>
+                      <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                      <CODE_MEANING>TIPO I: Contínua o Progresiva</CODE_MEANING>
+                      <CODE_MEANING2>Persistent Delayed Phase</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </CODE_VALUES>
+                </PROPERTIES>
+              </CODE>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34301</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Foco</CODE_MEANING>
+                  <CODE_MEANING2>Focus</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34302</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Focos</CODE_MEANING>
+                  <CODE_MEANING2>Foci</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+            </CHILDS>
+          </CONTAINER>
+          <CONTAINER>
+            <CONCEPT_NAME>
+              <CODE_VALUE>TRMM0011</CODE_VALUE>
+              <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+              <CODE_MEANING>Hallazgos Asociados</CODE_MEANING>
+              <CODE_MEANING2>Associated Findings</CODE_MEANING2>
+            </CONCEPT_NAME>
+            <PROPERTIES>
+              <CARDINALITY max="1" min="1"/>
+              <CONDITION_TYPE type="M"/>
+              <EXPRESION_CONDITION xquery=""/>
+            </PROPERTIES>
+            <CHILDS>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>TRMM0021</CODE_VALUE>
+                  <CODE_SCHEMA>TRENCADIS_MAMO</CODE_SCHEMA>
+                  <CODE_MEANING>Lesión Asociada Extramamaria</CODE_MEANING>
+                  <CODE_MEANING2>Extra-mammary Associated Lesion</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34272</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Adenopatías Axilares</CODE_MEANING>
+                  <CODE_MEANING2>Axillary Adenopathy</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID1518</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Adenopatías en Cadena Mamaria Interna</CODE_MEANING>
+                  <CODE_MEANING2>Parasternal Lymph Node</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34263</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Adenopatías Intramamarias</CODE_MEANING>
+                  <CODE_MEANING2>Intramammary lymph node group</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID5425</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Cuerpo Extraño</CODE_MEANING>
+                  <CODE_MEANING2>Foreign Body</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34271</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Edema Mamario</CODE_MEANING>
+                  <CODE_MEANING2>Trabecular Thickening</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34322</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Hematoma</CODE_MEANING>
+                  <CODE_MEANING2>Hematoma/Blood Signal</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34270</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Engrosamiento de Piel</CODE_MEANING>
+                  <CODE_MEANING2>Skin thickening</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34318</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Invasión de Piel</CODE_MEANING>
+                  <CODE_MEANING2>Skin Invasion</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34320</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Invasión de Pared Torácica</CODE_MEANING>
+                  <CODE_MEANING2>Chest Wall Invasion</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34319</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Invasión Pectoral</CODE_MEANING>
+                  <CODE_MEANING2>Pectoralis Muscle Invasion</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID3890</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Quiste Simple</CODE_MEANING>
+                  <CODE_MEANING2>Cyst (Simple)</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34383</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Retracción de Piel</CODE_MEANING>
+                  <CODE_MEANING2>Skin Retraction</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34269</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Retracción o Inversión del Pezón</CODE_MEANING>
+                  <CODE_MEANING2>Nipple Retraction</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34315</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Alta Intensidad en los Conductos Mamarios Precontrate</CODE_MEANING>
+                  <CODE_MEANING2>Pre-contrast High Duct Signal</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+              <NUM>
+                <CONCEPT_NAME>
+                  <CODE_VALUE>RID34321</CODE_VALUE>
+                  <CODE_SCHEMA>RADLEX</CODE_SCHEMA>
+                  <CODE_MEANING>Vacío de Señal Anormal</CODE_MEANING>
+                  <CODE_MEANING2>Abnormal Signal Void</CODE_MEANING2>
+                </CONCEPT_NAME>
+                <PROPERTIES>
+                  <CARDINALITY max="1" min="1"/>
+                  <CONDITION_TYPE type="M"/>
+                  <EXPRESION_CONDITION xquery=""/>
+                  <DEFAULT_VALUE value="0"/>
+                  <UNIT_MEASUREMENT>
+                    <CONCEPT_NAME>
+                      <CODE_VALUE>000000001</CODE_VALUE>
+                      <CODE_SCHEMA>UNIT_MEASUREMENT</CODE_SCHEMA>
+                      <CODE_MEANING>Unidades Boleanas</CODE_MEANING>
+                      <CODE_MEANING2>Boolean Units</CODE_MEANING2>
+                    </CONCEPT_NAME>
+                  </UNIT_MEASUREMENT>
+                </PROPERTIES>
+              </NUM>
+            </CHILDS>
+          </CONTAINER>
+        </CHILDS>
+      </CONTAINER>
+    </CHILDS>
+  </CONTAINER>
+</DICOM_SR>
