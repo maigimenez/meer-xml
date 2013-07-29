@@ -74,9 +74,11 @@ class Tree():
     #     self.value = None
     #     self.children.clear()
     
-    def get_set_data(self):
-        if (self.is_leaf()):
-            pass
+    def get_set_data(self,containers,attributes):
+        for container in self.breadthFirst():
+            print container.concept
+            for attribute in container.attributes:
+                print attribute
 
     def is_leaf(self):
         return self.children == []
