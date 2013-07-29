@@ -4,6 +4,7 @@ from config_variables import(MULTIPLE_PROPERTIES, DICOM_LEVEL,
                              CHILDREN_ARRAYS)
 from config import get_odontology_level
 from collections import deque
+from tree import Tree
 
 class Container(object):
     def __init__(self, tree_level, concept=Concept(), properties=Property(),
@@ -34,6 +35,9 @@ class Container(object):
 
     def get_schema_code(self,sep='_'):
         return self.concept.schema + sep + self.concept.value
+
+    def has_code(self,code):
+        return self.concept.get_schema_code() == code
 
     def __str__(self):
         meaning = self.concept.meaning.values()[0]
@@ -136,21 +140,27 @@ class DicomTree(object):
         q = deque([self])
         while len(q) > 0:
             node = q.pop()
-            yield node.root
-            for i in node.children:
-                q.append(node.children[i])
+            #print "!!!", type(node), node.root
+            yield node
+            print "¿¿¿???", node.root, type(node.root)
+            #print len(node), len(node.val)
+            for childtree in node.root.values():
+                for child in childtree.root.keys():
+                    print "ññññ", type(child)
+                    q.append(child)
+                    print len(q)
         return
 
 class DicomSR(object):
     def __init__(self, report_type="", id_odontology=-1):
         self.report_type = report_type
         self.id_odontology = id_odontology
-        self.report = DicomTree()
+        self.report = Tree()
 
     def imprime(self):
         """ Pretty print of a report """
         print u"\n ------ {0} ---------- \n".format(self.report_type)
-        self.report.print_tree(0, True)
+        self.report.print_tree(0)
 
     def add_node(self, node, parent):
         self.report.add_node(node, parent)
