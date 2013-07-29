@@ -79,20 +79,20 @@ def write_template(template, languages, xml_files, report=None):
     # Get the template path and its filename
     template_path, template_filename = get_template_filename(template)
 
-    # The template is STRING type
-    if (template in STRING_TEMPLATES):
-        env = set_environment(STRING_TEMPLATES_PATH)
-        # Localize the template for this language
-        # Get localized strings from report or form properties
-        if (template in TEMPLATE_BY_REPORT):
-            localized_strings = get_localized_report(
-                env, template_filename, languages, template, report)
-        else:
-            localized_strings = substitute_words(env, section,
-                                                 template_filename, languages,
-                                                 template)
-
-        #Write the localized string
-        for language, localized_string in localized_strings.iteritems():
-            xml_files[language].write(
-                u'{0}'.format(localized_string).encode('utf-8'))
+    # The template is STRING type. 
+    # This handler only get string templates. So this check is redundant
+    # if (template in STRING_TEMPLATES):
+    env = set_environment(STRING_TEMPLATES_PATH)
+    # Localize the template for this language
+    # Get localized strings from report or form properties
+    if (template in TEMPLATE_BY_REPORT):
+        localized_strings = get_localized_report(env, template_filename,
+                                                 languages, template, report)
+    else:
+        localized_strings = substitute_words(env, section, template_filename,
+                                             languages, template)
+        
+    #Write the localized string
+    for language, localized_string in localized_strings.iteritems():
+        xml_files[language].write(
+            u'{0}'.format(localized_string).encode('utf-8'))
