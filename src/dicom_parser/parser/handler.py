@@ -2,7 +2,7 @@
 import sys
 import logging
 import xml.sax
-from core.types import Date, Num, Text, Concept, Property
+from core.types import Date, Num, Text, Concept, Property, Code
 from core.dicom import SAXReport, SAXContainer
 from core.dicomSR import DicomSR, Container
 from core.config import get_language_code
@@ -27,13 +27,14 @@ class DicomParser(xml.sax.handler.ContentHandler):
         self._repeated = False
         self._in_unit_measurement = False
         self._in_property = False
+        self._in_code_values = False
+        # A list of the code values for a code Data
+        self._code_values = []
         #Store information read from xml
         self._current_attribute = None
         self._concept = None
         self._unit_measurement = None
         self._property = None
-        # A list of the code values already writen in strings.xml
-        self._code_values = []
         # Report-related variables
         self._report = SAXReport()
         self._dict_report = None
@@ -91,6 +92,12 @@ class DicomParser(xml.sax.handler.ContentHandler):
         if (name == "NUM"):
             self._in_type = True
             self._current_attribute = Num()
+        if (name == "CODE"):
+            self._in_type = True
+            self._current_attribute = Code()
+        if (name == "CODE_VALUES"):
+            self._in_code_values = True
+            self._code_values = []
         if (name == "UNIT_MEASUREMENT"):
             self._in_unit_measurement = True
         if (name == "CODE_VALUE" or name == "CODE_SCHEMA"):
@@ -138,6 +145,9 @@ class DicomParser(xml.sax.handler.ContentHandler):
             elif(self._in_unit_measurement):
                 self._unit_measurement.meaning[
                     get_language_code(name, sys.argv[2])] = self._buffer
+            # elif(self._in_code_values):
+            #     print "***********************"
+            #     print self._concept
 
         if (name == "CODE_SCHEMA"):
             self._in_data = False
@@ -148,6 +158,13 @@ class DicomParser(xml.sax.handler.ContentHandler):
 
         if (name == "CONCEPT_NAME"):
             self._in_concept = False
+            #print self._concept
+            if (self._in_code_values):
+                self._code_values.append(self._concept)
+                #print "*", self._concept
+            elif (self._in_type):
+                self._current_attribute.concept = self._concept
+                #print "!", self._concept
             #TODO: no va al log, s'imprimix per consola igual
             #logging.info(self._report.imprime())
 
@@ -202,6 +219,22 @@ class DicomParser(xml.sax.handler.ContentHandler):
             self._concept = None
             self._property = None
 
+        if (name == "CODE"):
+            logging.info(
+                "    -> Code: {0} * {1} ".format(
+                    self._current_attribute.concept,
+                    len(self._code_values)))
+            self._current_attribute.properties = self._property
+            self._report.add_attribute(self._child_level,self._current_attribute) 
+            self._in_type = False
+            self._concept = None
+            self._property = None
+
+        if ( name == "CODE_VALUES"):
+            #print len(self._code_values)
+            self._current_attribute.options = self._code_values[:]
+            self._in_code_values = False
+    
         if (name == "UNIT_MEASUREMENT"):
             self._in_unit_measurement = False
 
