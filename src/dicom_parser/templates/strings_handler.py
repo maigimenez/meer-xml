@@ -84,10 +84,11 @@ def write_template(template, languages, xml_files, report=None):
     # if (template in STRING_TEMPLATES):
     env = set_environment(STRING_TEMPLATES_PATH)
     # Localize the template for this language
-    # Get localized strings from report or form properties
+    # Get localized strings from Report Data
     if (template in TEMPLATE_BY_REPORT):
         localized_strings = get_localized_report(env, template_filename,
                                                  languages, template, report)
+    #Templates localized by Report Ontology ID or default strings. 
     else:
         localized_strings = substitute_words(env, section, template_filename,
                                              languages, template)

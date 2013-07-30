@@ -70,6 +70,8 @@ class Data_type(object):
         return u"{0}: {1} ({2})".format(self.type,self.concept.meaning.values()[0],
             self.properties)
 
+    def get_schema_code(self,separator='_'):
+        return self.concept.get_schema_code()
 
 class Date(Data_type):
     """Child class of Data_type

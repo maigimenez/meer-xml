@@ -75,10 +75,18 @@ class Tree():
     #     self.children.clear()
     
     def get_set_data(self,containers,attributes):
+        written_codes = []
         for container in self.breadthFirst():
-            print container.concept
+            schema_code = container.get_schema_code()
+            if schema_code not in written_codes:
+                containers.append(container)
+                written_codes.append(schema_code)
             for attribute in container.attributes:
-                print attribute
+                schema_code = attribute.get_schema_code()
+                if schema_code not in written_codes:
+                    attributes.append(attribute)
+                    written_codes.append(schema_code)
+        return (containers,attributes) 
 
     def is_leaf(self):
         return self.children == []
@@ -123,3 +131,12 @@ class Tree():
                     child.add_node(container,parent)
 
 
+    def get_flat_tree(self,flat):
+        if (self.is_leaf()):
+            flat[self.value] = []
+            return (flat)
+        else:
+            children = [child.value for child in self.children]
+            flat[self.value] = children
+            for child in self.children:
+                child.get_flat_tree(flat)

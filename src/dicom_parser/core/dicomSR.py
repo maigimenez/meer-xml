@@ -135,21 +135,6 @@ class DicomTree(object):
                 flat[parent] = children.get_parents()
                 children.get_flat_tree(flat)
     
-    def depthFirst(self):
-        '''Sequentially yield nodes in an unguided depth-first fashion'''
-        q = deque([self])
-        while len(q) > 0:
-            node = q.pop()
-            #print "!!!", type(node), node.root
-            yield node
-            print "¿¿¿???", node.root, type(node.root)
-            #print len(node), len(node.val)
-            for childtree in node.root.values():
-                for child in childtree.root.keys():
-                    print "ññññ", type(child)
-                    q.append(child)
-                    print len(q)
-        return
 
 class DicomSR(object):
     def __init__(self, report_type="", id_odontology=-1):
@@ -208,8 +193,6 @@ class DicomSR(object):
                 containers = []
                 attributes = []
                 self.report.get_set_data(containers, attributes)
-                # for c in containers:
-                #     print c.get_code()
                 for container in containers:
                     odontology = get_odontology_level(
                         odontology_id=self.get_odontology(),
@@ -242,11 +225,11 @@ class DicomSR(object):
                 #Delete leaf items. They are not needed
                 flat = {key: flat[key] for key in flat if flat[key]}
                 for parent, children in flat.iteritems():
-                    for language in languages:
-                        aux = {parent_tag: parent.get_code(), children_tag: []}
-                        for child in children:
-                            aux[children_tag].append(
-                                child.get_meaning()[language])
-                        substitution_words[language][nodes_tag].append(aux)
+                     for language in languages:
+                         aux = {parent_tag: parent.get_code(), children_tag: []}
+                         for child in children:
+                             aux[children_tag].append(
+                                 child.get_meaning()[language])
+                         substitution_words[language][nodes_tag].append(aux)
 
         return substitution_words
