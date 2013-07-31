@@ -113,3 +113,17 @@ class Num(Data_type):
     def __repr__(self):
          return u"{0}: {1} - type({2})".format(
              self.type,self.concept.meaning,self.unit_measurement.meaning)
+
+class Code(Data_type):
+    """ Child class of Date_type
+    It stores a code. 
+
+    """
+    def __init__(self):
+        Data_type.__init__(self)
+        self.type = "code"
+        self.options = []
+
+    def __repr__(self):
+        return u"{0}: {1} - options:{2}".format(
+            self.type,self.concept.meaning,len(self.options))
