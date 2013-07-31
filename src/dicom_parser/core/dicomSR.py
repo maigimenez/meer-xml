@@ -226,7 +226,7 @@ class DicomSR(object):
                 flat = {key: flat[key] for key in flat if flat[key]}
                 for parent, children in flat.iteritems():
                      for language in languages:
-                         aux = {parent_tag: parent.get_schema_code(), children_tag: []}
+                         aux = {parent_tag: parent.get_code(), children_tag: []}
                          for child in children:
                              aux[children_tag].append(
                                  child.get_meaning()[language])
@@ -243,7 +243,7 @@ class DicomSR(object):
                 codes = self.report.get_code_containers()
                 for code in codes:
                     for language in languages:
-                        aux = {parent_tag: code.get_schema_code(), children_tag: []}
+                        aux = {parent_tag: code.code, children_tag: []}
                         for option in code.options:
                             aux[children_tag].append(
                                 option.meaning[language])
