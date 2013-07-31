@@ -1,7 +1,7 @@
  #  -*- coding: utf-8 -*-
 from types import Concept, Property
-from config_variables import(MULTIPLE_PROPERTIES, DICOM_LEVEL,
-                             CHILDREN_ARRAYS)
+from config_variables import (MULTIPLE_PROPERTIES, DICOM_LEVEL,
+                             CHILDREN_ARRAYS, CODE_ARRAYS)
 from config import get_odontology_level
 from collections import deque
 from tree import Tree
@@ -15,7 +15,6 @@ class Container(object):
         #TODO: Items in this list will be Property type
         self.properties = properties
         self.attributes = attributes[:]
-        #print self.attributes
 
     # TODO: def __getattr__(self,name)
     def get_code(self):
@@ -136,6 +135,7 @@ class DicomTree(object):
                 children.get_flat_tree(flat)
     
 
+
 class DicomSR(object):
     def __init__(self, report_type="", id_odontology=-1):
         self.report_type = report_type
@@ -226,10 +226,28 @@ class DicomSR(object):
                 flat = {key: flat[key] for key in flat if flat[key]}
                 for parent, children in flat.iteritems():
                      for language in languages:
-                         aux = {parent_tag: parent.get_code(), children_tag: []}
+                         aux = {parent_tag: parent.get_schema_code(), children_tag: []}
                          for child in children:
                              aux[children_tag].append(
                                  child.get_meaning()[language])
                          substitution_words[language][nodes_tag].append(aux)
+
+            elif (template_type == CODE_ARRAYS):
+                #TODO: Change comment on this template to make it different 
+                #from CHILDREN_ARRAYS
+                nodes_tag = MULTIPLE_PROPERTIES[CODE_ARRAYS][0]
+                parent_tag = MULTIPLE_PROPERTIES[CODE_ARRAYS][1]
+                children_tag = MULTIPLE_PROPERTIES[CODE_ARRAYS][2]
+                for language in languages:
+                    substitution_words[language] = {nodes_tag: []}
+                codes = self.report.get_code_containers()
+                for code in codes:
+                    for language in languages:
+                        aux = {parent_tag: code.get_schema_code(), children_tag: []}
+                        for option in code.options:
+                            aux[children_tag].append(
+                                option.meaning[language])
+                        substitution_words[language][nodes_tag].append(aux)
+                    
 
         return substitution_words

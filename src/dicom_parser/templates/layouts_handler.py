@@ -129,8 +129,8 @@ def get_attributes_list(environment, attributes,
                 previous_item=previous_item,
                 language=default_language,
                 first=first_attribute)
-            if (first_attribute):
-                print attribute_layout
+            # if (first_attribute):
+            #     print attribute_layout
             attributes_layouts.append(attribute_layout)
             previous_item = current_item
         else:

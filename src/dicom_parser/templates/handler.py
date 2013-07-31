@@ -13,13 +13,16 @@ from core.config_variables import (I18N_INPUT, I18N,
                                    DEFAULT, DEFAULT_INPUT, STRINGS,
                                    DEFAULT_STRINGS, LEVEL_STRINGS,
                                    CHILDREN_ARRAYS, DICOM_LEVEL,
-                                   MODEL_TEMPLATES_PATH,ACTIVITIES_TEMPLATES_PATH,
+                                   MODEL_TEMPLATES_PATH,
+                                   ACTIVITIES_TEMPLATES_PATH,
                                    MODEL_TEMPLATES_SECTION, CLASS,
                                    ANDROID_PACKAGES,PACKAGE_MODEL,
-                                   BOOL_JAVA, STRING_JAVA, INT_JAVA,DATE_JAVA,
-                                   CUSTOM_JAVA,BASE_MODEL, LISTVIEW, EXPANDABLELISVIEW,
-                                   ACTIVITIES_TEMPLATES_SECTION, ACTIVITY, IMPORT_DATE,
-                                   CUSTOM_ARRAY, IMPORT_ARRAY, CHILD_CLASS,GROUP_CLASS)
+                                   BOOL_JAVA, STRING_JAVA, INT_JAVA, DATE_JAVA,
+                                   CUSTOM_JAVA,BASE_MODEL, LISTVIEW,
+                                   EXPANDABLELISVIEW,
+                                   ACTIVITIES_TEMPLATES_SECTION, ACTIVITY,
+                                   IMPORT_DATE, CUSTOM_ARRAY, IMPORT_ARRAY,
+                                   CHILD_CLASS, GROUP_CLASS, CODE_ARRAYS)
 
 from strings_handler import write_template
 from layouts_handler import write_two_columns_layout, write_one_column_layout_one_level
@@ -51,6 +54,7 @@ def write_strings(language_code, report):
     write_template(DEFAULT_STRINGS, languages, strings_files)
     write_template(LEVEL_STRINGS, languages, strings_files, report)
     write_template(CHILDREN_ARRAYS, languages, strings_files, report)
+    write_template(CODE_ARRAYS, languages, strings_files, report)
 
     # Write closing tags for the xml files
     for language in languages:
@@ -113,9 +117,9 @@ def write_layouts(xml_filenames, report, language_code):
 def write_model(java_filenames, report,language_code):
     template_model_file = get_template_model_file()
     flat = report.get_flat_data()
-    print flat
-    print 
-    print
+    # print flat
+    # print 
+    # print
     
     
     # Set the Environment for the jinja2 templates and get the template
@@ -139,7 +143,7 @@ def write_model(java_filenames, report,language_code):
             model_filename = get_model_file(template_model_file,
                                             class_name)
         if (not isfile(model_filename)):
-            print "!", model_filename
+            # print "!", model_filename
             # Boolean variables, preventing multiple imports
             import_date = False
             import_array = False
@@ -315,7 +319,4 @@ def write_activities(activities_filenames, report):
     write_manifest(package,activities,launcher_activity)
 
 
-def write_tree(java_filenames, report,language_code):
-    a = report.report.bff()
-    print a 
-    
+

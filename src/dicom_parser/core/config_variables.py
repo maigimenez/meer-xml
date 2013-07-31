@@ -64,17 +64,20 @@ DEFAULT_STRINGS = 'default_strings'
 LEVEL_STRINGS = 'level_strings'
 CHILDREN_ARRAYS = 'children_arrays'
 DICOM_LEVEL = 'dicom_level'
+#It is the same template as CHILDREN_ARRAYS, but filled with different data.
+CODE_ARRAYS = 'code_arrays'
 STRING_TEMPLATES = [DEFAULT_STRINGS, LEVEL_STRINGS, CHILDREN_ARRAYS,
-                    DICOM_LEVEL]
+                    DICOM_LEVEL, CODE_ARRAYS]
 #The options for these properties section replace a unique template value
 MULTIPLE_PROPERTIES = {LEVEL_STRINGS: ('level_code', 'level_meaning'),
                        CHILDREN_ARRAYS: ('nodes', 'parent_code', 'children'),
+                       CODE_ARRAYS: ('nodes', 'parent_code', 'children'),
                        DICOM_LEVEL: ('levels', 'attributes', 'level_num',
                                      'level_name', 'code', 'meaning')}
 #These templates are filled based on the report ID
 TEMPLATE_BY_ID = [LEVEL_STRINGS]
 #These templates are filled based on data from the report
-TEMPLATE_BY_REPORT = [CHILDREN_ARRAYS, DICOM_LEVEL]
+TEMPLATE_BY_REPORT = [CHILDREN_ARRAYS, DICOM_LEVEL, CODE_ARRAYS]
 
 # LAYOUT TEMPLATES
 END = 'End'

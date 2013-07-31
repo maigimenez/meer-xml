@@ -119,7 +119,7 @@ def get_template_filename(template):
         template_path = config.get(TEMPLATES_SECTION,LAYOUT_TEMPLATES_PATH)
         template_name = config.get(LAYOUT_TEMPLATES_SECTION,template)
     else:
-        exit("The template path for: {0}, has not been found.)".format(template))
+        exit("The template path for: {0}, has not been found.".format(template))
     # Return the path to tempalate file.
     return join(root_path,template_path),template_name
 

@@ -140,3 +140,15 @@ class Tree():
             flat[self.value] = children
             for child in self.children:
                 child.get_flat_tree(flat)
+
+    def get_code_containers(self):
+        codes = []
+        written_codes = []
+        for container in self.breadthFirst():
+            for attribute in container.attributes:
+                if (attribute.type == 'code'):
+                    schema_code = attribute.get_schema_code()
+                    if schema_code not in written_codes:
+                        codes.append(attribute)
+                        written_codes.append(schema_code)
+        return codes

@@ -14,7 +14,7 @@ xml_filenames.set_languages(LANGUAGE_CODE)
 
 # PARSE
 report = parser.DicomParser().parse(sys.argv[1])
-report.imprime()
+#report.imprime()
 #report.report.depthFirst()
 #for i in report.report.breadthFirst():
 #     print "---->", i
@@ -23,13 +23,14 @@ report.imprime()
 # OUTPUT LAYOUTS
 # Write the file names of the layouts and
 # the activities based on the report ontology
-#xml_filenames.set_odontology(report.get_odontology())
+# TODO: ODONTOLOGY???? It should be ONTOLOGY!!!!
+xml_filenames.set_odontology(report.get_odontology())
 
 #WRITE STRINGS XML
-#template_engine.write_strings(LANGUAGE_CODE, report)
+template_engine.write_strings(LANGUAGE_CODE, report)
 
 #WRITE LAYOUTS
-#template_engine.write_layouts(xml_filenames.layouts, report, LANGUAGE_CODE)
+template_engine.write_layouts(xml_filenames.layouts, report, LANGUAGE_CODE)
 
 # WRITE JAVA MODEL
 #template_engine.write_model(xml_filenames.model, report, LANGUAGE_CODE)
