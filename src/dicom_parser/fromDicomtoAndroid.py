@@ -33,7 +33,7 @@ template_engine.write_strings(LANGUAGE_CODE, report)
 template_engine.write_layouts(xml_filenames.layouts, report, LANGUAGE_CODE)
 
 # WRITE JAVA MODEL
-#template_engine.write_model(xml_filenames.model, report, LANGUAGE_CODE)
+template_engine.write_model(xml_filenames.model, report, LANGUAGE_CODE)
 
 # WRITE ANDROID ACTIVITIES
 #template_engine.write_activities(xml_filenames.activities, report)

@@ -5,7 +5,8 @@ from core.config_variables import (LAYOUT_TEMPLATES_PATH,
                                    LAYOUT_TEMPLATES_SECTION, TWO_COLUMNS,
                                    ONE_COLUMN, NUM, DATE, TEXT, TREE_TITLE,
                                    GENERIC_TITLE,NEXT_LEVEL, BOOL, SCROLL,
-                                   LISTVIEW, EXPANDABLELISVIEW, ATTRIBUTES)
+                                   LISTVIEW, EXPANDABLELISVIEW, ATTRIBUTES,
+                                   CODE)
 
 #TODO: Check when is been used GENERIC_TITLE, TREE_TITLE, NEXT_LEVEL and SCROLL 
 
@@ -77,6 +78,14 @@ def get_template_substitution(environment, template_type, concept=None,
                                           previous_item=previous_item,
                                           first_attribute=first)
         current_item = "etext_{0}".format(concept.value)
+    # CODE type attribute
+    elif (template_type == CODE):
+        localized_concept = concept.meaning[language]
+        render_template = template.render(concept_name=localized_concept,
+                                          concept_value=concept.value,
+                                          previous_item=previous_item,
+                                          first_attribute=first)
+        current_item = "spinner_{0}".format(concept.value)
     # SCROLL
     elif (template_type == SCROLL):
         render_template = template.render(parent=previous_item)
@@ -112,12 +121,12 @@ def get_attributes_list(environment, attributes,
             attribute_type = BOOL
         else:
             attribute_type = attribute.type
-        #print u" - {0} ({1})".format(
-        #    attribute.concept.meaning,
-        #    attribute_type).encode('utf-8')
-        #TODO: Discriminate between num and bool
+        # print u" - {0} ({1})".format(
+        #     attribute.concept.meaning,
+        #     attribute_type).encode('utf-8')
         if(attribute_type == NUM or attribute_type == DATE or
-           attribute_type == TEXT or attribute_type == BOOL):
+           attribute_type == TEXT or attribute_type == BOOL or
+           attribute_type == CODE):
             # Get the concept name in the default language.
             # TODO: Check if this (comments in default language)
             #is "really" needed.

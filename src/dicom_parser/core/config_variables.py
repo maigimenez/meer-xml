@@ -91,15 +91,16 @@ NUM = 'num'
 BOOL = 'bool'
 DATE = 'date'
 TEXT = 'text'
+CODE = 'code'
 SCROLL = 'scroll'
-LISTVIEW = "ListView"
+LISTVIEW = 'ListView'
 EXPANDABLELISVIEW = "Expandable ListView"
 ATTRIBUTES = 'Attributes'
 # LAYOUT
 ONE_COLUMN = '1 Column'
 TWO_COLUMNS ='2 Columns'
 LAYOUT_TEMPLATES = [END, HEADER, MAIN_LEFT, RIGHT, NEXT_LEVEL, GENERIC_TITLE,
-                    NUM, DATE, TEXT, SCROLL, ONE_COLUMN,
+                    NUM, DATE, TEXT, SCROLL, ONE_COLUMN, CODE,
                     TWO_COLUMNS, EXPANDABLELISVIEW, LISTVIEW]
 
 # JAVA TEMPLATES

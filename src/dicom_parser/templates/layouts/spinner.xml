@@ -1,0 +1,12 @@
+                        <!-- Code: {{ concept_name }}  -->			
+                        <TextView android:id="@+id/label_{{ concept_value }}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/code_{{ concept_value  }}"
+                            android:layout_below="@id/cbox_RID5196"
+                            android:layout_marginLeft="20dp" />
+                        
+                        <Spinner android:id="@+id/spinner_{{ concept_value }}"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_alignLeft="@id/{{ previous_item }}"
+                            android:layout_below="@id/label_{{ concept_value }}" />

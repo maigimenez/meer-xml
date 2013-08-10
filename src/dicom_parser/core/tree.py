@@ -48,6 +48,16 @@ class Tree():
                 q.append(child)
         return
 
+    def depthFirstChildren(self):
+        '''Sequentially yield nodes and its children in an unguided depth-first fashion'''
+        q = deque([self])
+        while len(q) > 0:
+            node = q.pop()
+            yield node.value, node.children
+            for child in node.children:
+                q.append(child)
+        return
+
     # def __contains__(self, item):
     #     '''Uses Breadth-first search to find Trees'''
     #     if item is self:
@@ -139,7 +149,8 @@ class Tree():
             children = [child.value for child in self.children]
             flat[self.value] = children
             for child in self.children:
-                child.get_flat_tree(flat)
+                    child.get_flat_tree(flat)
+
 
     def get_code_containers(self):
         codes = []

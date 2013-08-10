@@ -22,12 +22,12 @@ from core.config_variables import (I18N_INPUT, I18N,
                                    EXPANDABLELISVIEW,
                                    ACTIVITIES_TEMPLATES_SECTION, ACTIVITY,
                                    IMPORT_DATE, CUSTOM_ARRAY, IMPORT_ARRAY,
-                                   CHILD_CLASS, GROUP_CLASS, CODE_ARRAYS)
+                                   CHILD_CLASS, GROUP_CLASS, CODE_ARRAYS, CODE)
 
 from strings_handler import write_template
 from layouts_handler import write_two_columns_layout, write_one_column_layout_one_level
 from activities_handler import write_manifest
-from model_handler import write_group_class
+from model_handler import write_group_class, get_attributes, get_children
 
 def write_strings(language_code, report):
     """ Write all needed strings in report for all supported languages.
@@ -116,113 +116,74 @@ def write_layouts(xml_filenames, report, language_code):
 
 def write_model(java_filenames, report,language_code):
     template_model_file = get_template_model_file()
-    flat = report.get_flat_data()
-    # print flat
-    # print 
-    # print
-    
     
     # Set the Environment for the jinja2 templates and get the template
     environment = set_environment(MODEL_TEMPLATES_PATH)
     package = get_property(ANDROID_PACKAGES,PACKAGE_MODEL)
     # Store an ids list of expandable. This 
     expandables = []
+    parent_code = None
+    parent_schema = None
+    flat_tree = {}
 
-    for container,children in flat.iteritems():
+    for container,children in report.report.depthFirstChildren():
+        imports = []
+        print expandables
+
+        # Get the parent code and schema. 
+        if (flat_tree):
+            for p,c in flat_tree.iteritems():
+                if container.get_schema_code() in c:
+                    parent_code, parent_schema = p
+                    c.remove(container.get_schema_code())
+                    if (not c):
+                        del flat_tree[p]
+                    break
+
         # Build this container java filename using its parent codes and its own
-        parent_code, parent_schema = get_parent_code_schema(flat, container)
         class_name = get_class_name(container.get_schema(),
                                     container.get_code(),
                                     parent_schema,parent_code).replace('-','_')
+        
+        # Build a parent/children codes hash table. 
+        # We will use it for parent_code and schema.
+        if (children):
+            container_schema_code = (container.get_code(), container.get_schema())
+            flat_tree[container_schema_code]=[]
+            for child in children:
+               flat_tree[container_schema_code].append(child.value.get_schema_code())
+
         # If this class will be expandable in activity.
         # We need to create a child class. 
         if (class_name in expandables):
-            model_filename = get_model_file(template_model_file,
-                                            class_name+CHILD_CLASS)
-        else:
-            model_filename = get_model_file(template_model_file,
-                                            class_name)
+            class_name = class_name+CHILD_CLASS
+
+        model_filename = get_model_file(template_model_file, class_name)
+
+        # Write model
         if (not isfile(model_filename)):
-            # print "!", model_filename
-            # Boolean variables, preventing multiple imports
-            import_date = False
-            import_array = False
-            #print "* {0} \n -> {1}".format(container,model_filename)
-            #print
             model_file = open(model_filename, 'w')
-            #TODO: Add the imports
-            imports = []
-            attributes = []
-            # Render this container attributers
-            for attribute in container.attributes:
-                #print attribute.concept
-                #print attribute.type
-                render_template = ""
-                attribute_name = attribute.concept.get_schema_code().lower().replace('-','_')
-                # BOOL ATTRIBUTE
-                if (attribute.type == NUM and attribute.is_bool()):
-                    template_name = get_property(MODEL_TEMPLATES_SECTION, BOOL_JAVA)
-                # NUM ATTRIBUTE
-                elif (attribute.type == NUM and not attribute.is_bool()):
-                    template_name = get_property(MODEL_TEMPLATES_SECTION, INT_JAVA)
-                # TEXT ATTRIBUTE
-                elif(attribute.type==TEXT):
-                    template_name = get_property(MODEL_TEMPLATES_SECTION, STRING_JAVA)
-                # DATE ATTRIBUTE
-                elif(attribute.type==DATE):
-                    template_name = get_property(MODEL_TEMPLATES_SECTION, DATE_JAVA)
-                    if(not import_date):
-                        import_temp_name = get_property(MODEL_TEMPLATES_SECTION,IMPORT_DATE) 
-                        template_import = environment.get_template(import_temp_name)
-                        render_import_template = template_import.render()
-                        imports.append(render_import_template)
-                        import_date = True
-
-                template = environment.get_template(template_name)
-                render_template = template.render(name=attribute_name)
-                #print render_template, attribute_name
-                attributes.append(render_template)
-                
-
-            # Render class attributes for this container's children
-            for child in children:
-                # Create the class name 
-                attribute_variable = child.concept.get_schema_code().lower()
-                parent_class = (container.get_schema().lower().capitalize() + 
-                                '_' + container.get_code().lower())
-                child_class_name = parent_class + '_' + attribute_variable
-                child_class_name = child_class_name.replace('-','_')
-                # This child has multiple items. Write a Group class. 
-                if (child.properties.max_cardinality == -1 ):
-                    write_group_class(environment, template_model_file, 
-                                      child_class_name, attribute_variable, package)
-                    child_class_name = child_class_name + GROUP_CLASS
-                    expandables.append(child_class_name)
-
-                    # template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_ARRAY)
-                    # if (not import_array):
-                    #     import_temp_name = get_property(MODEL_TEMPLATES_SECTION,IMPORT_ARRAY) 
-                    #     template_import = environment.get_template(import_temp_name)
-                    #     render_import_template = template_import.render()
-                    #     imports.append(render_import_template)
-                    #     import_array = True
-
-                template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_JAVA)
-                template = environment.get_template(template_name)
-                render_template = template.render(custom_class=child_class_name,
-                                                  custom_variable=attribute_variable)
-                attributes.append(render_template)
-
+            # Get the attributes.
+            java_attributes = get_attributes(environment, 
+                                             container.attributes, imports)
+            # Get children attributes
+            parent_class = (container.get_schema().lower().capitalize() + 
+                            '_' + container.get_code().lower())
+            java_children = get_children(environment, children, imports,
+                                         parent_class, expandables,
+                                         template_model_file, package)
+            java_attributes.extend(java_children)
+            #Write the model
             template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
             template = environment.get_template(template_name)
             model_file.write(template.render(package=package,
                                              class_name=class_name,
-                                             attributes=attributes,
+                                             attributes=java_attributes,
                                              imports=imports))
-            print 
             model_file.close()
         else:
             print "Java class {0} already created".format(model_filename)
+
 
 def write_activities(activities_filenames, report):
     flat = report.get_flat_data()
