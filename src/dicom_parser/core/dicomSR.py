@@ -2,7 +2,7 @@
 from types import Concept, Property
 from config_variables import (MULTIPLE_PROPERTIES, DICOM_LEVEL,
                              CHILDREN_ARRAYS, CODE_ARRAYS)
-from config import get_odontology_level
+from config import get_ontology_level
 from collections import deque
 from tree import Tree
 
@@ -137,9 +137,9 @@ class DicomTree(object):
 
 
 class DicomSR(object):
-    def __init__(self, report_type="", id_odontology=-1):
+    def __init__(self, report_type="", id_ontology=-1):
         self.report_type = report_type
-        self.id_odontology = id_odontology
+        self.id_ontology = id_ontology
         self.report = Tree()
 
     def imprime(self):
@@ -150,9 +150,9 @@ class DicomSR(object):
     def add_node(self, node, parent):
         self.report.add_node(node, parent)
 
-    def get_odontology(self):
-        """ Return current report odontology """
-        return self.id_odontology
+    def get_ontology(self):
+        """ Return current report ontology """
+        return self.id_ontology
 
     def get_flat_data(self):
         flat = {}
@@ -194,14 +194,14 @@ class DicomSR(object):
                 attributes = []
                 self.report.get_set_data(containers, attributes)
                 for container in containers:
-                    odontology = get_odontology_level(
-                        odontology_id=self.get_odontology(),
+                    ontology = get_ontology_level(
+                        ontology_id=self.get_ontology(),
                         tree_level=container.get_level(),
                         languages_tag=language)
                     for language in languages:
                         aux = {}
                         aux[level_num] = container.get_level()
-                        aux[level_name] = (unicode(odontology, "utf-8"))
+                        aux[level_name] = (unicode(ontology, "utf-8"))
                         aux[code] = container.get_code()
                         aux[meaning] = container.get_meaning()[language]
                         substitution_words[language][levels_tag].\

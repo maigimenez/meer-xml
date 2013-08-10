@@ -74,15 +74,15 @@ def get_parent_code_schema(flat, container):
 def write_layouts(xml_filenames, report, language_code):
     #print xml_filenames
     flat = report.get_flat_data()
-    #Get the odontology id of the report
-    odontology_id = report.get_odontology()
+    #Get the ontology id of the report
+    ontology_id = report.get_ontology()
     #Write layout for every file
     for container, children in flat.iteritems():
-        level_layout = get_layout_settings(odontology_id,
+        level_layout = get_layout_settings(ontology_id,
                                            str(container.tree_level))
         # Get the preferred children distribution, if there are children
         if(children):
-            children_layout = get_children_settings(odontology_id,
+            children_layout = get_children_settings(ontology_id,
                                                     str(container.tree_level))
         else:
             children_layout = None
@@ -188,8 +188,8 @@ def write_model(java_filenames, report,language_code):
 def write_activities(activities_filenames, report):
     flat = report.get_flat_data()
 
-    #Get the odontology id of the report
-    odontology_id = report.get_odontology()
+    #Get the ontology id of the report
+    ontology_id = report.get_ontology()
 
     # Set the Environment for the jinja2 templates and get the template
     environment = set_environment(ACTIVITIES_TEMPLATES_PATH)
@@ -235,7 +235,7 @@ def write_activities(activities_filenames, report):
 
         # Get children layout if there are childrens in this container.
         if(children):
-            children_layout = get_children_settings(odontology_id,
+            children_layout = get_children_settings(ontology_id,
                                                     str(container.tree_level))
         else:
             children_layout = None

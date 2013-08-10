@@ -1,7 +1,7 @@
 #  -*- coding: utf-8 -*-
 import re
 from config import ( get_substitution_options,get_filepath,get_language_section_options, 
-    get_property, get_property_interpolation , get_filepath_odontology )
+    get_property, get_property_interpolation , get_filepath_ontology )
 from config_variables import *
 
 #{filename:<file>}
@@ -70,21 +70,16 @@ class AndroidFiles(object):
         self.strings = {}
         #There is no point for the variable model to be a dictionary here. We don't need the key
         self.model = []
-        self.activities={}
-
-
-    #ef set_odontology(self,id_odontology):
-    #   self.layouts = LAYOUTS_DICTIONARY[int(id_odontology)]
-    #   self.activities = ACTIVITIES_DICTIONARY[int(id_odontology)]        
+        self.activities={}  
     
-    def set_odontology(self,id_odontology):
+    def set_ontology(self,id_ontology):
         """ Set the filenames for of layouts and android activities using the 
-        report odontology id.
+        report ontology id.
         We are using templates, then this template variables will be 
         instanciated with the report values. 
         """
-        self.layouts = get_filepath_odontology(id_odontology,LAYOUTS)
-        self.activities = get_filepath_odontology(id_odontology,ACTIVITIES)
+        self.layouts = get_filepath_ontology(id_ontology,LAYOUTS)
+        self.activities = get_filepath_ontology(id_ontology,ACTIVITIES)
 
     #TODO: Move this to config.py
     def set_languages(self,languages=""):

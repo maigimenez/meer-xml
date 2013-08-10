@@ -23,8 +23,7 @@ report = parser.DicomParser().parse(sys.argv[1])
 # OUTPUT LAYOUTS
 # Write the file names of the layouts and
 # the activities based on the report ontology
-# TODO: ODONTOLOGY???? It should be ONTOLOGY!!!!
-xml_filenames.set_odontology(report.get_odontology())
+xml_filenames.set_ontology(report.get_ontology())
 
 #WRITE STRINGS XML
 template_engine.write_strings(LANGUAGE_CODE, report)

@@ -74,7 +74,7 @@ def read_config(path=SETTINGS_PATH):
                  "it should be at ./settings (I was looking for this file: {0})".format(path))
     return config
 
-#TODO: Hay 3 funciones para encontrar la ruta en la configuración: get_filepath, get_xml_filepath y get_filepath_odontology haz un merge de las tres. 
+#TODO: Hay 3 funciones para encontrar la ruta en la configuración: get_filepath, get_xml_filepath y get_filepath_ontology haz un merge de las tres. 
 def get_filepath(filetype):
     """ Return the output path for the file type (section) given """ 
     config = read_config()
@@ -174,12 +174,12 @@ def get_language_code(dicom_tag,languages_tag,path=SETTINGS_PATH):
     else:
         return ""
 
-def get_odontology_level(odontology_id,tree_level,dicom_tag=None,languages_tag=None,language=None):
+def get_ontology_level(ontology_id,tree_level,dicom_tag=None,languages_tag=None,language=None):
     """ 
     Return the level name.
 
     Keyword Arguments:
-    odontology_id -- Odontolgy ID of the report. 
+    ontology_id -- Odontolgy ID of the report. 
     tree level -- tree level number. We want to know this level's name.
     languages_tag  --  tag with supported languages (i18n|default) to resolve
     language -- comments language tag using i18n standard. 
@@ -194,11 +194,11 @@ def get_odontology_level(odontology_id,tree_level,dicom_tag=None,languages_tag=N
             comments_language = DEFAULT_LANGUAGE
     else:
         comments_language = languages_tag
-    odontology_path = get_properties_path(comments_language)
-    config = read_config(odontology_path)
-    odontology_section = odontology_id+' '+LEVEL_STRINGS
+    ontology_path = get_properties_path(comments_language)
+    config = read_config(ontology_path)
+    ontology_section = ontology_id+' '+LEVEL_STRINGS
     #TODO: Handle the exceptions
-    return config.get(odontology_section,str(tree_level))
+    return config.get(ontology_section,str(tree_level))
 
 def get_substitution_dictionary(language_code,section,template_type):
     """  Read properties file for the language and returns a dictionary 
@@ -236,11 +236,11 @@ def get_substitution_dictionary(language_code,section,template_type):
 
     return substitution_words                                  
 
-def get_filepath_odontology(odontology_id, filetype):
+def get_filepath_ontology(ontology_id, filetype):
     """ Retun layouts filenames inside a dictionary, the key is the level id and the value is the filename
 
     Keyword:
-    odontology_id -- odontology id of the report. Every odontology has its own layout configuration in 
+    ontology_id -- ontology id of the report. Every ontology has its own layout configuration in 
     the settings file
     filetype -- file type of the filenames we are looking for (layouts or activities).
 
@@ -253,7 +253,7 @@ def get_filepath_odontology(odontology_id, filetype):
     if( not exists(output_directory)):
         makedirs(output_directory)
     #Get the filetypes file names. 
-    section = odontology_id + ODONTOLOGY_FILENAMES
+    section = ontology_id + ONTOLOGY_FILENAMES
     options = config.options(section)
     filenames = {}
     #Get files extension
@@ -275,21 +275,21 @@ def get_filepath_odontology(odontology_id, filetype):
     return filenames
     
 
-def get_layout_settings(odontology_id, level):
-    """ Return a layout distribution for odontology and level given
+def get_layout_settings(ontology_id, level):
+    """ Return a layout distribution for ontology and level given
     set by the user in the settings.ini file. (1 column or 2 columns)
 
     """
-    section = odontology_id + LAYOUT_SETTINGS
+    section = ontology_id + LAYOUT_SETTINGS
     layout_option = LEVEL_TAG + level
     return get_property(section,layout_option)
 
-def get_children_settings(odontology_id, level):
-    """ Return children layout distribution for odontology and level given
+def get_children_settings(ontology_id, level):
+    """ Return children layout distribution for ontology and level given
     set by the user in the settings.ini file. (ExpandableListView or Listview)
 
     """
-    section = odontology_id + LAYOUT_SETTINGS
+    section = ontology_id + LAYOUT_SETTINGS
     children_option = LEVEL_TAG + level + CHILDREN_TAG
     return get_property(section,children_option)
 

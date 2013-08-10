@@ -71,7 +71,7 @@ def write_template(template, languages, xml_files, report=None):
     # Set the section of the template name for the strings.
     if (report is not None):
         if (template in TEMPLATE_BY_ID):
-            section = report.get_odontology() + " " + template
+            section = report.get_ontology() + " " + template
         elif (template in TEMPLATE_BY_REPORT):
             section = template
     else:
