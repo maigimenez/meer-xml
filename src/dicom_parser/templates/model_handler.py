@@ -3,7 +3,7 @@ from core.config import get_model_file, get_property
 from core.config_variables import (CHILD_CLASS, GROUP_CLASS, GROUP_STRING,
 								   MODEL_TEMPLATES_SECTION, CUSTOM_JAVA,
 								   CLASS, NUM, TEXT, CODE, DATE, DATE_JAVA,
-								   IMPORT_DATE, STRING_JAVA, BOOL_JAVA)
+								   IMPORT_DATE, STRING_JAVA, BOOL_JAVA, INT_JAVA)
 from os.path import isfile
 
 def write_group_class (environment, template_model_file, class_name, attribute_variable, package):
