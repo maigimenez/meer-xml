@@ -1,7 +1,7 @@
 from collections import defaultdict, deque
 
 class Tree():
-    '''Tree Object, contains value and child references'''
+    """Tree Object, contains value and child references"""
     def __init__(self, value=None, children=None):
         self.value = value
         if children is None:
@@ -10,7 +10,7 @@ class Tree():
             self.children = children
 
     def breadthFirst(self):
-        '''Sequentially yield nodes in an unguided breadthFirst fashion'''
+        """Sequentially yield nodes in an unguided breadthFirst fashion"""
         q = deque([self])
         while len(q) > 0:
             node = q.popleft()
@@ -38,7 +38,7 @@ class Tree():
     #     return
 
     def depthFirst(self):
-        '''Sequentially yield nodes in an unguided depth-first fashion'''
+        """Sequentially yield nodes in an unguided depth-first fashion"""
         q = deque([self])
         while len(q) > 0:
             node = q.pop()
@@ -48,7 +48,7 @@ class Tree():
         return
 
     def depthFirstChildren(self):
-        '''Sequentially yield nodes and its children in an unguided depth-first fashion'''
+        """Sequentially yield nodes and its children in an unguided depth-first fashion"""
         q = deque([self])
         while len(q) > 0:
             node = q.pop()
@@ -57,33 +57,23 @@ class Tree():
                 q.append(child)
         return
 
-    # def __contains__(self, item):
-    #     '''Uses Breadth-first search to find Trees'''
-    #     if item is self:
-    #         return True
-    #     else:
-    #         for node in self.breadthFirst():
-    #             if node is item:
-    #                 return True
-    #         return False
+    def __contains__(self, item):
+        """Uses Breadth-first search to find Trees"""
+        if item is self:
+            return True
+        else:
+            for node in self.breadthFirst():
+                if node is item:
+                    return True
+            return False
 
-    def __str__(self):
-        return "Tree: {value: %s, \n Children: %s}" % (self.value, len(self.children))
-
-    # def __repr__(self):
-    #     '''
-    #     Currently does not conform to the convention:
-    #     >>Z = Tree()
-    #     >>Tree(repr(Z)) == Z
-    #     >>False  # True if following pickle protocol (I believe)
-    #     '''
-    #     return str(self)
-
-    # def clear(self):
-    #     self.value = None
-    #     self.children.clear()
+    def clear(self):
+        """ Clear tree structure """
+        self.value = None
+        self.children.clear()
     
     def get_set_data(self,containers,attributes):
+        """ Return a set of containers and a set of its attributes"""
         written_codes = []
         for container in self.breadthFirst():
             schema_code = container.get_schema_code()
@@ -98,6 +88,7 @@ class Tree():
         return (containers,attributes) 
 
     def is_leaf(self):
+        """ Return true if this tree hasn't got children"""
         return self.children == []
 
     def print_tree(self,ident):
@@ -141,6 +132,8 @@ class Tree():
 
 
     def get_flat_tree(self,flat):
+        """ Return a hash table with the tree. 
+        It loses tree level information """
         if (self.is_leaf()):
             flat[self.value] = []
             return (flat)
@@ -152,6 +145,7 @@ class Tree():
 
 
     def get_code_containers(self):
+        """ Return a set of schema_code values for every CODE attribute.""" 
         codes = []
         written_codes = []
         for container in self.breadthFirst():
@@ -162,3 +156,4 @@ class Tree():
                         codes.append(attribute)
                         written_codes.append(schema_code)
         return codes
+
