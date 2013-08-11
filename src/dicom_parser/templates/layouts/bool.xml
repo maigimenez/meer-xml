@@ -6,4 +6,5 @@
                             {%- if not first_attribute %}
                             android:layout_alignLeft="@id/{{ previous_item }}" 
                             android:layout_below="@id/{{ previous_item }}"
-                            {%- endif -%}/>
+                            {%- endif -%}
+                            android:layout_marginBottom="10dp"/>

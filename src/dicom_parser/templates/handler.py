@@ -26,7 +26,7 @@ from core.config_variables import (I18N_INPUT, I18N,
 
 from strings_handler import write_template
 from layouts_handler import write_two_columns_layout, write_one_column_layout_one_level
-from activities_handler import write_manifest
+from activities_handler import write_manifest, get_spinners
 from model_handler import write_group_class, get_attributes, get_children
 
 def write_strings(language_code, report):
@@ -128,7 +128,6 @@ def write_model(java_filenames, report,language_code):
 
     for container,children in report.report.depthFirstChildren():
         imports = []
-        print expandables
 
         # Get the parent code and schema. 
         if (flat_tree):
@@ -173,6 +172,7 @@ def write_model(java_filenames, report,language_code):
                                          parent_class, expandables,
                                          template_model_file, package)
             java_attributes.extend(java_children)
+
             #Write the model
             template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
             template = environment.get_template(template_name)
@@ -194,8 +194,11 @@ def write_activities(activities_filenames, report):
     # Set the Environment for the jinja2 templates and get the template
     environment = set_environment(ACTIVITIES_TEMPLATES_PATH)
 
+    # TODO: set launcher activity
     # Get report root container. This will be the launcher activity.             
-    report_root = report.get_report_root()[0].get_schema_code()
+    report_root = report.get_root()
+
+    # Variables to store data
     activities = []
     launcher_activity = ""
 
@@ -244,6 +247,8 @@ def write_activities(activities_filenames, report):
         print
         print "[Level {0}] {1}".format(container.tree_level, children_layout)
         print activity_filename, package, activity_name
+        spinners = get_spinners(container.attributes)
+        print len(spinners)
 
         # Write activity file 
         if (not isfile(activity_filename)):
@@ -264,11 +269,13 @@ def write_activities(activities_filenames, report):
                 activity_file.write(template.render(package_name=package,
                                             activity_name=activity_name,
                                             layout_file=layout_id,
-                                            childview=render_children))
+                                            childview=render_children,
+                                            spinners=spinners))
             else:
                 activity_file.write(template.render(package_name=package,
                                             activity_name=activity_name,
-                                            layout_file=layout_id))
+                                            layout_file=layout_id,
+                                            spinners=spinners))
             print template_name
             activity_file.close()
         else:

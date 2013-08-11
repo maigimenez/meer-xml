@@ -1,6 +1,5 @@
 from collections import defaultdict, deque
 
-
 class Tree():
     '''Tree Object, contains value and child references'''
     def __init__(self, value=None, children=None):

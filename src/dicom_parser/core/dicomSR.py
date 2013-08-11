@@ -159,8 +159,8 @@ class DicomSR(object):
         self.report.get_flat_tree(flat)
         return flat
 
-    def get_report_root(self):
-        return self.report.get_root()
+    def get_root(self):
+        return self.report.value
 
     def get_data_form_report(self, languages, template_type):
         """ Return data from the report in a dictionary

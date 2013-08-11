@@ -1,7 +1,7 @@
 from os.path import join, exists
 from os import makedirs
 from core.config_variables import (MANIFEST, ACTIVITIES_TEMPLATES_PATH,
-								   ACTIVITIES_TEMPLATES_SECTION)
+								   ACTIVITIES_TEMPLATES_SECTION,CODE)
 from core.config import set_environment, get_property,get_filepath
 
 def write_manifest(package_name, activities, launcher_activity):
@@ -21,4 +21,10 @@ def write_manifest(package_name, activities, launcher_activity):
 	manifest_file = open(manifest_path,'w')
 	manifest_file.write(template.render(package_name=package_name, activities=activities))
 	manifest_file.close()
-	
+
+def get_spinners(attributes):
+	spinners = []
+	for attribute in attributes:
+		if attribute.type == CODE:
+			spinners.append(attribute.concept.code)
+	return spinners

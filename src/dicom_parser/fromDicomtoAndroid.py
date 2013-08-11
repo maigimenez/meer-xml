@@ -15,10 +15,6 @@ xml_filenames.set_languages(LANGUAGE_CODE)
 # PARSE
 report = parser.DicomParser().parse(sys.argv[1])
 #report.imprime()
-#report.report.depthFirst()
-#for i in report.report.breadthFirst():
-#     print "---->", i
-#     print 
 
 # OUTPUT LAYOUTS
 # Write the file names of the layouts and
@@ -35,4 +31,4 @@ template_engine.write_layouts(xml_filenames.layouts, report, LANGUAGE_CODE)
 template_engine.write_model(xml_filenames.model, report, LANGUAGE_CODE)
 
 # WRITE ANDROID ACTIVITIES
-#template_engine.write_activities(xml_filenames.activities, report)
+template_engine.write_activities(xml_filenames.activities, report)
