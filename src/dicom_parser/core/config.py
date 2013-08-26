@@ -1,5 +1,6 @@
 #  -*- coding: utf-8 -*-
-from ConfigParser import SafeConfigParser, ConfigParser
+#from ConfigParser import SafeConfigParser, ConfigParser, NoOptionError
+import ConfigParser
 from config_variables import *
 from os.path import join, exists
 from os import makedirs
@@ -68,7 +69,7 @@ def get_languages(language_code):
 
 def read_config(path=SETTINGS_PATH):
     """ Read the config file """
-    config = ConfigParser()
+    config = ConfigParser.ConfigParser()
     if(config.read(path)==[]):
         exit("The settings file is empty or it's not where it's supposed to be.\n"\
                  "it should be at ./settings (I was looking for this file: {0})".format(path))
@@ -78,7 +79,17 @@ def read_config(path=SETTINGS_PATH):
 def get_filepath(filetype):
     """ Return the output path for the file type (section) given """ 
     config = read_config()
-    return config.get(OUTPUT_DIRECTORIES_SECTION,filetype)
+    try:
+        # If the user has its own output paths setting get them. 
+        # Otherwise use default settings.
+        user_settings = config.get(USER_SETTINGS_PATH,OUTPUT_DIRECTORIES_SECTION)
+        if( exists(user_settings)):
+            user_config = read_config(user_settings)
+            return user_config.get(OUTPUT_DIRECTORIES_SECTION,filetype)
+        return config.get(OUTPUT_DIRECTORIES_SECTION,filetype)
+    # Default Settings
+    except ConfigParser.NoOptionError:
+        return config.get(OUTPUT_DIRECTORIES_SECTION,filetype)
 
 def get_properties_path(language):
     """ Return the path for the properties given the language """
@@ -207,7 +218,7 @@ def get_substitution_dictionary(language_code,section,template_type):
     so, we return a dictionary with every possible substitution. 
     
     """
-    config = SafeConfigParser()
+    config = ConfigParser.SafeConfigParser()
     path = get_properties_path(language_code)
     #Since it may appear utf-8 characters we read this file coded as utf-8
     with codecs.open(path,'r',encoding='utf-8') as f:
@@ -247,14 +258,20 @@ def get_filepath_ontology(ontology_id, filetype):
     """
     config = read_config()
     # Get layouts filepath
-    #Get the ouputs directory
+    # Get the ouputs directory
     output_directory = get_filepath(filetype)
     # If the directory does not exist, create it. 
     if( not exists(output_directory)):
         makedirs(output_directory)
-    #Get the filetypes file names. 
-    section = ontology_id + ONTOLOGY_FILENAMES
-    options = config.options(section)
+    # Read the ontology settings file
+    ontology_settings_path = config.get(ONTOLOGIES_SETTINGS,ONTOLOGIES_PATH)
+    extension = config.get(EXTENSIONS_SECTION,SETTINGS_EXTENSION)
+    ontology_settings_file = join(ontology_settings_path,ontology_id+extension)
+
+    #Get the templates for the file names. 
+    ontology_config = read_config(ontology_settings_file)
+    section = ONTOLOGY_FILENAMES
+    options = ontology_config.options(section)
     filenames = {}
     #Get files extension
     if (filetype == LAYOUTS):
@@ -266,9 +283,9 @@ def get_filepath_ontology(ontology_id, filetype):
         level = option.replace(LEVEL_TAG,'')
         #Get the filename. If it's an activity it need to be capitalize.
         if (filetype == LAYOUTS):
-            filename = config.get(section,option)+extension
+            filename = ontology_config.get(section,option)+extension
         elif (filetype == ACTIVITIES):
-            template_name = config.get(section,option)
+            template_name = ontology_config.get(section,option)
             template_capitalize = template_name[0].upper() + template_name[1:]
             filename = template_capitalize+extension
         filenames[level] = join( output_directory,filename)
@@ -280,18 +297,36 @@ def get_layout_settings(ontology_id, level):
     set by the user in the settings.ini file. (1 column or 2 columns)
 
     """
-    section = ontology_id + LAYOUT_SETTINGS
+    #Get the default config file
+    config = read_config()
+
+    # Read the ontology settings file
+    ontology_settings_path = config.get(ONTOLOGIES_SETTINGS,ONTOLOGIES_PATH)
+    extension = config.get(EXTENSIONS_SECTION,SETTINGS_EXTENSION)
+    ontology_settings_file = join(ontology_settings_path,ontology_id+extension)
+    # Get the ontolgy settings. And from this get the 
+    ontology_config = read_config(ontology_settings_file)
     layout_option = LEVEL_TAG + level
-    return get_property(section,layout_option)
+    return ontology_config.get(LAYOUT_SETTINGS,layout_option)
 
 def get_children_settings(ontology_id, level):
     """ Return children layout distribution for ontology and level given
     set by the user in the settings.ini file. (ExpandableListView or Listview)
 
     """
-    section = ontology_id + LAYOUT_SETTINGS
+    #Get the default config file
+    config = read_config()
+
+    # Read the ontology settings file
+    ontology_settings_path = config.get(ONTOLOGIES_SETTINGS,ONTOLOGIES_PATH)
+    extension = config.get(EXTENSIONS_SECTION,SETTINGS_EXTENSION)
+    ontology_settings_file = join(ontology_settings_path,ontology_id+extension)
+
+    # Get the ontolgy settings. And from this get the 
+    ontology_config = read_config(ontology_settings_file)
     children_option = LEVEL_TAG + level + CHILDREN_TAG
-    return get_property(section,children_option)
+    return ontology_config.get(LAYOUT_SETTINGS,children_option)
+
 
 def get_template_model_file():
     """ Return filename for java model """

@@ -1,4 +1,11 @@
-SETTINGS_PATH = "./settings/settings.ini"
+SETTINGS_PATH = './settings/settings.ini'
+USER_SETTINGS_PATH = 'User Settings'
+
+# ONTOLOGIES SETTINGS
+ONTOLOGIES_SETTINGS = 'Ontologies Settings'
+ONTOLOGIES_PATH = 'Settings Path'
+ONTOLOGY_FILENAMES= "Filenames"
+LAYOUT_SETTINGS = "Layouts Settings"
 
 # SCRIPT INPUT
 I18N_INPUT = 'i18n'
@@ -22,14 +29,11 @@ EXTENSIONS_SECTION = 'Extensions'
 PROPERTIES_EXTENSION = 'Properties'
 XML_EXTENSION = 'Xml'
 JAVA_EXTENSION = 'Java'
-
-#LAYOUTS AND ACTIVITIES 
-ONTOLOGY_FILENAMES= "-Filenames"
+SETTINGS_EXTENSION = 'Settings'
 
 # LAYOUTS
 LAYOUTS = "Layouts"
 LAYOUT_FILENAME = "-Layouts"
-LAYOUT_SETTINGS = "-Layouts Settings"
 LEVEL_TAG = "level_"
 CHILDREN_TAG = "_children" 
 COLUMN_1 = "1 Column"
