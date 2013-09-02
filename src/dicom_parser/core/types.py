@@ -44,7 +44,7 @@ class Concept(object):
     def get_schema_code(self,separator='_'):
         return self.schema + separator + self.code
 
-
+# TODO: This class should inherit from Concept
 class Data_type(object):
     """This class manages a data type. 
     This is the superclass, the  child classes are: date, text and num

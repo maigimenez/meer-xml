@@ -24,7 +24,7 @@ def get_model_file(java_filename, class_name):
     return Template(java_filename).safe_substitute(CLASS_NAME=class_name)
 
 
-
+# TODO: There are 3 ways to instantiate a filename: get_template_filename, instantiate_filename and get_template_model_file. Merge!
 def instantiate_filename(report_level, xml_filename, 
                          concept=None, parent=None):
     """ Reuturn filename of current layout
@@ -75,7 +75,7 @@ def read_config(path=SETTINGS_PATH):
                  "it should be at ./settings (I was looking for this file: {0})".format(path))
     return config
 
-#TODO: Hay 3 funciones para encontrar la ruta en la configuración: get_filepath, get_xml_filepath y get_filepath_ontology haz un merge de las tres. 
+#TODO: Hay 3 funciones para encontrar la ruta en la configuración: get_properties_path, get_filepath, get_xml_filepath y get_filepath_ontology haz un merge de las tres. 
 def get_filepath(filetype):
     """ Return the output path for the file type (section) given """ 
     config = read_config()
@@ -134,6 +134,7 @@ def get_template_filename(template):
     # Return the path to tempalate file.
     return join(root_path,template_path),template_name
 
+#TODO: If interpolation is false get_property_interpolation and get_property do exactly the same. Merge!
 def get_property(section,option):
     """ Returns a configuration property given a section and an option from the settings file. """
     config = read_config(SETTINGS_PATH)
@@ -291,7 +292,7 @@ def get_filepath_ontology(ontology_id, filetype):
         filenames[level] = join( output_directory,filename)
     return filenames
     
-
+# TODO: get_layout_settings and get_children_settings are just looking in different sections. Merge!
 def get_layout_settings(ontology_id, level):
     """ Return a layout distribution for ontology and level given
     set by the user in the settings.ini file. (1 column or 2 columns)
