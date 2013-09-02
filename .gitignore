@@ -44,3 +44,6 @@ outputs/
 
 # Sublime project files
 *.sublime-*
+
+#Pycharm
+.idea/
