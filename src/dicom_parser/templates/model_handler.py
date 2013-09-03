@@ -3,11 +3,13 @@ from core.config import get_model_file, get_property
 from core.config_variables import (CHILD_CLASS, GROUP_CLASS, GROUP_STRING,
 								   MODEL_TEMPLATES_SECTION, CUSTOM_JAVA,
 								   CLASS, NUM, TEXT, CODE, DATE, DATE_JAVA,
-								   IMPORT_DATE, STRING_JAVA, BOOL_JAVA, INT_JAVA)
+								   IMPORT_DATE, STRING_JAVA, BOOL_JAVA, INT_JAVA,
+								   CUSTOM_ARRAY, INTERFACE_IDENTIFIER,
+								   INTERFACE_CLASS)
 from os.path import isfile
 
 def write_group_class (environment, template_model_file, class_name, attribute_variable, package):
-	""" Write group class.
+	""" Write group class
 
 	This class is needed to handle Expandablelistview in Android. 
 	It will have only two attributes: 
@@ -18,23 +20,48 @@ def write_group_class (environment, template_model_file, class_name, attribute_v
     template_model_file -- template for model filename. Handles ouptput rpath.
     class_name -- Name of the class to write. 
     """
-    
 	model_filename = get_model_file(template_model_file,class_name+GROUP_CLASS)
-	#print "*", model_filename
 	if (not isfile(model_filename)):
 		model_file = open(model_filename, 'w')
 		# Create a list with this class attributes and add a default group name
 		attributes = [GROUP_STRING]
 		# Create custom child class
-		template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_JAVA)
+		template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_ARRAY)
 		template = environment.get_template(template_name)
-		render_template = template.render(custom_class=(class_name+CHILD_CLASS), custom_variable=attribute_variable)
+		render_template = template.render(custom_class=(class_name), custom_variable=attribute_variable)
 		attributes.append(render_template)
-		# Load model template
+		# Load model template and write the class
 		template_name = get_property(MODEL_TEMPLATES_SECTION, CLASS)
 		template = environment.get_template(template_name)
 		model_file.write(template.render(package=package,
 										 class_name=class_name+GROUP_CLASS,
+										 attributes=attributes))
+		#TODO: Getters & setters
+		model_file.close()
+	else:
+		print "Java class {0} already created".format(model_filename)
+
+def write_children_interface (environment, template_model_file, class_name, package):
+	""" Write interface children class
+
+	This class is needed to handle Expandablelistview in Android. 
+	It will have only one attribute: a string with its identifier.
+
+    Keyword Arguments:
+    template_model_file -- template for model filename. Handles ouptput rpath.
+    class_name -- Name of the class to write. 
+    """
+	model_filename = get_model_file(template_model_file,class_name+CHILD_CLASS)
+	#print "*", model_filename
+	if (not isfile(model_filename)):
+		model_file = open(model_filename, 'w')
+		# Create a list with this class attributes and add a default get Id 
+		attributes = [INTERFACE_IDENTIFIER]
+		# Load model template and write the class
+		template_name = get_property(MODEL_TEMPLATES_SECTION, INTERFACE_CLASS)
+		template = environment.get_template(template_name)
+		model_file.write(template.render(package=package,
+										 class_name=class_name+CHILD_CLASS,
 										 attributes=attributes))
 		model_file.close()
 	else:
@@ -76,12 +103,31 @@ def get_attributes(environment, attributes, imports):
 	return java_attributes
 
 
-def get_children(environment, children, imports, parent_class, expandables,
-				 template_model_file, package):
+def get_children(environment, children, imports, parent_class, 
+				 parent_class_name, expandables, template_model_file,
+				 package):
 	# Boolean variable preventing multiple imports.
 	import_array = False
-	attributes = []
+	#Boolean variable set true if we need to handle Expandable Children
+	# If at least one of the children has multiple items all of them
+	# will be inside an expandablelist.
+	has_expandable = False
+	# Find out if you need an ExpandableList
+	for child in children:
+		if (child.value.properties.max_cardinality == -1 ):
+			has_expandable = True
+			break
+	
+	attribute_variable = parent_class_name.lower()
+	if (has_expandable):
+		write_group_class(environment, template_model_file, parent_class_name,
+						  attribute_variable, package)
+		write_children_interface(environment, template_model_file,
+								 parent_class_name, package)
 
+	attributes = []
+	#print
+	#print "********** Get children ****************"
 	for child in children:
 		# Create the class name 
 		attribute_variable = child.value.concept.get_schema_code().lower()
@@ -89,16 +135,26 @@ def get_children(environment, children, imports, parent_class, expandables,
 		child_class_name = child_class_name.replace('-','_')
 
 		# This child has multiple items. Write a Group class. 
-		if (child.value.properties.max_cardinality == -1 ):
-		    write_group_class(environment, template_model_file, 
-		                      child_class_name, attribute_variable, package)
-		    expandables.append(child_class_name)
-		    child_class_name = child_class_name + GROUP_CLASS
+		if (has_expandable):
+			expandables.append(child_class_name)
 
- 		template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_JAVA)
-		template = environment.get_template(template_name)
-		render_template = template.render(custom_class=child_class_name,
-		                                  custom_variable=attribute_variable)
+		render_template = ""
+		if (child.value.properties.max_cardinality == -1 ):
+ 			template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_ARRAY)
+			template = environment.get_template(template_name)
+			render_template = template.render(custom_class=child_class_name,
+		     	                              custom_variable=attribute_variable)
+		else:
+			template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_JAVA)
+			template = environment.get_template(template_name)
+			render_template = template.render(custom_class=child_class_name,
+			                                  custom_variable=attribute_variable)
+	
 		attributes.append(render_template)
 
+	# if (write_group):
+	# 	write_group_class(environment, template_model_file, child_class_name, attribute_variable, package)
+		#write_children_interface(environment,template_model_file,parent_class,package)
+	#print "********** END Get children ****************"
+	#print
 	return attributes

@@ -22,7 +22,8 @@ from core.config_variables import (I18N_INPUT, I18N,
                                    EXPANDABLELISVIEW,
                                    ACTIVITIES_TEMPLATES_SECTION, ACTIVITY,
                                    IMPORT_DATE, CUSTOM_ARRAY, IMPORT_ARRAY,
-                                   CHILD_CLASS, GROUP_CLASS, CODE_ARRAYS, CODE)
+                                   CHILD_CLASS, GROUP_CLASS, CODE_ARRAYS, CODE,
+                                   IMPLEMENT_CLASS)
 
 from strings_handler import write_template
 from layouts_handler import write_two_columns_layout, write_one_column_layout_one_level
@@ -124,38 +125,52 @@ def write_model(java_filenames, report,language_code):
     expandables = []
     parent_code = None
     parent_schema = None
+    gparent_class = None
     flat_tree = {}
 
     for container,children in report.report.depthFirstChildren():
+        #print 
+        #print
         imports = []
 
-        # Get the parent code and schema. 
+        found = False
+        # Get the parent code and schema and its grandfather class. 
         if (flat_tree):
-            for p,c in flat_tree.iteritems():
-                if container.get_schema_code() in c:
-                    parent_code, parent_schema = p
-                    c.remove(container.get_schema_code())
-                    if (not c):
-                        del flat_tree[p]
+            for parent,children_codes in flat_tree.iteritems():
+                for child in children_codes:
+                    if container.get_schema_code() == child[0]:
+                        parent_code, parent_schema = parent
+                        gparent_class = child[1]
+                        children_codes.remove(child)
+                        if (not children_codes):
+                            del flat_tree[parent]
+                        found = True
+                        break
+                if found:
                     break
+        # print
+        # print "------------------------------------------------------------------------"
+        # print container.get_schema_code()
+        # print flat_tree
+        # print parent_code , gparent_class
+        # print "------------------------------------------------------------------------"
+        # print
 
         # Build this container java filename using its parent codes and its own
         class_name = get_class_name(container.get_schema(),
                                     container.get_code(),
                                     parent_schema,parent_code).replace('-','_')
-        
+        #print class_name
+
         # Build a parent/children codes hash table. 
         # We will use it for parent_code and schema.
         if (children):
             container_schema_code = (container.get_code(), container.get_schema())
             flat_tree[container_schema_code]=[]
             for child in children:
-               flat_tree[container_schema_code].append(child.value.get_schema_code())
+               flat_tree[container_schema_code].append((child.value.get_schema_code(),class_name))
 
-        # If this class will be expandable in activity.
-        # We need to create a child class. 
-        if (class_name in expandables):
-            class_name = class_name+CHILD_CLASS
+        #print class_name
 
         model_filename = get_model_file(template_model_file, class_name)
 
@@ -168,18 +183,33 @@ def write_model(java_filenames, report,language_code):
             # Get children attributes
             parent_class = (container.get_schema().lower().capitalize() + 
                             '_' + container.get_code().lower())
+            #print "*", parent_class, gparent_class, class_name
+
             java_children = get_children(environment, children, imports,
-                                         parent_class, expandables,
+                                         parent_class, class_name, expandables,
                                          template_model_file, package)
             java_attributes.extend(java_children)
 
             #Write the model
-            template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
-            template = environment.get_template(template_name)
-            model_file.write(template.render(package=package,
+            # If this class will be expandable in activity.
+            # Child class should extend its parent interface. 
+            if (class_name in expandables):
+                template_name = get_property(MODEL_TEMPLATES_SECTION,IMPLEMENT_CLASS)
+                template = environment.get_template(template_name)
+                model_file.write(template.render(package=package,
+                                             class_name=class_name,
+                                             attributes=java_attributes,
+                                             imports=imports,
+                                             parent_class=gparent_class))
+            else:
+                template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
+                template = environment.get_template(template_name)
+                model_file.write(template.render(package=package,
                                              class_name=class_name,
                                              attributes=java_attributes,
                                              imports=imports))
+
+
             model_file.close()
         else:
             print "Java class {0} already created".format(model_filename)
