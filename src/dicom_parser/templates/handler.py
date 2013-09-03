@@ -178,18 +178,27 @@ def write_model(java_filenames, report,language_code):
         if (not isfile(model_filename)):
             model_file = open(model_filename, 'w')
             # Get the attributes.
-            java_attributes = get_attributes(environment, 
-                                             container.attributes, imports)
+            java_attributes, getter_setters = get_attributes(environment,
+                                                    container.attributes, 
+                                                    imports)
             # Get children attributes
             parent_class = (container.get_schema().lower().capitalize() + 
                             '_' + container.get_code().lower())
             #print "*", parent_class, gparent_class, class_name
 
-            java_children = get_children(environment, children, imports,
-                                         parent_class, class_name, expandables,
-                                         template_model_file, package)
-            java_attributes.extend(java_children)
-
+            children_attributes, children_methods = get_children(environment,
+                                                                 children,
+                                                                 imports,
+                                                                 parent_class,
+                                                                 class_name,
+                                                                 expandables,
+                                                                 template_model_file,
+                                                                 package)
+            # children_attributes = get_children(environment, children, imports, parent_class, class_name, 
+            #     expandables, template_model_file, package)
+            java_attributes.extend(children_attributes)
+            getter_setters.extend(children_methods)
+            
             #Write the model
             # If this class will be expandable in activity.
             # Child class should extend its parent interface. 
@@ -200,14 +209,16 @@ def write_model(java_filenames, report,language_code):
                                              class_name=class_name,
                                              attributes=java_attributes,
                                              imports=imports,
-                                             parent_class=gparent_class))
+                                             parent_class=gparent_class,
+                                             methods=getter_setters))
             else:
                 template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
                 template = environment.get_template(template_name)
                 model_file.write(template.render(package=package,
                                              class_name=class_name,
                                              attributes=java_attributes,
-                                             imports=imports))
+                                             imports=imports,
+                                             methods=getter_setters))
 
 
             model_file.close()
