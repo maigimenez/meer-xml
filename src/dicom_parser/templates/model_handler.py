@@ -5,7 +5,8 @@ from core.config_variables import (CHILD_CLASS, GROUP_CLASS, GROUP_STRING,
 								   CLASS, NUM, TEXT, CODE, DATE, DATE_JAVA,
 								   IMPORT_DATE, STRING_JAVA, BOOL_JAVA, INT_JAVA,
 								   CUSTOM_ARRAY, INTERFACE_IDENTIFIER,
-								   INTERFACE_CLASS, GETTERS_SETTERS,ARRAY_JAVA)
+								   INTERFACE_CLASS, GETTERS_SETTERS,ARRAY_JAVA,
+								   TYPE_JAVA, IMPORT_ARRAY)
 from os.path import isfile
 from string import Template
 
@@ -21,22 +22,41 @@ def write_group_class (environment, template_model_file, class_name, attribute_v
     template_model_file -- template for model filename. Handles ouptput rpath.
     class_name -- Name of the class to write. 
     """
+    # Import Arraylist. It's always needed with a group class
+	imports =[]
+   	import_temp_name = get_property(MODEL_TEMPLATES_SECTION,IMPORT_ARRAY) 
+	template_import = environment.get_template(import_temp_name)
+	imports.append(template_import.render())
+
+	#Load template to instantiate getters and setters
+	getters_setters_template_name = get_property(MODEL_TEMPLATES_SECTION, GETTERS_SETTERS)
+	getters_setters_template = environment.get_template(getters_setters_template_name)
+
+
 	model_filename = get_model_file(template_model_file,class_name+GROUP_CLASS)
 	if (not isfile(model_filename)):
 		model_file = open(model_filename, 'w')
 		# Create a list with this class attributes and add a default group name
 		attributes = [GROUP_STRING]
+		methods = [getters_setters_template.render(type="type",
+												   variable_type=STRING_JAVA)]
 		# Create custom child class
-		template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_ARRAY)
+		template_name = get_property(MODEL_TEMPLATES_SECTION, TYPE_JAVA)
 		template = environment.get_template(template_name)
-		render_template = template.render(custom_class=(class_name), custom_variable=attribute_variable)
-		attributes.append(render_template)
+		type_name = Template(ARRAY_JAVA).safe_substitute(CLASS=class_name+CHILD_CLASS)
+
+		array = template.render(type=(type_name), variable="children")
+		attributes.append(array)
+		methods.append( getters_setters_template.render(type="children",
+														variable_type=type_name))
 		# Load model template and write the class
 		template_name = get_property(MODEL_TEMPLATES_SECTION, CLASS)
 		template = environment.get_template(template_name)
 		model_file.write(template.render(package=package,
+										 imports=imports,
 										 class_name=class_name+GROUP_CLASS,
-										 attributes=attributes))
+										 attributes=attributes,
+										 methods=methods))
 		#TODO: Getters & setters
 		model_file.close()
 	else:
@@ -81,44 +101,50 @@ def get_attributes(environment, attributes, imports):
 		render_template = ""
 		attribute_name = attribute.concept.get_schema_code().lower().replace('-','_')
 
+		#Load template writte the attributes
+		template_name = get_property(MODEL_TEMPLATES_SECTION, TYPE_JAVA)
+		template = environment.get_template(template_name)
+
 		#Load template to instantiate getters and setters
 		getters_setters_template_name = get_property(MODEL_TEMPLATES_SECTION, GETTERS_SETTERS)
 		getters_setters_template = environment.get_template(getters_setters_template_name)
 
  		# BOOL ATTRIBUTE
  		if (attribute.type == NUM and attribute.is_bool()):
- 		    template_name = get_property(MODEL_TEMPLATES_SECTION, BOOL_JAVA)
- 		    java_getters_setters.append( getters_setters_template.render(
- 												type=attribute_name,
- 												variable_type=BOOL_JAVA))
+			java_attributes.append(template.render(type=BOOL_JAVA, 
+													variable=attribute_name))
+			java_getters_setters.append( getters_setters_template.render(
+												type=attribute_name,
+												variable_type=BOOL_JAVA))
  		# NUM ATTRIBUTE
  		elif (attribute.type == NUM and not attribute.is_bool()):
- 		    template_name = get_property(MODEL_TEMPLATES_SECTION, INT_JAVA)
- 		    java_getters_setters.append( getters_setters_template.render(
+			java_attributes.append(template.render(type=INT_JAVA, 
+													variable=attribute_name))
+			java_getters_setters.append( getters_setters_template.render(
  										type=attribute_name,
  										variable_type=INT_JAVA))
  		# TEXT ATTRIBUTE
  		elif(attribute.type==TEXT or attribute.type==CODE):
- 			template_name = get_property(MODEL_TEMPLATES_SECTION, STRING_JAVA)
- 			java_getters_setters.append( getters_setters_template.render(
- 											type=attribute_name,
- 											variable_type=STRING_JAVA))
- 		# DATE ATTRIBUTE
- 		elif(attribute.type==DATE):
- 		    template_name = get_property(MODEL_TEMPLATES_SECTION, DATE_JAVA)
- 		    java_getters_setters.append( getters_setters_template.render(
- 											type=attribute_name,
- 											variable_type=DATE_JAVA))
- 		    if(not import_date):
- 		        import_temp_name = get_property(MODEL_TEMPLATES_SECTION,IMPORT_DATE) 
- 		        template_import = environment.get_template(import_temp_name)
- 		        render_import_template = template_import.render()
- 		        imports.append(render_import_template)
- 		        import_date = True
- 		template = environment.get_template(template_name)
-		render_template = template.render(name=attribute_name)
-		#print render_template, attribute_name
-		java_attributes.append(render_template)
+			java_attributes.append(template.render(type=STRING_JAVA, 
+													variable=attribute_name))
+			java_getters_setters.append( getters_setters_template.render(
+											type=attribute_name,
+											variable_type=STRING_JAVA))
+		# DATE ATTRIBUTE
+		elif(attribute.type==DATE):
+			java_attributes.append(template.render(type=DATE_JAVA, 
+													variable=attribute_name))
+			java_getters_setters.append( getters_setters_template.render(
+											type=attribute_name,
+											variable_type=DATE_JAVA))
+			if(not import_date):
+				import_temp_name = get_property(MODEL_TEMPLATES_SECTION,IMPORT_DATE) 
+				template_import = environment.get_template(import_temp_name)
+				render_import_template = template_import.render()
+				imports.append(render_import_template)
+				import_date = True
+		
+
 	return java_attributes, java_getters_setters
 
 
@@ -173,6 +199,12 @@ def get_children(environment, children, imports, parent_class,
 			methods.append( getters_setters_template.render( 
 										type=attribute_variable,
  										variable_type=class_type))
+			if(not import_array):
+				import_temp_name = get_property(MODEL_TEMPLATES_SECTION,IMPORT_ARRAY) 
+				template_import = environment.get_template(import_temp_name)
+				imports.append(template_import.render())
+				import_array = True
+		
 		else:
 			template_name = get_property(MODEL_TEMPLATES_SECTION, CUSTOM_JAVA)
 			template = environment.get_template(template_name)

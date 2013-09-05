@@ -198,7 +198,6 @@ def write_model(java_filenames, report,language_code):
             #     expandables, template_model_file, package)
             java_attributes.extend(children_attributes)
             getter_setters.extend(children_methods)
-            
             #Write the model
             # If this class will be expandable in activity.
             # Child class should extend its parent interface. 
@@ -209,7 +208,7 @@ def write_model(java_filenames, report,language_code):
                                              class_name=class_name,
                                              attributes=java_attributes,
                                              imports=imports,
-                                             parent_class=gparent_class,
+                                             parent_class=gparent_class+CHILD_CLASS,
                                              methods=getter_setters))
             else:
                 template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS)
