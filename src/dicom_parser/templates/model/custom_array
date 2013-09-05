@@ -1,1 +1,0 @@
-       ArrayList<{{ custom_class }}> {{ custom_variable }};

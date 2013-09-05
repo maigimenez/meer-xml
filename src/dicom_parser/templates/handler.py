@@ -17,14 +17,12 @@ from core.config_variables import (I18N_INPUT, I18N,
                                    ACTIVITIES_TEMPLATES_PATH,
                                    MODEL_TEMPLATES_SECTION, CLASS,
                                    ANDROID_PACKAGES,PACKAGE_MODEL,
-                                   BOOL_JAVA, STRING_JAVA, INT_JAVA, DATE_JAVA,
                                    CUSTOM_JAVA,BASE_MODEL, LISTVIEW,
                                    EXPANDABLELISVIEW,
                                    ACTIVITIES_TEMPLATES_SECTION, ACTIVITY,
                                    IMPORT_DATE, CUSTOM_ARRAY, IMPORT_ARRAY,
                                    CHILD_CLASS, GROUP_CLASS, CODE_ARRAYS, CODE,
                                    IMPLEMENT_CLASS)
-
 from strings_handler import write_template
 from layouts_handler import write_two_columns_layout, write_one_column_layout_one_level
 from activities_handler import write_manifest, get_spinners

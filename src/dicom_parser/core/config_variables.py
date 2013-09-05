@@ -108,13 +108,8 @@ LAYOUT_TEMPLATES = [END, HEADER, MAIN_LEFT, RIGHT, NEXT_LEVEL, GENERIC_TITLE,
                     TWO_COLUMNS, EXPANDABLELISVIEW, LISTVIEW]
 
 # JAVA TEMPLATES
-ARRAY_JAVA = 'ArrayList<${CLASS}>'
 TYPE_JAVA = 'Type'
 CLASS = 'Class'
-BOOL_JAVA = 'Boolean'
-INT_JAVA = 'int'
-STRING_JAVA = 'String'
-DATE_JAVA = 'Date'
 CUSTOM_JAVA = 'Custom'
 CUSTOM_ARRAY = 'Custom Array'
 IMPORT_ARRAY = 'Import Array'
@@ -126,6 +121,7 @@ GROUP_CLASS = '_Group'
 GROUP_STRING = '\tString type;'
 INTERFACE_IDENTIFIER='	public String get_snomed_ct_118522005();'
 GETTERS_SETTERS = 'Getters and Setters'
+
 # XML FILETYPES
 STRINGS = 'Strings'
 
