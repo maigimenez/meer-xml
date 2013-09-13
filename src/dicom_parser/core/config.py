@@ -75,21 +75,35 @@ def read_config(path=SETTINGS_PATH):
                  "it should be at ./settings (I was looking for this file: {0})".format(path))
     return config
 
-#TODO: Hay 3 funciones para encontrar la ruta en la configuración: get_properties_path, get_filepath, get_xml_filepath y get_filepath_ontology haz un merge de las tres. 
-def get_filepath(filetype):
+
+#TODO: Hay 3 funciones para encontrar la ruta en la configuración: get_properties_path, get_filepath y get_filepath_ontology haz un merge de las tres. 
+def get_filepath(filetype,language_code=None):
     """ Return the output path for the file type (section) given """ 
     config = read_config()
     try:
         # If the user has its own output paths setting get them. 
         # Otherwise use default settings.
         user_settings = config.get(USER_SETTINGS_PATH,OUTPUT_DIRECTORIES_SECTION)
-        if( exists(user_settings)):
+
+         #Get the path for the filename for the language_code
+        if(exists(user_settings)):
             user_config = read_config(user_settings)
-            return user_config.get(OUTPUT_DIRECTORIES_SECTION,filetype)
-        return config.get(OUTPUT_DIRECTORIES_SECTION,filetype)
-    # Default Settings
+            if (filetype == STRINGS and language_code):
+                output_directory = user_config.get(OUTPUT_DIRECTORIES_SECTION,STRINGS_OUTPUT_OPTION)
+                #Get the path for the filename for the language_code
+                xml_filename = config.get(XML_STRINGS_SECTION,language_code)
+                # Return filepath for string given a language
+                return join(output_directory, xml_filename)
+            else:            
+                # Return user configuration
+                return user_config.get(OUTPUT_DIRECTORIES_SECTION,filetype)
+        else:
+            # Return default configuration
+            return config.get(OUTPUT_DIRECTORIES_SECTION,filetype)
     except ConfigParser.NoOptionError:
-        return config.get(OUTPUT_DIRECTORIES_SECTION,filetype)
+        #TODO: Handle properly this error
+        return "Path not found", filetype, language_code
+
 
 def get_properties_path(language):
     """ Return the path for the properties given the language """
@@ -98,21 +112,6 @@ def get_properties_path(language):
                 language+
                 config.get(EXTENSIONS_SECTION, PROPERTIES_EXTENSION))
 
-def get_xml_filepath(language_code,filetype):
-    """ Return the xml file for the strings in the language given by the language_code parameter """
-    config = read_config()
-    if (filetype == STRINGS):
-        #Get the root path for the outputs
-        output_directory = config.get(OUTPUT_DIRECTORIES_SECTION,STRINGS_OUTPUT_OPTION)
-        # If the directory does not exist, create it. 
-        if( not exists(output_directory)):
-            makedirs(output_directory)
-        #Get the path for the filename for the language_code
-        xml_filename = config.get(XML_STRINGS_SECTION,language_code)
-    else:
-        # TODO: throw an error. 
-        pass
-    return join(output_directory, xml_filename)
 
 def get_template_filename(template):
     """ Given a template name, returns the path and the filename """

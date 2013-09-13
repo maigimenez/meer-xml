@@ -3,7 +3,7 @@ package {{ package }};
 {% for import in imports -%}
 	{{import}}
 {% endfor %}
-public class {{ class_name }} {
+public {{class_type}} {{ class_name }} {{ implements_class }}{
 
     {% for attribute in attributes -%}
         {{attribute}}

@@ -109,12 +109,11 @@ LAYOUT_TEMPLATES = [END, HEADER, MAIN_LEFT, RIGHT, NEXT_LEVEL, GENERIC_TITLE,
 
 # JAVA TEMPLATES
 TYPE_JAVA = 'Type'
-CLASS = 'Class'
+CLASS_TEMPLATE = 'Class'
 CUSTOM_JAVA = 'Custom'
 CUSTOM_ARRAY = 'Custom Array'
 IMPORT_ARRAY = 'Import Array'
 CHILD_CLASS = '_Children'
-INTERFACE_CLASS = 'Interface class'
 IMPLEMENT_CLASS = 'Implement class'
 CHILD_STRING = 'String instance;'
 GROUP_CLASS = '_Group'

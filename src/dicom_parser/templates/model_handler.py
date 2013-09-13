@@ -2,14 +2,59 @@
 from core.config import get_model_file, get_property
 from core.config_variables import (CHILD_CLASS, GROUP_CLASS, GROUP_STRING,
 								   MODEL_TEMPLATES_SECTION, CUSTOM_JAVA,
-								   CLASS, NUM, TEXT, CODE, DATE,
+								   CLASS_TEMPLATE, NUM, TEXT, CODE, DATE,
 								   CUSTOM_ARRAY, INTERFACE_IDENTIFIER,
-								   INTERFACE_CLASS, GETTERS_SETTERS,
-								   TYPE_JAVA)
+								   GETTERS_SETTERS, TYPE_JAVA)
 from core.java_types import (ARRAY, BOOL, DATE, INT, STRING, IMPORT_DATE,
-                             IMPORT_ARRAY)
+                             IMPORT_ARRAY, INTERFACE, CLASS)
 from os.path import isfile
 from string import Template
+
+
+def add_tree_hierarchy(flat_tree, container, children, class_name):
+    """ Store a container's code class and code schema 
+        so when its children are created we will have it
+
+        Keyword Arguments:
+        flat_tree -- hash table where its stored containers and children
+                 withot its model created.
+        container -- we want to store its data 
+        children -- container's children. Holds the hierarchy
+        class_name -- this container's class name 
+    """
+    container_schema_code = (container.get_code(), container.get_schema())
+    flat_tree[container_schema_code]=[]
+    for child in children:
+        flat_tree[container_schema_code].append((child.value.get_schema_code(),class_name))
+
+def get_parent_class(flat_tree, container):
+    """ Find parent code and its grandfather class. 
+
+    Keyword Arguments:
+    flat_tree -- hash table where its stored containers and children
+                 withot its model created.
+    container -- we want to know its parent 
+    parent_code -- return parent's code (default None)
+    parent_schema -- return parent's schema (default None)
+    gparent_class -- return grandfather class (default None)
+
+    """
+    parent_code = None
+    parent_schema = None
+    gparent_class = None
+
+    if (flat_tree):
+        for parent,children_codes in flat_tree.iteritems():
+            for child in children_codes:
+                if container.get_schema_code() == child[0]:
+                    parent_code, parent_schema = parent
+                    gparent_class = child[1]
+                    children_codes.remove(child)
+                    if (not children_codes):
+                        del flat_tree[parent]
+                    return (parent_code,parent_schema,gparent_class)
+    return (parent_code,parent_schema,gparent_class)
+
 
 def write_group_class (environment, template_model_file, class_name, attribute_variable, package):
 	""" Write group class
@@ -49,9 +94,10 @@ def write_group_class (environment, template_model_file, class_name, attribute_v
 		methods.append( getters_setters_template.render(type="children",
 														variable_type=type_name))
 		# Load model template and write the class
-		template_name = get_property(MODEL_TEMPLATES_SECTION, CLASS)
+		template_name = get_property(MODEL_TEMPLATES_SECTION, CLASS_TEMPLATE)
 		template = environment.get_template(template_name)
 		model_file.write(template.render(package=package,
+										 class_type=CLASS,
 										 imports=imports,
 										 class_name=class_name+GROUP_CLASS,
 										 attributes=attributes,
@@ -78,9 +124,10 @@ def write_children_interface (environment, template_model_file, class_name, pack
 		# Create a list with this class attributes and add a default get Id 
 		attributes = [INTERFACE_IDENTIFIER]
 		# Load model template and write the class
-		template_name = get_property(MODEL_TEMPLATES_SECTION, INTERFACE_CLASS)
+		template_name = get_property(MODEL_TEMPLATES_SECTION, CLASS_TEMPLATE)
 		template = environment.get_template(template_name)
-		model_file.write(template.render(package=package,
+		model_file.write(template.render(class_type=INTERFACE,
+										 package=package,
 										 class_name=class_name+CHILD_CLASS,
 										 attributes=attributes))
 		model_file.close()
