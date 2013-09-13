@@ -76,6 +76,7 @@ def write_template(template, languages, xml_files, report=None):
             section = template
     else:
         section = template
+        
     # Get the template path and its filename
     template_path, template_filename = get_template_filename(template)
 

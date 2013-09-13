@@ -1,5 +1,7 @@
     <!-- Default buttons -->
+    <string name="edit">{{ edit }}</string>
     <string name="add">{{ add }}</string>
+    <string name="delete">{{ delete }}</string>
     <string name="finish">{{ finish }}</string>
     <string name="validate">{{ validate }}</string>
     <string name="change">{{ change }}</string>
