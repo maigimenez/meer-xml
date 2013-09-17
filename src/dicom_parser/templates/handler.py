@@ -1,34 +1,28 @@
  #  -*- coding: utf-8 -*-
-from jinja2 import Environment, PackageLoader, TemplateNotFound
-from os.path import join, exists, isfile
-from core.config import (get_filepath, get_substitution_dictionary,
-                         get_layout_settings,
+from os.path import isfile
+from core.config import (get_filepath, get_layout_settings,
                          get_children_settings, get_template_model_file,
-                         get_languages,instantiate_filename,
-                         get_class_name,get_model_file, set_environment,
+                         get_languages, instantiate_filename,
+                         get_class_name, get_model_file, set_environment,
                          get_property)
-from core.config_variables import (I18N_INPUT, I18N,
-                                   COLUMN_1, COLUMNS_2,
-                                   TREE_TITLE, NUM, TEXT, DATE,
-                                   DEFAULT, DEFAULT_INPUT, STRINGS,
+from core.config_variables import (COLUMN_1, COLUMNS_2, STRINGS,
                                    DEFAULT_STRINGS, LEVEL_STRINGS,
                                    CHILDREN_ARRAYS, DICOM_LEVEL,
                                    MODEL_TEMPLATES_PATH,
                                    ACTIVITIES_TEMPLATES_PATH,
                                    MODEL_TEMPLATES_SECTION, CLASS_TEMPLATE,
-                                   ANDROID_PACKAGES,PACKAGE_MODEL,
-                                   CUSTOM_JAVA,BASE_MODEL, LISTVIEW,
-                                   EXPANDABLELISVIEW,
-                                   ACTIVITIES_TEMPLATES_SECTION, ACTIVITY,
-                                   IMPORT_DATE, CUSTOM_ARRAY, IMPORT_ARRAY,
-                                   CHILD_CLASS, GROUP_CLASS, CODE_ARRAYS, CODE)
-from core.java_types import CLASS, INTERFACE, IMPLEMENTS
+                                   ANDROID_PACKAGES, PACKAGE_MODEL,
+                                   BASE_MODEL, ACTIVITIES_TEMPLATES_SECTION,
+                                   ACTIVITY, CHILD_CLASS, CODE_ARRAYS)
+from core.java_types import CLASS, IMPLEMENTS
 from strings_handler import write_template
-from layouts_handler import write_two_columns_layout, write_one_column_layout_one_level
+from layouts_handler import (write_two_columns_layout,
+                             write_one_column_layout_one_level)
 from activities_handler import write_manifest, get_spinners
-from model_handler import ( write_group_class, get_attributes, get_children,
-                            get_parent_class, add_tree_hierarchy)
+from model_handler import (get_attributes, get_children,
+                           get_parent_class, add_tree_hierarchy)
 from string import Template
+
 
 def write_strings(language_code, report):
     """ Write all needed strings in report for all supported languages.
@@ -44,7 +38,7 @@ def write_strings(language_code, report):
     strings_files = {}
     # Get and open current language file
     for language in languages:
-        strings_filename[language] = get_filepath(STRINGS,language)
+        strings_filename[language] = get_filepath(STRINGS, language)
         strings_files[language] = open(strings_filename[language], 'w')
         strings_files[language].write(
             u'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
@@ -64,12 +58,13 @@ def write_strings(language_code, report):
 
 ###################################LAYOUTS###################################
 
+
 def get_parent_code_schema(flat, container):
     for parent, children in flat.iteritems():
         for child in children:
             if (container == child):
                 return parent.get_code(), parent.get_schema()
-    return None,None
+    return None, None
 
 
 def write_layouts(xml_filenames, report, language_code):
@@ -112,39 +107,37 @@ def write_layouts(xml_filenames, report, language_code):
             write_two_columns_layout(layout_filename, container, children,
                                      children_layout, language_code)
 
-##########################################JAVA ##################################################
+##########################JAVA #########################################
 
 
-
-
-def write_model(java_filenames, report,language_code):
+def write_model(java_filenames, report, language_code):
     template_model_file = get_template_model_file()
-    
+
     # Set the Environment for the jinja2 templates and get the template
     environment = set_environment(MODEL_TEMPLATES_PATH)
-    package = get_property(ANDROID_PACKAGES,PACKAGE_MODEL)
+    package = get_property(ANDROID_PACKAGES, PACKAGE_MODEL)
     # Store an ids list of expandable.
     expandables = []
     flat_tree = {}
 
     #Write model for every container.
-    for container,children in report.report.depthFirstChildren():
+    for container, children in report.report.depthFirstChildren():
         imports = []
-        found = False
 
         #Get parent code, parent schema and grandparent class
-        parent_code,parent_schema,gparent_class = get_parent_class(flat_tree,
-                                                                   container)
+        parent_code, parent_schema, gparent_class = get_parent_class(flat_tree,
+                                                                     container)
 
         # Build this container java filename using its parent codes and its own
         class_name = get_class_name(container.get_schema(),
                                     container.get_code(),
-                                    parent_schema,parent_code).replace('-','_')
+                                    parent_schema,
+                                    parent_code).replace('-', '_')
 
-        # Build a parent/children codes hash table. 
+        # Build a parent/children codes hash table.
         # We will use it for parent_code and schema.
         if (children):
-            add_tree_hierarchy(flat_tree,container,children, class_name)
+            add_tree_hierarchy(flat_tree, container, children, class_name)
 
         model_filename = get_model_file(template_model_file, class_name)
 
@@ -152,51 +145,52 @@ def write_model(java_filenames, report,language_code):
         if (not isfile(model_filename)):
             model_file = open(model_filename, 'w')
             # Get the attributes.
-            java_attributes, getter_setters = get_attributes(environment,
-                                                    container.attributes, 
-                                                    imports)
-            # Get children attributes
-            parent_class = (container.get_schema().lower().capitalize() + 
+            attributes, methods = get_attributes(environment,
+                                                 container.attributes,
+                                                 imports)
+            # Get children attributes and its methods
+            parent_class = (container.get_schema().lower().capitalize() +
                             '_' + container.get_code().lower())
 
-            children_attributes, children_methods = get_children(environment,
-                                                                 children,
-                                                                 imports,
-                                                                 parent_class,
-                                                                 class_name,
-                                                                 expandables,
-                                                                 template_model_file,
-                                                                 package)
+            c_attributes, c_methods = get_children(environment,
+                                                   children,
+                                                   imports,
+                                                   parent_class,
+                                                   class_name,
+                                                   expandables,
+                                                   template_model_file,
+                                                   package)
 
-            java_attributes.extend(children_attributes)
-            getter_setters.extend(children_methods)
+            attributes.extend(c_attributes)
+            methods.extend(c_methods)
             #Write the model
             # If this class will be expandable in activity.
-            # Child class should extend its parent interface. 
-            template_name = get_property(MODEL_TEMPLATES_SECTION,CLASS_TEMPLATE)
+            # Child class should extend its parent interface.
+            template_name = get_property(MODEL_TEMPLATES_SECTION,
+                                         CLASS_TEMPLATE)
             template = environment.get_template(template_name)
-            # If this class has expandables it has to implement 
+            # If this class has expandables it has to implement
             # the children interface class
-            if (class_name in expandables and 
-                container.properties.max_cardinality == -1):
-                implement_class =  Template(IMPLEMENTS).safe_substitute(
-                                        PARENT_CLASS=gparent_class+CHILD_CLASS)
-                model_file.write(template.render(package=package,
-                                        class_type=CLASS,
-                                        class_name=class_name,
-                                        attributes=java_attributes,
-                                        imports=imports,
-                                        implements_class=implement_class,
-                                        methods=getter_setters))              
-            else:                
-                model_file.write(template.render(package=package,
-                                        class_type=CLASS,
-                                        class_name=class_name,
-                                        attributes=java_attributes,
-                                        imports=imports,
-                                        methods=getter_setters))
-
-
+            has_multiple_children = container.properties.max_cardinality == -1
+            if (class_name in expandables and has_multiple_children):
+                implement_class = Template(IMPLEMENTS).safe_substitute(
+                    PARENT_CLASS=gparent_class + CHILD_CLASS)
+                model_file.write(
+                    template.render(package=package,
+                                    class_type=CLASS,
+                                    class_name=class_name,
+                                    attributes=attributes,
+                                    imports=imports,
+                                    implements_class=implement_class,
+                                    methods=methods))
+            else:
+                model_file.write(
+                    template.render(package=package,
+                                    class_type=CLASS,
+                                    class_name=class_name,
+                                    attributes=attributes,
+                                    imports=imports,
+                                    methods=methods))
             model_file.close()
         else:
             print "Java class {0} already created".format(model_filename)
@@ -212,20 +206,20 @@ def write_activities(activities_filenames, report):
     environment = set_environment(ACTIVITIES_TEMPLATES_PATH)
 
     # TODO: set launcher activity
-    # Get report root container. This will be the launcher activity.             
+    # Get report root container. This will be the launcher activity.
     report_root = report.get_root()
 
     # Variables to store data
     activities = []
     launcher_activity = ""
 
-    package = get_property(ANDROID_PACKAGES,BASE_MODEL)
+    package = get_property(ANDROID_PACKAGES, BASE_MODEL)
 
     #Write layout for every file
     for container, children in flat.iteritems():
         activity = {}
         # Get the filenames for this container. It depends on its parent
-        activity_filename_template = activities_filenames[str(container.tree_level)]
+        activity_template = activities_filenames[str(container.tree_level)]
         child_name = (container.get_schema() + '_' +
                       container.get_code())
         parent_code, parent_schema = get_parent_code_schema(flat, container)
@@ -234,13 +228,13 @@ def write_activities(activities_filenames, report):
         else:
             parent_name = None
         activity_filename = instantiate_filename(str(container.tree_level),
-                                               activity_filename_template,
-                                               child_name,
-                                               parent_name)
-        # Get the layout id and the activity name. It matches partially 
+                                                 activity_template,
+                                                 child_name,
+                                                 parent_name)
+        # Get the layout id and the activity name. It matches partially
         # with the activity filename.
         layout_id = activity_filename.split('/')[-1].split('.')[0].lower()
-        activity_name = activity_filename.split('/')[-1].split('.')[0]
+        activity = activity_filename.split('/')[-1].split('.')[0]
 
         # Store info to write the Android Manifest
         # Check if this activity is the launcher
@@ -248,7 +242,7 @@ def write_activities(activities_filenames, report):
             activity['launcher'] = True
         else:
             activity['launcher'] = False
-        activity['name'] = activity_name
+        activity['name'] = activity
         activities.append(activity)
 
         # Get children layout if there are childrens in this container.
@@ -261,36 +255,40 @@ def write_activities(activities_filenames, report):
         # Log purpose info
         print
         print "[Level {0}] {1}".format(container.tree_level, children_layout)
-        print activity_filename, package, activity_name
+        print activity_filename, package, activity
         spinners = get_spinners(container.attributes)
         print len(spinners)
 
-        # Write activity file 
+        # Write activity file
         if (not isfile(activity_filename)):
             activity_file = open(activity_filename, 'w')
             render_children = None
-            #If there are children, will be a listview or an expandable listview to load
+            # If there are children, will be a listview or
+            # an expandable listview to load
             if (children_layout):
-                template_name =  get_property(ACTIVITIES_TEMPLATES_SECTION,children_layout)
+                template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,
+                                             children_layout)
                 template = environment.get_template(template_name)
                 child_list = layout_id.split('_')[-1].upper()
                 render_children = template.render(string_array=child_list)
 
-            template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,ACTIVITY)
+            template_name = get_property(
+                ACTIVITIES_TEMPLATES_SECTION,
+                ACTIVITY)
             template = environment.get_template(template_name)
-            #TODO: Find a better way to solve this. 
-            # Problem: if childview is None jinja is defined does not work 
+            #TODO: Find a better way to solve this.
+            # Problem: if childview is None jinja is defined does not work
             if (render_children):
                 activity_file.write(template.render(package_name=package,
-                                            activity_name=activity_name,
-                                            layout_file=layout_id,
-                                            childview=render_children,
-                                            spinners=spinners))
+                                                    activity_name=activity,
+                                                    layout_file=layout_id,
+                                                    childview=render_children,
+                                                    spinners=spinners))
             else:
                 activity_file.write(template.render(package_name=package,
-                                            activity_name=activity_name,
-                                            layout_file=layout_id,
-                                            spinners=spinners))
+                                                    activity_name=activity,
+                                                    layout_file=layout_id,
+                                                    spinners=spinners))
             print template_name
             activity_file.close()
         else:
@@ -298,8 +296,5 @@ def write_activities(activities_filenames, report):
     print
     print
 
-    print launcher_activity , type(launcher_activity)
-    write_manifest(package,activities,launcher_activity)
-
-
-
+    print launcher_activity, type(launcher_activity)
+    write_manifest(package, activities, launcher_activity)

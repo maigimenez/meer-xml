@@ -1,12 +1,9 @@
 #  -*- coding: utf-8 -*-
-from jinja2 import Environment, PackageLoader, TemplateNotFound
-from os.path import join, exists
 from core.config_variables import (TEMPLATE_BY_ID, TEMPLATE_BY_REPORT,
-                                   STRING_TEMPLATES, STRING_TEMPLATES_PATH,
-                                   TEMPLATES_SECTION, TEMPLATES_ROOT_PATH,
-                                   TEMPLATE_PACKAGE)
-from core.config import (get_template_filename, get_property, 
-                         get_substitution_dictionary, set_environment)
+                                   STRING_TEMPLATES_PATH)
+from core.config import (get_template_filename, get_substitution_dictionary,
+                         set_environment)
+
 
 #TODO: Capture the exceptions
 def substitute_words(environment, section,
@@ -76,11 +73,11 @@ def write_template(template, languages, xml_files, report=None):
             section = template
     else:
         section = template
-        
+
     # Get the template path and its filename
     template_path, template_filename = get_template_filename(template)
 
-    # The template is STRING type. 
+    # The template is STRING type.
     # This handler only get string templates. So this check is redundant
     # if (template in STRING_TEMPLATES):
     env = set_environment(STRING_TEMPLATES_PATH)
@@ -89,11 +86,11 @@ def write_template(template, languages, xml_files, report=None):
     if (template in TEMPLATE_BY_REPORT):
         localized_strings = get_localized_report(env, template_filename,
                                                  languages, template, report)
-    #Templates localized by Report Ontology ID or default strings. 
+    #Templates localized by Report Ontology ID or default strings.
     else:
         localized_strings = substitute_words(env, section, template_filename,
                                              languages, template)
-        
+
     #Write the localized string
     for language, localized_string in localized_strings.iteritems():
         xml_files[language].write(

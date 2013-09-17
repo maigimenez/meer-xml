@@ -1,14 +1,16 @@
 #  -*- coding: utf-8 -*-
-from os.path import isfile
-from core.config import set_environment, get_property, get_language_code
-from core.config_variables import (LAYOUT_TEMPLATES_PATH, 
+from os.path import isfile, join
+from core.config import (set_environment, get_property, get_language_code,
+                         get_template_filename)
+from core.config_variables import (LAYOUT_TEMPLATES_PATH,
                                    LAYOUT_TEMPLATES_SECTION, TWO_COLUMNS,
                                    ONE_COLUMN, NUM, DATE, TEXT, TREE_TITLE,
-                                   GENERIC_TITLE,NEXT_LEVEL, BOOL, SCROLL,
+                                   GENERIC_TITLE, NEXT_LEVEL, BOOL, SCROLL,
                                    LISTVIEW, EXPANDABLELISVIEW, ATTRIBUTES,
                                    CODE)
 
-#TODO: Check when is been used GENERIC_TITLE, TREE_TITLE, NEXT_LEVEL and SCROLL 
+#TODO: Check when is been used GENERIC_TITLE, TREE_TITLE, NEXT_LEVEL and SCROLL
+
 
 def write_template_snippet(layout_file, template_name):
     """ Write a template snippet that does NOT requiere substitution
@@ -112,7 +114,8 @@ def get_attributes_list(environment, attributes,
     """
     attributes_layouts = []
     current_item = ""
-    # If the attribute is the first one, it should not be aligned below any other attribute
+    # If the attribute is the first one,
+    # it should not be aligned below any other attribute
     first_attribute = True
     # Get android xml layout for every attribute
     for attribute in attributes:
@@ -150,8 +153,8 @@ def get_attributes_list(environment, attributes,
     return attributes_layouts, current_item
 
 
-def get_children(environment, children_code,
-                  previous_item, children_layout):
+def get_children(environment, children_code, previous_item,
+                 children_layout):
     children, current_item = get_template_substitution(
         environment,
         children_layout,
@@ -221,7 +224,7 @@ def write_two_columns_layout(layout_filename, container, children,
         template = environment.get_template(template_name)
         #Atrtibutes template
         attributes_template = environment.get_template(
-                get_property(LAYOUT_TEMPLATES_SECTION, ATTRIBUTES))
+            get_property(LAYOUT_TEMPLATES_SECTION, ATTRIBUTES))
 
         # Store previous concept id
         layout_prev_item = "code_{0}".format(container.get_code())
@@ -239,15 +242,18 @@ def write_two_columns_layout(layout_filename, container, children,
                                                              left_attributes,
                                                              layout_prev_item,
                                                              language_code)
-            left_content = attributes_template.render(previous_item=layout_prev_item,
-                                                      items=left_items)
-            right_items, previous_item = get_attributes_list(environment,
-                                                             right_attributes,
-                                                             previous_item,
-                                                             language_code)
+            left_content = attributes_template.render(
+                previous_item=layout_prev_item,
+                items=left_items)
+            right_items, previous_item = get_attributes_list(
+                environment,
+                right_attributes,
+                previous_item,
+                language_code)
 
-            right_content = attributes_template.render(previous_item='right_layout',
-                                                       items=right_items)
+            right_content = attributes_template.render(
+                previous_item='right_layout',
+                items=right_items)
         # There are ATTRIBUTES and CHILDREN in this layout
         elif((len(container.attributes) > 0) and (len(children) > 0)):
             attributes = container.attributes
@@ -257,8 +263,9 @@ def write_two_columns_layout(layout_filename, container, children,
                                                              attributes,
                                                              layout_prev_item,
                                                              language_code)
-            left_content = attributes_template.render(previous_item=layout_prev_item,
-                                                      items=left_items)
+            left_content = attributes_template.render(
+                previous_item=layout_prev_item,
+                items=left_items)
             right_content, previous_item = get_children(environment,
                                                         concept,
                                                         previous_item,

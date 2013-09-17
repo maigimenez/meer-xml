@@ -226,16 +226,17 @@ class DicomParser(xml.sax.handler.ContentHandler):
                     self._current_attribute.concept,
                     len(self._code_values)))
             self._current_attribute.properties = self._property
-            self._report.add_attribute(self._child_level,self._current_attribute) 
+            self._report.add_attribute(self._child_level,
+                                       self._current_attribute)
             self._in_type = False
             self._concept = None
             self._property = None
 
-        if ( name == "CODE_VALUES"):
+        if (name == "CODE_VALUES"):
             #print len(self._code_values)
             self._current_attribute.options = self._code_values[:]
             self._in_code_values = False
-    
+
         if (name == "UNIT_MEASUREMENT"):
             self._in_unit_measurement = False
 
