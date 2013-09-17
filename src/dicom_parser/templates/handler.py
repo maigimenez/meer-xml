@@ -234,7 +234,7 @@ def write_activities(activities_filenames, report):
         # Get the layout id and the activity name. It matches partially
         # with the activity filename.
         layout_id = activity_filename.split('/')[-1].split('.')[0].lower()
-        activity = activity_filename.split('/')[-1].split('.')[0]
+        a_name = activity_filename.split('/')[-1].split('.')[0]
 
         # Store info to write the Android Manifest
         # Check if this activity is the launcher
@@ -242,7 +242,7 @@ def write_activities(activities_filenames, report):
             activity['launcher'] = True
         else:
             activity['launcher'] = False
-        activity['name'] = activity
+        activity['name'] = a_name
         activities.append(activity)
 
         # Get children layout if there are childrens in this container.
@@ -255,7 +255,7 @@ def write_activities(activities_filenames, report):
         # Log purpose info
         print
         print "[Level {0}] {1}".format(container.tree_level, children_layout)
-        print activity_filename, package, activity
+        print activity_filename, package, a_name
         spinners = get_spinners(container.attributes)
         print len(spinners)
 
@@ -280,13 +280,13 @@ def write_activities(activities_filenames, report):
             # Problem: if childview is None jinja is defined does not work
             if (render_children):
                 activity_file.write(template.render(package_name=package,
-                                                    activity_name=activity,
+                                                    activity_name=a_name,
                                                     layout_file=layout_id,
                                                     childview=render_children,
                                                     spinners=spinners))
             else:
                 activity_file.write(template.render(package_name=package,
-                                                    activity_name=activity,
+                                                    activity_name=a_name,
                                                     layout_file=layout_id,
                                                     spinners=spinners))
             print template_name
