@@ -46,8 +46,8 @@ def get_localized_report(environment, template_name, language_code,
     """
     template = environment.get_template(template_name)
     # Get a dictionary with words that will be used in the template.
-    substitution_languages = report.get_data_form_report(
-        language_code, template_var)
+    substitution_languages = report.get_data_from_report(
+        template_var, language_code)
     strings_render = {}
     for language, dict_words in substitution_languages.iteritems():
         strings_render[language] = template.render(dict_words)
@@ -65,6 +65,7 @@ def write_template(template, languages, xml_files, report=None):
     report -- dicom report where information is taken.
 
     """
+
     # Set the section of the template name for the strings.
     if (report is not None):
         if (template in TEMPLATE_BY_ID):

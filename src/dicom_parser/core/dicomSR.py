@@ -31,14 +31,15 @@ class DicomSR(object):
     def get_root(self):
         return self.report.value
 
-    def get_data_form_report(self, languages, template_type):
+    def get_data_from_report(self, template_type, languages=None , position=None):
         """ Return data from the report in a dictionary
 
         Keyword arguments:
-        language_code -- language for the data returned
+        languages -- list of languages supported in the  report. 
         template_type -- indicates the template type and
                          therefore the information to extract from the report.
         self -- Dict Report with the information extracted from the dicom XML.
+        position -- dictionary where it's stored parent and its children position
 
         """
         substitution_words = {}
@@ -87,19 +88,39 @@ class DicomSR(object):
                 nodes_tag = MULTIPLE_PROPERTIES[CHILDREN_ARRAYS][0]
                 parent_tag = MULTIPLE_PROPERTIES[CHILDREN_ARRAYS][1]
                 children_tag = MULTIPLE_PROPERTIES[CHILDREN_ARRAYS][2]
-                for language in languages:
-                    substitution_words[language] = {nodes_tag: []}
-                flat = {}
+                # Get a flat version of the report
+                # TODO: check if the flat version of the tree is always the same 
+                flat = {} 
                 self.report.get_flat_tree(flat)
                 #Delete leaf items. They are not needed
-                flat = {key: flat[key] for key in flat if flat[key]}
-                for parent, children in flat.iteritems():
-                     for language in languages:
-                         aux = {parent_tag: parent.get_code(), children_tag: []}
-                         for child in children:
-                             aux[children_tag].append(
-                                 child.get_meaning()[language])
-                         substitution_words[language][nodes_tag].append(aux)
+                flat = {key: flat[key] for key in flat if flat[key]}                
+                if languages:
+                    for language in languages:
+                        substitution_words[language] = {nodes_tag: []}
+                
+                    for parent, children in flat.iteritems():
+                        for language in languages:                            
+                            aux = {parent_tag: parent.get_code(), children_tag: []}
+                            position = 0
+                            for child in children:
+                                aux[children_tag].append(
+                                    child.get_meaning()[language])
+                                #print parent.get_schema_code(), child.get_schema_code(), position
+                                position += 1
+                            substitution_words[language][nodes_tag].append(aux)
+                else:
+                    #print position_dict
+                    for parent, children in flat.iteritems():
+                        p_code = (parent.get_schema(),
+                                         parent.get_code())
+                        #print type(parent_code)
+                        position[p_code] = {}
+                        pos = 0
+                        for child in children:
+                            position[p_code][pos] = child.get_schema_code()
+                            pos += 1
+                   # print position_dict
+                            
 
             elif (template_type == CODE_ARRAYS):
                 #TODO: Change comment on this template to make it different 

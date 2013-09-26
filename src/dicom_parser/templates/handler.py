@@ -214,7 +214,10 @@ def write_activities(activities_filenames, report):
     launcher_activity = ""
 
     package = get_property(ANDROID_PACKAGES, BASE_MODEL)
-
+    
+    position = {}
+    report.get_data_from_report(CHILDREN_ARRAYS, position=position)
+    #print position
     #Write layout for every file
     for container, children in flat.iteritems():
         activity = {}
@@ -238,6 +241,7 @@ def write_activities(activities_filenames, report):
 
         # Store info to write the Android Manifest
         # Check if this activity is the launcher
+        # TODO :  activity['launcher'] = (container.get_schema_code() == report_root)
         if (container.get_schema_code() == report_root):
             activity['launcher'] = True
         else:
@@ -253,11 +257,11 @@ def write_activities(activities_filenames, report):
             children_layout = None
 
         # Log purpose info
-        print
-        print "[Level {0}] {1}".format(container.tree_level, children_layout)
-        print activity_filename, package, a_name
+        #print
+        #print "[Level {0}] {1}".format(container.tree_level, children_layout)
+        #print activity_filename, package, a_name
         spinners = get_spinners(container.attributes)
-        print len(spinners)
+        #print len(spinners)
 
         # Write activity file
         if (not isfile(activity_filename)):
@@ -270,7 +274,20 @@ def write_activities(activities_filenames, report):
                                              children_layout)
                 template = environment.get_template(template_name)
                 child_list = layout_id.split('_')[-1].upper()
-                render_children = template.render(string_array=child_list)
+                children_position=[]
+                schema_code = (container.get_schema(),container.get_code())
+        
+                for child_pos, child_code in position[schema_code].iteritems():
+                    activity_template = activities_filenames[str(container.tree_level+1)]
+                    c_schema_code  = child_code.lower()
+                    child_filename = instantiate_filename(str(container.tree_level+1),
+                                                 activity_template,
+                                                 c_schema_code,
+                                                 child_name)
+                    c_name = child_filename.split('/')[-1].split('.')[0]
+                    children_position.append({"position":child_pos,"class_name":c_name})
+                render_children = template.render(string_array=child_list,
+                                                  children=children_position)
 
             template_name = get_property(
                 ACTIVITIES_TEMPLATES_SECTION,
@@ -289,12 +306,12 @@ def write_activities(activities_filenames, report):
                                                     activity_name=a_name,
                                                     layout_file=layout_id,
                                                     spinners=spinners))
-            print template_name
+            #print template_name
             activity_file.close()
         else:
             print "Activity {0} already created".format(activity_filename)
-    print
-    print
+    #print
+    #print
 
-    print launcher_activity, type(launcher_activity)
+    #print launcher_activity, type(launcher_activity)
     write_manifest(package, activities, launcher_activity)
