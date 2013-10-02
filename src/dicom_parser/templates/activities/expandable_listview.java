@@ -1,5 +1,5 @@
 
-        ListView listview_{{string_array}} = (ListView) findViewById(R.id.list_{{ string_array }});
-        String[] items = getResources().getStringArray(R.array.list_{{string_array}});
-        ArrayAdapter<String> adapter_{{string_array}} = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-        listview_{{string_array}}.setAdapter(adapter_{{string_array}});
+        children = SetChildren();
+        {{ string_array }}_elist = (ExpandableListView) findViewById(R.id.list_{{ string_array }});
+        adapter = new {{string_array}}_ListAdapter({{ activity_name }}.this,children);
+        {{string_array}}_elist.setAdapter(adapter);

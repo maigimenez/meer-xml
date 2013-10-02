@@ -42,6 +42,8 @@ COLUMNS_2 = "2 Columns"
 #ACTIVITIES
 ACTIVITIES="Activities"
 ACTIVITY = 'Activity'
+SET_CHILDREN = 'SetChildren Method'
+EXPANDABLE_ATTRIBUTES = 'Expandable Attributes'
 
 # This variables match with the settings.ini
 # TEMPLATE_TYPES
@@ -112,7 +114,6 @@ TYPE_JAVA = 'Type'
 CLASS_TEMPLATE = 'Class'
 CUSTOM_JAVA = 'Custom'
 CUSTOM_ARRAY = 'Custom Array'
-IMPORT_ARRAY = 'Import Array'
 CHILD_CLASS = '_Children'
 CHILD_STRING = 'String instance;'
 GROUP_CLASS = '_Group'
