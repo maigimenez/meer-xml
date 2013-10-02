@@ -44,6 +44,7 @@ ACTIVITIES="Activities"
 ACTIVITY = 'Activity'
 SET_CHILDREN = 'SetChildren Method'
 EXPANDABLE_ATTRIBUTES = 'Expandable Attributes'
+LISTADAPTER = 'ListAdapter'
 
 # This variables match with the settings.ini
 # TEMPLATE_TYPES
