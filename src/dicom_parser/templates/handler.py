@@ -1,5 +1,5 @@
  #  -*- coding: utf-8 -*-
-from os.path import isfile
+from os.path import isfile, join
 from core.config import (get_filepath, get_layout_settings,
                          get_children_settings, get_template_model_file,
                          get_languages, instantiate_filename,
@@ -15,7 +15,9 @@ from core.config_variables import (COLUMN_1, COLUMNS_2, STRINGS,
                                    BASE_MODEL, ACTIVITIES_TEMPLATES_SECTION,
                                    ACTIVITY, CHILD_CLASS, CODE_ARRAYS,
                                    SET_CHILDREN,EXPANDABLELISVIEW,
-                                   EXPANDABLE_ATTRIBUTES)
+                                   EXPANDABLE_ATTRIBUTES,LISTADAPTER,
+                                   LISTADAPTER_FILE, TEMPLATES_SECTION,
+                                   ACTIVITIES)
 from core.java_types import (CLASS, IMPLEMENTS, IMPORT_ARRAY,
                              IMPORT_EXPANDABLE_LISTVIEW,
                              IMPORT_CUSTOM)
@@ -243,7 +245,7 @@ def write_activities(activities_filenames, report):
         # with the activity filename.
         layout_id = activity_filename.split('/')[-1].split('.')[0].lower()
         a_name = activity_filename.split('/')[-1].split('.')[0]
-
+        
         # Store info to write the Android Manifest
         # Check if this activity is the launcher
         # TODO :  activity['launcher'] = (container.get_schema_code() == report_root)
@@ -308,6 +310,7 @@ def write_activities(activities_filenames, report):
                 init_children = template.render(string_array=child_list,
                                                 children=children_position,
                                                 activity_name=a_name)
+                #EXPANDABLELISVIEW OPTIONS
                 if(children_layout==EXPANDABLELISVIEW):
                     # CHILDERN METHODS
                     # Render methods for listview
@@ -328,8 +331,14 @@ def write_activities(activities_filenames, report):
                     template = environment.get_template(template_name)
                     attr_children = template.render(container_class=c_class,
                                                     string_array=c_code)
-                    imports.append(IMPORT_ARRAY)
-                    imports.append(IMPORT_EXPANDABLE_LISTVIEW)
+                    # EXPANDABLE LISVIEW CUSTOM ADAPTER
+                    # Get the output path
+                    path = get_filepath(ACTIVITIES)
+
+                    #adapter_filename = 
+                    template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,
+                                                 LISTADAPTER)
+                    template = environment.get_template(template_name)
                     model_package = get_property(ANDROID_PACKAGES,PACKAGE_MODEL)
                     imports.append(Template(IMPORT_CUSTOM).safe_substitute(
                             PACKAGE=model_package,
@@ -337,12 +346,30 @@ def write_activities(activities_filenames, report):
                     imports.append(Template(IMPORT_CUSTOM).safe_substitute(
                             PACKAGE=model_package,
                             CLASS=c_class+'_Children'))
+
+                    list_adapter = template.render(package_name=package,
+                                                   container_class=c_class,
+                                                   string_array=c_code,
+                                                   imports=imports)
+                    
+                    template_filename = get_property(TEMPLATES_SECTION, 
+                                                     LISTADAPTER_FILE)
+                    adapter_filename = join(path,
+                                            Template(template_filename).\
+                                                safe_substitute(CLASS_NAME=c_code))
+
+                    # Write custom adapter
+                    # TODO: Check if this file already exists
+                    adapter_file = open(adapter_filename,'w')
+                    adapter_file.write(list_adapter)
+                    adapter_file.close()
+                    
                     imports.append(Template(IMPORT_CUSTOM).safe_substitute(
                             PACKAGE=package,
                             CLASS=c_code+'_ListAdapter'))
-                    
-                    print imports
 
+            imports.append(IMPORT_ARRAY)
+            imports.append(IMPORT_EXPANDABLE_LISTVIEW)
 
             # Write Activity Tempalte 
             template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,

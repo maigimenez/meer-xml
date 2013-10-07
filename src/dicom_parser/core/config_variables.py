@@ -66,6 +66,8 @@ MODEL_FILE = 'Model File'
 ACTIVITIES_TEMPLATES_PATH = 'Activity Templates Path'
 ACTIVITIES_TEMPLATES_SECTION = 'Activity Templates'
 
+LISTADAPTER_FILE = 'ListAdapter File'
+
 # STRING TEMPLATES
 DEFAULT_STRINGS = 'default_strings'
 LEVEL_STRINGS = 'level_strings'
