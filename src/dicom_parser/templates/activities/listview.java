@@ -16,8 +16,6 @@
                 default:
                     break;
                 }
-                Toast.makeText(getApplicationContext(), 
-                               "Click ListItem Number " + position, Toast.LENGTH_LONG).show();
                 startActivity(i);			
 			}
 		});

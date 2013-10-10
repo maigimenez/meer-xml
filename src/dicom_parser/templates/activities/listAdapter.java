@@ -9,8 +9,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 
 {% for import in imports -%}
@@ -99,27 +101,26 @@ public class {{string_array}}_ListAdapter extends BaseExpandableListAdapter {
 		
 		ImageButton add_button = (ImageButton) v.findViewById(R.id.add_group_button);
 		add_button.setFocusable(false);
-		
-		if (groupPosition==3){	
-			add_button.setOnClickListener(new ImageButton.OnClickListener() {
-			    public void onClick(View v) {
-			    	Toast.makeText(context, 
-							"Add node type: " +Integer.toString(groupPosition), Toast.LENGTH_LONG).show();
-			    	//context.startActivity(new Intent(context,DetailNodeActivity.class));
+        add_button.setOnClickListener(new OnClickListener() {
+			 
+			public void onClick(View arg0) {
+		        Intent i = null;
+		        switch(groupPosition){
+                {% for child in children %}    
+		        case {{ child["position"] }}:
+                    i = new Intent(context, {{ child["class_name"] }}.class);
+		            break;
+                {% endfor %}
+		        default:
+		            break;
+		        }
+		       context.startActivity(i);
+		        
+ 
+			}
+ 
+		});
 
-			    }
-			});	
-		}
-		else{
-			add_button.setOnClickListener(new ImageButton.OnClickListener() {
-			    public void onClick(View v) {
-			    	Toast.makeText(context, 
-							"Caca: " +Integer.toString(groupPosition), Toast.LENGTH_LONG).show();
-			    	//context.startActivity(new Intent(context,DetailNodeActivity.class));
-
-			    }
-			});	
-		}
 		return v;
 	}
 

@@ -224,6 +224,8 @@ def write_activities(activities_filenames, report):
     position = {}
     report.get_data_from_report(CHILDREN_ARRAYS, position=position)
     #print position
+    #print
+    #print
     #Write layout for every file
     for container, children in flat.iteritems():
         imports=[]
@@ -334,8 +336,7 @@ def write_activities(activities_filenames, report):
                     # EXPANDABLE LISVIEW CUSTOM ADAPTER
                     # Get the output path
                     path = get_filepath(ACTIVITIES)
-
-                    #adapter_filename = 
+                    
                     template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,
                                                  LISTADAPTER)
                     template = environment.get_template(template_name)
@@ -350,7 +351,8 @@ def write_activities(activities_filenames, report):
                     list_adapter = template.render(package_name=package,
                                                    container_class=c_class,
                                                    string_array=c_code,
-                                                   imports=imports)
+                                                   imports=imports,
+                                                   children=children_position)
                     
                     template_filename = get_property(TEMPLATES_SECTION, 
                                                      LISTADAPTER_FILE)
