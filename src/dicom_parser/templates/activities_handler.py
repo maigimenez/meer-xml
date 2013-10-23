@@ -14,7 +14,7 @@ from core.config import (set_environment, get_property, get_filepath,
 from string import Template
 
 
-def write_manifest(package_name, activities, launcher_activity):
+def write_manifest(package_name, activities):
     """ Write the Android Manifest file """
 
     # Get the AndroidManifest

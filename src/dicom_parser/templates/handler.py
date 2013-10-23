@@ -198,7 +198,7 @@ def write_activities(activities_filenames, report):
     environment = set_environment(ACTIVITIES_TEMPLATES_PATH)
 
     # Get report root container. This will be the launcher activity.
-    report_root = report.get_root()
+    report_root = report.get_root().get_schema_code()
 
     # Variables to store data
     activities = []
@@ -221,7 +221,7 @@ def write_activities(activities_filenames, report):
                                                   container, parent_code,
                                                   parent_schema)
         activity_name = get_activity_name(activity_filename)
-
+        
         # Store info to write the Android Manifest
         # Check if this activity is the launcher
         # TODO : (on liner) activity['launcher'] = (container.get_schema_code() == report_root) 
@@ -241,4 +241,4 @@ def write_activities(activities_filenames, report):
                             activity_name, container, children, position,
                             parent_schema, parent_code)
 
-    write_manifest(package, activities, launcher_activity)
+    write_manifest(package, activities                   )
