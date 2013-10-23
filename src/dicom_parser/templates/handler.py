@@ -1,32 +1,26 @@
  #  -*- coding: utf-8 -*-
-from os.path import isfile, join
+from os.path import isfile
 from core.config import (get_filepath, get_layout_settings,
-                         get_children_settings, get_template_model_file,
-                         get_languages, instantiate_filename,
-                         get_class_name, get_model_file, set_environment,
-                         get_property)
+                         get_template_model_file, get_languages,
+                         instantiate_filename, get_class_name, get_model_file,
+                         set_environment, get_property, get_parent_code_schema,
+                         get_children_settings)
 from core.config_variables import (COLUMN_1, COLUMNS_2, STRINGS,
                                    DEFAULT_STRINGS, LEVEL_STRINGS,
                                    CHILDREN_ARRAYS, DICOM_LEVEL,
                                    MODEL_TEMPLATES_PATH,
                                    ACTIVITIES_TEMPLATES_PATH,
                                    MODEL_TEMPLATES_SECTION, CLASS_TEMPLATE,
-                                   ANDROID_PACKAGES, PACKAGE_MODEL,
-                                   BASE_MODEL, ACTIVITIES_TEMPLATES_SECTION,
-                                   ACTIVITY, CHILD_CLASS, CODE_ARRAYS,
-                                   SET_CHILDREN,EXPANDABLELISVIEW,
-                                   EXPANDABLE_ATTRIBUTES,LISTADAPTER,
-                                   LISTADAPTER_FILE, TEMPLATES_SECTION,
-                                   ACTIVITIES)
-from core.java_types import (CLASS, IMPLEMENTS, IMPORT_ARRAY,
-                             IMPORT_EXPANDABLE_LISTVIEW,
-                             IMPORT_CUSTOM)
+                                   ANDROID_PACKAGES, PACKAGE_MODEL, BASE_MODEL,
+                                   CHILD_CLASS, CODE_ARRAYS)
+from core.java_types import (CLASS, IMPLEMENTS)
 from strings_handler import write_template
 from layouts_handler import (write_two_columns_layout,
                              write_one_column_layout_one_level)
-from activities_handler import write_manifest, get_spinners
-from model_handler import (get_attributes, get_children,
-                           get_parent_class, add_tree_hierarchy)
+from activities_handler import (write_manifest, get_activity_filename,
+                                get_activity_name, write_activity_file)
+from model_handler import (get_attributes, get_children, get_parent_class,
+                           add_tree_hierarchy)
 from string import Template
 
 
@@ -63,14 +57,6 @@ def write_strings(language_code, report):
         strings_files[language].close()
 
 ###################################LAYOUTS###################################
-
-
-def get_parent_code_schema(flat, container):
-    for parent, children in flat.iteritems():
-        for child in children:
-            if (container == child):
-                return parent.get_code(), parent.get_schema()
-    return None, None
 
 
 def write_layouts(xml_filenames, report, language_code):
@@ -211,7 +197,6 @@ def write_activities(activities_filenames, report):
     # Set the Environment for the jinja2 templates and get the template
     environment = set_environment(ACTIVITIES_TEMPLATES_PATH)
 
-    # TODO: set launcher activity
     # Get report root container. This will be the launcher activity.
     report_root = report.get_root()
 
@@ -220,178 +205,40 @@ def write_activities(activities_filenames, report):
     launcher_activity = ""
 
     package = get_property(ANDROID_PACKAGES, BASE_MODEL)
-    
+
+    # Get containers position. It must match strings-array position.
     position = {}
     report.get_data_from_report(CHILDREN_ARRAYS, position=position)
-    #print position
-    #print
-    #print
+
     #Write layout for every file
     for container, children in flat.iteritems():
-        imports=[]
         activity = {}
-        # Get the filenames for this container. It depends on its parent
-        activity_template = activities_filenames[str(container.tree_level)]
-        child_name = (container.get_schema() + '_' +
-                      container.get_code())
+
+        # Get this container's parent code and Schema
         parent_code, parent_schema = get_parent_code_schema(flat, container)
-        if (parent_code):
-            parent_name = (parent_schema + '_' + parent_code)
-        else:
-            parent_name = None
-        activity_filename = instantiate_filename(str(container.tree_level),
-                                                 activity_template,
-                                                 child_name,
-                                                 parent_name)
-        # Get the layout id and the activity name. It matches partially
-        # with the activity filename.
-        layout_id = activity_filename.split('/')[-1].split('.')[0].lower()
-        a_name = activity_filename.split('/')[-1].split('.')[0]
-        
+
+        activity_filename = get_activity_filename(activities_filenames, flat,
+                                                  container, parent_code,
+                                                  parent_schema)
+        activity_name = get_activity_name(activity_filename)
+
         # Store info to write the Android Manifest
         # Check if this activity is the launcher
-        # TODO :  activity['launcher'] = (container.get_schema_code() == report_root)
+        # TODO : (on liner) activity['launcher'] = (container.get_schema_code() == report_root) 
         if (container.get_schema_code() == report_root):
             activity['launcher'] = True
         else:
             activity['launcher'] = False
-        activity['name'] = a_name
+        activity['name'] = activity_name
         activities.append(activity)
 
-        # Get children layout if there are childrens in this container.
-        if(children):
-            children_layout = get_children_settings(ontology_id,
-                                                    str(container.tree_level))
-            has_children = True
-        else:
-            children_layout = None
-            has_children = False
-
         # Log purpose info
-        #print
         #print "[Level {0}] {1}".format(container.tree_level, children_layout)
         #print activity_filename, package, a_name
-        spinners = get_spinners(container.attributes)
-        #print len(spinners)
 
-        # Write activity file
-        if (not isfile(activity_filename)):
-            activity_file = open(activity_filename, 'w')
+        write_activity_file(environment, ontology_id, package,
+                            activities_filenames, activity_filename,
+                            activity_name, container, children, position,
+                            parent_schema, parent_code)
 
-            # This variables should store attributes for listview
-            init_children = ""
-            attr_children = ""
-            methods_children = ""
-            
-            # If there are children, will be a listview or
-            # an expandable listview to load
-            if (children_layout):
-                # INIT CHILDREN 
-                # Get template name of the children layout 
-                template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,
-                                             children_layout)
-                template = environment.get_template(template_name)
-
-                # Get the child_list variable 
-                child_list = layout_id.split('_')[-1].upper()
-                # Get the position for every child. Render strings and
-                # activities should be at same position. 
-                children_position=[]
-                schema_code = (container.get_schema(),container.get_code())
-                for child_pos, child_code in position[schema_code].iteritems():
-                    activity_template = activities_filenames[str(container.tree_level+1)]
-                    c_schema_code  = child_code.lower()
-                    child_filename = instantiate_filename(str(container.tree_level+1),
-                                                 activity_template,
-                                                 c_schema_code,
-                                                 child_name)
-                    c_name = child_filename.split('/')[-1].split('.')[0]
-                    children_position.append({"position":child_pos,"class_name":c_name})
- 
-                # Get initialize string for listview child. 
-                init_children = template.render(string_array=child_list,
-                                                children=children_position,
-                                                activity_name=a_name)
-                #EXPANDABLELISVIEW OPTIONS
-                if(children_layout==EXPANDABLELISVIEW):
-                    # CHILDERN METHODS
-                    # Render methods for listview
-                    template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,
-                                                 SET_CHILDREN)
-                    template = environment.get_template(template_name)
-                
-                    c_code = container.get_code()
-                    c_class = get_class_name(container.get_schema(),
-                                             c_code,
-                                             parent_schema,
-                                             parent_code)
-                    methods_children = template.render(container_class=c_class,
-                                                       string_array=c_code)
-                    # CHILDREN ATTRIBUTES
-                    template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,
-                                                 EXPANDABLE_ATTRIBUTES)
-                    template = environment.get_template(template_name)
-                    attr_children = template.render(container_class=c_class,
-                                                    string_array=c_code)
-                    # EXPANDABLE LISVIEW CUSTOM ADAPTER
-                    # Get the output path
-                    path = get_filepath(ACTIVITIES)
-                    
-                    template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,
-                                                 LISTADAPTER)
-                    template = environment.get_template(template_name)
-                    model_package = get_property(ANDROID_PACKAGES,PACKAGE_MODEL)
-                    imports.append(Template(IMPORT_CUSTOM).safe_substitute(
-                            PACKAGE=model_package,
-                            CLASS=c_class+'_Group'))
-                    imports.append(Template(IMPORT_CUSTOM).safe_substitute(
-                            PACKAGE=model_package,
-                            CLASS=c_class+'_Children'))
-
-                    list_adapter = template.render(package_name=package,
-                                                   container_class=c_class,
-                                                   string_array=c_code,
-                                                   imports=imports,
-                                                   children=children_position)
-                    
-                    template_filename = get_property(TEMPLATES_SECTION, 
-                                                     LISTADAPTER_FILE)
-                    adapter_filename = join(path,
-                                            Template(template_filename).\
-                                                safe_substitute(CLASS_NAME=c_code))
-
-                    # Write custom adapter
-                    # TODO: Check if this file already exists
-                    adapter_file = open(adapter_filename,'w')
-                    adapter_file.write(list_adapter)
-                    adapter_file.close()
-                    
-                    imports.append(Template(IMPORT_CUSTOM).safe_substitute(
-                            PACKAGE=package,
-                            CLASS=c_code+'_ListAdapter'))
-
-            imports.append(IMPORT_ARRAY)
-            imports.append(IMPORT_EXPANDABLE_LISTVIEW)
-
-            # Write Activity Tempalte 
-            template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,
-                                         ACTIVITY)
-            template = environment.get_template(template_name)
-
-            #Write the template
-            activity_file.write(template.render(imports= imports,
-                                                package_name=package,
-                                                activity_name=a_name,
-                                                childview=init_children,
-                                                layout_file=layout_id,
-                                                spinners=spinners,
-                                                setChildren=methods_children,
-                                                attributes=attr_children))
-            activity_file.close()
-        else:
-            print "Activity {0} already created".format(activity_filename)
-    #print
-    #print
-
-    #print launcher_activity, type(launcher_activity)
     write_manifest(package, activities, launcher_activity)
