@@ -232,7 +232,6 @@ def write_activities(activities_filenames, report):
             activity['launcher'] = False
         activity['name'] = activity_name
         activities.append(activity)
-
         # Log purpose info
         #print "[Level {0}] {1}".format(container.tree_level, children_layout)
         #print activity_filename, package, a_name
@@ -243,5 +242,6 @@ def write_activities(activities_filenames, report):
                             parent_schema, parent_code)
     
     report_class = report_root.lower().capitalize()
-    write_application(package, report_class)
+    activity = write_application(package, report_class)
+    activities.append(activity)
     write_manifest(package, activities)

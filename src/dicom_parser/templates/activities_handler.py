@@ -308,6 +308,11 @@ def write_activity_file(environment, ontology_id, package,
 
 
 def write_application(package, report_class):
+    """ Write java class which extends android application. 
+    I will handle shared information as the report 
+    
+    Returns a dictionary with the information to add to Manifest file. 
+    """
     # Get the application class file. 
     output_directory = get_filepath(ACTIVITIES)
     if (not exists(output_directory)):
@@ -331,3 +336,4 @@ def write_application(package, report_class):
                                    model_package=model_package,
                                    report_class=report_class))
     app_file.close()
+    return {'name':report_class+'_Application', 'launcher':False}
