@@ -5,7 +5,9 @@ from core.config_variables import (MANIFEST, ACTIVITIES_TEMPLATES_PATH,
                                    ACTIVITIES, LISTADAPTER, ANDROID_PACKAGES,
                                    PACKAGE_MODEL, TEMPLATES_SECTION,
                                    LISTADAPTER_FILE, EXPANDABLE_ATTRIBUTES,
-                                   SET_CHILDREN, EXPANDABLELISVIEW, ACTIVITY)
+                                   SET_CHILDREN, EXPANDABLELISVIEW, ACTIVITY,
+                                   APPLICATION, APPLICATION_FILE,
+                                   ANDROID_PACKAGES, PACKAGE_MODEL)
 from core.java_types import (IMPORT_CUSTOM, IMPORT_ARRAY,
                              IMPORT_EXPANDABLE_LISTVIEW)
 from core.config import (set_environment, get_property, get_filepath,
@@ -303,3 +305,29 @@ def write_activity_file(environment, ontology_id, package,
         activity_file.close()
     else:
         print "Activity {0} already created".format(activity_filename)
+
+
+def write_application(package, report_class):
+    # Get the application class file. 
+    output_directory = get_filepath(ACTIVITIES)
+    if (not exists(output_directory)):
+        makedirs(output_directory)
+    application_template_filename = get_property(TEMPLATES_SECTION,
+                                                 APPLICATION_FILE)
+    application_filename = join(output_directory,
+                                (Template(application_template_filename).
+                                 safe_substitute(CLASS_NAME=report_class)))
+
+    # Set the Environment for the jinja2 templates and get the template
+    environment = set_environment(ACTIVITIES_TEMPLATES_PATH)
+    template_name = get_property(ACTIVITIES_TEMPLATES_SECTION, APPLICATION)
+    template = environment.get_template(template_name)
+
+    model_package = get_property(ANDROID_PACKAGES, PACKAGE_MODEL)
+
+    # Open and write the manifest file
+    app_file = open(application_filename, 'w')
+    app_file.write(template.render(package=package,
+                                   model_package=model_package,
+                                   report_class=report_class))
+    app_file.close()

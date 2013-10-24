@@ -18,7 +18,8 @@ from strings_handler import write_template
 from layouts_handler import (write_two_columns_layout,
                              write_one_column_layout_one_level)
 from activities_handler import (write_manifest, get_activity_filename,
-                                get_activity_name, write_activity_file)
+                                get_activity_name, write_activity_file,
+                                write_application)
 from model_handler import (get_attributes, get_children, get_parent_class,
                            add_tree_hierarchy)
 from string import Template
@@ -240,5 +241,7 @@ def write_activities(activities_filenames, report):
                             activities_filenames, activity_filename,
                             activity_name, container, children, position,
                             parent_schema, parent_code)
-
-    write_manifest(package, activities                   )
+    
+    report_class = report_root.lower().capitalize()
+    write_application(package, report_class)
+    write_manifest(package, activities)

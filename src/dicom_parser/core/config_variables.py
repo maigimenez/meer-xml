@@ -42,6 +42,7 @@ COLUMNS_2 = "2 Columns"
 #ACTIVITIES
 ACTIVITIES="Activities"
 ACTIVITY = 'Activity'
+APPLICATION = 'Application'
 SET_CHILDREN = 'SetChildren Method'
 EXPANDABLE_ATTRIBUTES = 'Expandable Attributes'
 LISTADAPTER = 'ListAdapter'
@@ -67,6 +68,7 @@ ACTIVITIES_TEMPLATES_PATH = 'Activity Templates Path'
 ACTIVITIES_TEMPLATES_SECTION = 'Activity Templates'
 
 LISTADAPTER_FILE = 'ListAdapter File'
+APPLICATION_FILE = 'Application File'
 
 # STRING TEMPLATES
 DEFAULT_STRINGS = 'default_strings'
