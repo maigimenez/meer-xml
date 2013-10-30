@@ -243,5 +243,6 @@ def write_activities(activities_filenames, report):
     
     report_class = report_root.lower().capitalize()
     activity = write_application(package, report_class)
+    print report_class
     activities.append(activity)
-    write_manifest(package, activities)
+    write_manifest(package, activities, '.'+report_class+'_Application')

@@ -16,7 +16,7 @@ from core.config import (set_environment, get_property, get_filepath,
 from string import Template
 
 
-def write_manifest(package_name, activities):
+def write_manifest(package_name, activities,app_name):
     """ Write the Android Manifest file """
 
     # Get the AndroidManifest
@@ -34,6 +34,7 @@ def write_manifest(package_name, activities):
     # Open and write the manifest file
     manifest_file = open(manifest_path, 'w')
     manifest_file.write(template.render(package_name=package_name,
+                                        app_name=app_name,
                                         activities=activities))
     manifest_file.close()
 

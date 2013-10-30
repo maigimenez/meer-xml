@@ -14,12 +14,13 @@
 
     <application
         android:label="meer"
+        android:name="{{app_name}}"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/dicomTheme" >
         {%- for activity in activities %}
         <activity
             android:name="{{package_name}}.{{activity.name}}"
-            android:label="summary"
+            android:label="{{activity.label}}"
             android:windowSoftInputMode="adjustPan">
             {%- if activity.launcher %}
             <intent-filter>
