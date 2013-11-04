@@ -24,10 +24,16 @@ public class {{ activity_name }} extends Activity {
     {% endfor %}
     
     {% if childview -%}
-{{ attributes }}
+       {{ attributes }}
     {% endif %}
+    private {{ app_classname }} app = null;
+    private {{ report_classname }} report = null
 
     public void onCreate(Bundle savedInstanceState) {
+        // Get global app shared variable. 
+        app = ({{app_classname}}) getApplication();
+        report = app.get_report();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.{{ layout_file }});
         {% if childview -%}

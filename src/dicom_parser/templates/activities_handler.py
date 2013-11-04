@@ -251,7 +251,7 @@ def get_activity_name(activity_filename):
 def write_activity_file(environment, ontology_id, package,
                         activities_filenames, activity_filename, activity_name,
                         container, children, position, parent_schema,
-                        parent_code):
+                        parent_code, report_class, app_classname):
     """ Write activity file for given container and its children """
     imports = []
     tree_level = container.tree_level
@@ -302,7 +302,9 @@ def write_activity_file(environment, ontology_id, package,
                                             layout_file=layout_id,
                                             spinners=spinners,
                                             setChildren=methods,
-                                            attributes=attributes))
+                                            attributes=attributes,
+                                            app_classname=app_classname,
+                                            report_classname=report_class))
         activity_file.close()
     else:
         print "Activity {0} already created".format(activity_filename)

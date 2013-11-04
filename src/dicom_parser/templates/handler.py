@@ -210,6 +210,8 @@ def write_activities(activities_filenames, report):
     # Get containers position. It must match strings-array position.
     position = {}
     report.get_data_from_report(CHILDREN_ARRAYS, position=position)
+    report_class = report_root.lower().capitalize()
+    app_classname = report_class+'_Application'
 
     #Write layout for every file
     for container, children in flat.iteritems():
@@ -239,10 +241,9 @@ def write_activities(activities_filenames, report):
         write_activity_file(environment, ontology_id, package,
                             activities_filenames, activity_filename,
                             activity_name, container, children, position,
-                            parent_schema, parent_code)
+                            parent_schema, parent_code, report_class,
+                            app_classname)
     
-    report_class = report_root.lower().capitalize()
     activity = write_application(package, report_class)
-    print report_class
     activities.append(activity)
-    write_manifest(package, activities, '.'+report_class+'_Application')
+    write_manifest(package, activities, '.'+app_classname)
