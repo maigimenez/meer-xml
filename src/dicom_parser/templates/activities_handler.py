@@ -1,15 +1,16 @@
 from os.path import join, exists, isfile
 from os import makedirs
 from core.config_variables import (MANIFEST, ACTIVITIES_TEMPLATES_PATH,
-                                   ACTIVITIES_TEMPLATES_SECTION, CODE,
-                                   ACTIVITIES, LISTADAPTER, ANDROID_PACKAGES,
-                                   PACKAGE_MODEL, TEMPLATES_SECTION,
-                                   LISTADAPTER_FILE, EXPANDABLE_ATTRIBUTES,
-                                   SET_CHILDREN, EXPANDABLELISVIEW, ACTIVITY,
+                                   ACTIVITIES_TEMPLATES_SECTION, TEXT,
+                                   NUM, CODE, ACTIVITIES, LISTADAPTER,
+                                   ANDROID_PACKAGES, PACKAGE_MODEL,
+                                   TEMPLATES_SECTION, LISTADAPTER_FILE, 
+                                   EXPANDABLE_ATTRIBUTES, SET_CHILDREN,
+                                   EXPANDABLELISVIEW, ACTIVITY,
                                    APPLICATION, APPLICATION_FILE,
                                    ANDROID_PACKAGES, PACKAGE_MODEL)
 from core.java_types import (IMPORT_CUSTOM, IMPORT_ARRAY,
-                             IMPORT_EXPANDABLE_LISTVIEW)
+                             IMPORT_EXPANDABLE_LISTVIEW, IMPORT_EDITTEXT)
 from core.config import (set_environment, get_property, get_filepath,
                          instantiate_filename, get_children_settings,
                          get_class_name)
@@ -51,6 +52,19 @@ def get_spinners(attributes):
             if attribute.type == CODE:
                     spinners.append(attribute.concept.code)
     return spinners
+
+
+def get_edit_fields(attributes):
+    """ Return a list of attributes which should be represented as a text field
+
+    Keyword arguments:
+    attributes -- a list of container's attributes
+
+    """
+    return [attribute.concept.code 
+            for attribute in attributes if (attribute.type is TEXT or
+                                            (attribute.type is NUM 
+                                            and not attribute.is_bool()))]
 
 
 def write_listAdapter(environment, package, c_class, c_code,
@@ -272,8 +286,19 @@ def write_activity_file(environment, ontology_id, package,
         # Get a list of attributes that will be shown as spinners.
         spinners = get_spinners(container.attributes)
 
+        # Get a list of attributes that will be shown as text fields.
+        etext_list=get_edit_fields(container.attributes)
+        # Get data model package and include it in imports.
+        model_package = get_property(ANDROID_PACKAGES, PACKAGE_MODEL)
+        imports.append(Template(IMPORT_CUSTOM).
+                       safe_substitute(PACKAGE=model_package,
+                                       CLASS=report_class))
+
+        if etext_list:
+            imports.append(IMPORT_EDITTEXT)
+
         # Get children layout if there are childrens in this container.
-        if(children):
+        if children:
             children_layout = get_children_settings(ontology_id,
                                                     str(tree_level))
             # If there are children, will be a listview or
@@ -300,6 +325,7 @@ def write_activity_file(environment, ontology_id, package,
                                             activity_name=activity_name,
                                             childview=init,
                                             layout_file=layout_id,
+                                            etext_list=etext_list,
                                             spinners=spinners,
                                             setChildren=methods,
                                             attributes=attributes,

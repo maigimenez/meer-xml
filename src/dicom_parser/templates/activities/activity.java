@@ -16,20 +16,22 @@ import android.view.View;
 import android.content.Intent;
 import android.widget.Spinner;
 
-
 public class {{ activity_name }} extends Activity {
 
-    {% for spinner_id in spinners %}
+    {%- for spinner_id in spinners %}
         private Spinner spinner_{{spinner_id}};
-    {% endfor %}
-    {% if childview -%}
+    {%- endfor %}
+
+    {%- if childview -%}
        {{ attributes }}
-    {% endif %}
+    {%- endif %}
+
     {% for etext_id in etext_list %}
-        private EditText etext_{{etext_id}}; 
-    {% endfor %}
+    private EditText etext_{{etext_id}}; 
+    {%- endfor %}
+
     private {{ app_classname }} app = null;
-    private {{ report_classname }} report = null
+    private {{ report_classname }} report = null;
 
     public void onCreate(Bundle savedInstanceState) {
         // Get global app shared variable. 
@@ -54,7 +56,7 @@ public class {{ activity_name }} extends Activity {
 
         // EditText
         {% for etext_id in etext_list %}
-        etext_{{etext_id}} = (EditText) findViewById(R.id.etext_{{etext_id}};
+        etext_{{etext_id}} = (EditText) findViewById(R.id.etext_{{etext_id}});
         etext_{{etext_id}}.setOnClickListener(
                       new View.OnClickListener() {
                           public void onClick(View v) {
