@@ -74,14 +74,14 @@ class DicomSR(object):
                         aux = {}
                         aux[level_num] = container.get_level()
                         aux[level_name] = (unicode(ontology, "utf-8"))
-                        aux[code] = container.get_code()
+                        aux[code] = container.get_code().lower()
                         aux[meaning] = container.get_meaning()[language]
                         substitution_words[language][levels_tag].\
                             append(aux.copy())
                 for attribute in attributes:
                     for language in languages:
                         aux = {}
-                        aux[code] = attribute.code
+                        aux[code] = attribute.code.lower()
                         aux[meaning] = attribute.meaning[language]
                         substitution_words[language][attrs_tag].\
                             append(aux.copy())
@@ -103,7 +103,7 @@ class DicomSR(object):
 
                     for parent, children in flat.iteritems():
                         for language in languages:
-                            aux = {parent_tag: parent.get_code(),
+                            aux = {parent_tag: parent.get_code().lower(),
                                    children_tag: []}
                             position = 0
                             for child in children:
@@ -116,7 +116,8 @@ class DicomSR(object):
                 else:
                     #print position_dict
                     for parent, children in flat.iteritems():
-                        p_code = parent.get_schema() + '_' + parent.get_code()
+                        p_code = (parent.get_schema().lower() + '_' 
+                                  + parent.get_code().lower())
                         #print type(parent_code)
                         position[p_code] = {}
                         pos = 0
@@ -136,7 +137,7 @@ class DicomSR(object):
                 codes = self.report.get_code_containers()
                 for code in codes:
                     for language in languages:
-                        aux = {parent_tag: code.code, children_tag: []}
+                        aux = {parent_tag: code.code.lower(), children_tag: []}
                         for option in code.options:
                             aux[children_tag].append(
                                 option.meaning[language])

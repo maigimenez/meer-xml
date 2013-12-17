@@ -9,7 +9,7 @@
                             android:text="@string/code_{{ concept_value }}"
                             android:layout_marginLeft="20dp" />
 
-                        <EditText android:id="@+id/etext_{{ concept_value }}"
+                        <EditText android:id="@+id/etext_{{ concept_schema }}_{{ concept_value }}"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/label_{{ concept_value }}"

@@ -38,62 +38,65 @@ def get_template_substitution(environment, template_type, concept=None,
     template_name = get_property(LAYOUT_TEMPLATES_SECTION, template_type)
     template = environment.get_template(template_name)
     render_template = ""
+    concept_schema = concept.schema.lower().replace('-','_')
     # Strore in a variable the current item id. We will need this when
     # we write self dependent layout items.
     current_item = ""
     # TITLE of a tree section
     if (template_type == TREE_TITLE):
-        render_template = template.render(level=concept.value)
+        render_template = template.render(level=concept.value.lower())
         # TODO: find a better way to do this. Dependent on the template
         # using a regex to find "#+id/    \n", and not hardcoded here.
-        current_item = "level_{0}_label".format(concept.value)
+        current_item = "level_{0}_label".format(concept.value.lower())
     # TITLE of a generic section
     elif (template_type == GENERIC_TITLE):
-        render_template = template.render(level=report_level)
-        current_item = "level_{0}_label".format(report_level)
-    # Listview for next (deeper) level of the dicom tree.
+        render_template = template.render(level=report_level.lower())
+        current_item = "level_{0}_label".format(report_level.lower())
+     # Listview for next (deeper) level of the dicom tree.
     elif (template_type == NEXT_LEVEL):
-        render_template = template.render(code=concept.value,
-                                          parent_code=concept.value)
+        render_template = template.render(code=concept.value.lower(),
+                                          parent_code=concept.value.lower())
         current_item = "children_{0}_list".format(concept.value)
     # NUM type attribute & TEXT type attribute
     elif (template_type == NUM or template_type == TEXT):
         localized_concept = concept.meaning[language]
         render_template = template.render(concept_name=localized_concept,
-                                          concept_value=concept.value,
+                                          concept_schema = concept_schema,
+                                          concept_value=concept.value.lower(),
                                           previous_item=previous_item,
                                           first_attribute=first)
-        current_item = "etext_{0}".format(concept.value)
+        current_item = "etext_{0}".format(concept_schema.lower()
+                                          +'_'+concept.value.lower())
     # BOOL type attribute
     elif (template_type == BOOL):
         localized_concept = concept.meaning[language]
         render_template = template.render(concept_name=localized_concept,
-                                          concept_value=concept.value,
+                                          concept_value=concept.value.lower(), 
                                           previous_item=previous_item,
                                           first_attribute=first)
-        current_item = "cbox_{0}".format(concept.value)
+        current_item = "cbox_{0}".format(concept.value.lower())
     # DATE type attribute
     elif (template_type == DATE):
         localized_concept = concept.meaning[language]
         render_template = template.render(concept_name=localized_concept,
-                                          concept_value=concept.value,
+                                          concept_value=concept.value.lower(),
                                           previous_item=previous_item,
                                           first_attribute=first)
-        current_item = "etext_{0}".format(concept.value)
+        current_item = "etext_{0}".format(concept.value.lower())
     # CODE type attribute
     elif (template_type == CODE):
         localized_concept = concept.meaning[language]
         render_template = template.render(concept_name=localized_concept,
-                                          concept_value=concept.value,
+                                          concept_value=concept.value.lower(),
                                           previous_item=previous_item,
                                           first_attribute=first)
-        current_item = "spinner_{0}".format(concept.value)
+        current_item = "spinner_{0}".format(concept.value.lower())
     # SCROLL
     elif (template_type == SCROLL):
         render_template = template.render(parent=previous_item)
     # LISTVIEW & EXPANDABLELISVIEW
     elif (template_type == LISTVIEW or template_type == EXPANDABLELISVIEW):
-        render_template = template.render(concept_value=concept.value,
+        render_template = template.render(concept_value=concept.value.lower(),
                                           previous_item=previous_item)
         current_item = "list_{0}".format(concept.value)
 
@@ -188,14 +191,14 @@ def write_one_column_layout_one_level(layout_filename, container, children,
                                          ONE_COLUMN)
             template = environment.get_template(template_name)
             # Store previous concept id
-            previous_item = "code_{0}".format(container.get_code())
+            previous_item = "code_{0}".format(container.get_code()).lower()
             items, current_item  = get_children(environment,
                                                 container.get_concept(),
                                                 previous_item,
                                                 children_layout)
 
             # Render layout template with correct values.
-            layout_file.write(template.render(level_code=container.get_code(),
+            layout_file.write(template.render(level_code=container.get_code().lower(),
                                               content=items)
                               .encode('utf-8'))
             layout_file.close()
@@ -227,7 +230,7 @@ def write_two_columns_layout(layout_filename, container, children,
             get_property(LAYOUT_TEMPLATES_SECTION, ATTRIBUTES))
 
         # Store previous concept id
-        layout_prev_item = "code_{0}".format(container.get_code())
+        layout_prev_item = "code_{0}".format(container.get_code().lower())
         left_content = ""
         right_content = ""
         # There are ONLY ATTRIBUTES in this layout
@@ -272,7 +275,7 @@ def write_two_columns_layout(layout_filename, container, children,
                                                         children_layout)
         try:
             # Render layout template with correct values.
-            layout_file.write(template.render(level_code=container.get_code(),
+            layout_file.write(template.render(level_code=container.get_code().lower(),
                                               left_content=left_content,
                                               right_content=right_content)
                               .encode('utf-8'))

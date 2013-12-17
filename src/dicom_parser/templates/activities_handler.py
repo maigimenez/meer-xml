@@ -50,7 +50,7 @@ def get_spinners(attributes):
     spinners = []
     for attribute in attributes:
             if attribute.type == CODE:
-                    spinners.append(attribute.concept.code)
+                    spinners.append(attribute.concept.code.lower())
     return spinners
 
 
@@ -61,7 +61,8 @@ def get_edit_fields(attributes):
     attributes -- a list of container's attributes
 
     """
-    return [attribute.concept.code 
+    return [(attribute.concept.schema.lower().replace('-','_') + '_' +
+             attribute.concept.value.lower()) 
             for attribute in attributes if (attribute.type is TEXT or
                                             (attribute.type is NUM 
                                             and not attribute.is_bool()))]
@@ -94,7 +95,7 @@ def write_listAdapter(environment, package, c_class, c_code,
     imports.append(Template(IMPORT_CUSTOM).
                    safe_substitute(PACKAGE=model_package,
                                    CLASS=c_class + '_Children'))
-
+    
     # Get custom listView Adapter
     list_adapter = template.render(package_name=package,
                                    container_class=c_class,
@@ -131,7 +132,7 @@ def get_children_position(child_level, position, c_activity_template,
     """
     children_position = []
     # For every child of this container get its position and its class name
-    for child_pos, child_code in position[p_schema_code].iteritems():
+    for child_pos, child_code in position[p_schema_code.lower()].iteritems():
         c_schema_code  = child_code.lower()
         child_filename = instantiate_filename(child_level,
                                               c_activity_template,
@@ -144,7 +145,7 @@ def get_children_position(child_level, position, c_activity_template,
 
 
 def get_init_children(environment, children_layout, children_position, a_name,
-                      layout_id):
+                      layout_id, etext_list):
     """ Return a string with children initialized """
 
     # Get template name of the children layout
@@ -153,11 +154,13 @@ def get_init_children(environment, children_layout, children_position, a_name,
     template = environment.get_template(template_name)
 
     # Get the child_list variable
-    child_list = layout_id.split('_')[-1].upper()
-
+    child_list = layout_id.split('_')[-1]
+    
     # Get initialize string for listview child.
-    return template.render(string_array=child_list,
+    return template.render(string_array=child_list.lower(),
+                           string_array_class=child_list.upper(),
                            children=children_position,
+                           etext_list=etext_list,
                            activity_name=a_name)
 
 
@@ -167,7 +170,8 @@ def get_expandable_attributes(environment, c_class, c_code):
                                  EXPANDABLE_ATTRIBUTES)
     template = environment.get_template(template_name)
     return template.render(container_class=c_class,
-                           string_array=c_code)
+                           string_array_class=c_code,
+                           string_array=c_code.lower())
 
 
 def get_expandable_methods(environment, c_class, c_code):
@@ -178,7 +182,7 @@ def get_expandable_methods(environment, c_class, c_code):
     template = environment.get_template(template_name)
 
     return template.render(container_class=c_class,
-                           string_array=c_code)
+                           string_array=c_code.lower())
 
 
 def get_children(environment, package, activities_filenames, tree_level,
@@ -202,11 +206,16 @@ def get_children(environment, package, activities_filenames, tree_level,
                                               c_activity_template,
                                               container_name)
 
+    # Get a list of attributes that shown as text fields 
+    # to recover the information written by the user
+    etext_list=get_edit_fields(container.attributes)
+    if etext_list:
+        imports.append(IMPORT_EDITTEXT)
+
     # Get initialize string for listview child.
     init_children = get_init_children(environment, children_layout,
                                       children_position,
-                                      activity_name, layout_id)
-
+                                      activity_name, layout_id, etext_list)
     #EXPANDABLELISVIEW OPTIONS
     if(children_layout == EXPANDABLELISVIEW):
         c_code = container.get_code()

@@ -42,27 +42,19 @@ public class {{ activity_name }} extends Activity {
         setContentView(R.layout.{{ layout_file }});
         {% if childview -%}
         {{ childview }}
-        {% endif -%}
+        {% endif %}
 
         // Spinners 
         {% for spinner_id in spinners %}
 		ArrayAdapter<CharSequence> adapter_{{ spinner_id }} = ArrayAdapter.createFromResource(
-		    this, R.array.list_RID5958, android.R.layout.simple_spinner_item);
+                     this, R.array.list_{{ spinner_id }}, android.R.layout.simple_spinner_item);
         spinner_{{spinner_id}} = (Spinner) findViewById(R.id.spinner_{{spinner_id}});
         adapter_{{ spinner_id }}.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
          
         spinner_{{spinner_id}}.setAdapter(adapter_{{ spinner_id }});
         {% endfor -%}
 
-        // EditText
-        {% for etext_id in etext_list %}
-        etext_{{etext_id}} = (EditText) findViewById(R.id.etext_{{etext_id}});
-        etext_{{etext_id}}.setOnClickListener(
-                      new View.OnClickListener() {
-                          public void onClick(View v) {
-                          }
-                      });
-        {% endfor %}
+
     }
 
     {% if childview %}

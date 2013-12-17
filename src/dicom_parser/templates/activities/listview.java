@@ -16,6 +16,11 @@
                 default:
                     break;
                 }
+                // EditText Caca
+                {%- for etext_id in etext_list %}
+                etext_{{ etext_id }} = (EditText) findViewById(R.id.etext_{{etext_id}});
+                report.set_{{ etext_id }}(etext_{{ etext_id }}.getText().toString());
+                {%- endfor %}
                 startActivity(i);			
 			}
 		});
