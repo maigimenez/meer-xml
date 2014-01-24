@@ -209,7 +209,9 @@ def write_activities(activities_filenames, report):
 
     # Get containers position. It must match strings-array position.
     position = {}
-    report.get_data_from_report(CHILDREN_ARRAYS, position=position)
+    cardinality = {}
+    report.get_data_from_report(CHILDREN_ARRAYS, position=position, 
+                                cardinality=cardinality)
     report_class = report_root.lower().capitalize()
     app_classname = report_class+'_Application'
 
@@ -241,8 +243,8 @@ def write_activities(activities_filenames, report):
         write_activity_file(environment, ontology_id, package,
                             activities_filenames, activity_filename,
                             activity_name, container, children, position,
-                            parent_schema, parent_code, report_class,
-                            app_classname)
+                            cardinality, parent_schema, parent_code,
+                            report_class, app_classname)
     
     activity = write_application(package, report_class)
     activities.append(activity)

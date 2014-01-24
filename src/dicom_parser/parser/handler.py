@@ -246,8 +246,9 @@ class DicomParser(xml.sax.handler.ContentHandler):
             #this concept will be the level ID
             if (self._in_level):
                 #print self._concept
-                #print self._property.max_value, self._property.min_value
+                #print self._property.max_cardinality, self._property.min_cardinality
                 logging.info(self._concept)
+                #logging.info(self._property.max_cardinality, self._property.min_cardinality)
                 self._report.add_container(
                     SAXContainer(self._concept, self._tree_level, True,
                                  self._report.return_parent(self._tree_level),

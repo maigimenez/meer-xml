@@ -86,7 +86,7 @@ public class {{string_array}}_ListAdapter extends BaseExpandableListAdapter {
 		View expander = v.findViewById(R.id.explist_indicator);
 		if (expander !=null){
 			ImageView expander_button = (ImageView) expander;
-			if (groupPosition==3){	
+			if ({{ not_multiple_condition }}){	
 				expander_button.setVisibility(View.INVISIBLE);
 			}
 			else{

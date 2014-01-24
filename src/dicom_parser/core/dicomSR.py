@@ -32,7 +32,7 @@ class DicomSR(object):
         return self.report.value
 
     def get_data_from_report(self, template_type, languages=None,
-                             position=None):
+                             position=None, cardinality=None):
         """ Return data from the report in a dictionary
 
         Keyword arguments:
@@ -114,17 +114,16 @@ class DicomSR(object):
                                 position += 1
                             substitution_words[language][nodes_tag].append(aux)
                 else:
-                    #print position_dict
                     for parent, children in flat.iteritems():
                         p_code = (parent.get_schema().lower() + '_' 
                                   + parent.get_code().lower())
-                        #print type(parent_code)
                         position[p_code] = {}
+                        cardinality[p_code] = {}
                         pos = 0
                         for child in children:
                             position[p_code][pos] = child.get_schema_code()
+                            cardinality[p_code][pos] = child.get_max_cardinality()
                             pos += 1
-                    # print position_dict
 
             elif (template_type == CODE_ARRAYS):
                 #TODO: Change comment on this template to make it different

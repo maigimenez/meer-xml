@@ -69,7 +69,7 @@ def get_edit_fields(attributes):
 
 
 def write_listAdapter(environment, package, c_class, c_code,
-                      children_position, imports):
+                      children_position, imports, cardinality):
     """ Write custom list adapter for expandableListView class
 
     Keyword arguments:
@@ -86,7 +86,7 @@ def write_listAdapter(environment, package, c_class, c_code,
     template_name = get_property(ACTIVITIES_TEMPLATES_SECTION,
                                  LISTADAPTER)
     template = environment.get_template(template_name)
-
+    
     # Get data model package and include it in imports.
     model_package = get_property(ANDROID_PACKAGES, PACKAGE_MODEL)
     imports.append(Template(IMPORT_CUSTOM).
@@ -96,12 +96,18 @@ def write_listAdapter(environment, package, c_class, c_code,
                    safe_substitute(PACKAGE=model_package,
                                    CLASS=c_class + '_Children'))
     
-    # Get custom listView Adapter
+    # Create custom condition for unique attributes
+    condition = Template("groupPosition == $pos")
+
+    not_multiple=" and ".join(map(lambda x: condition.substitute(pos=x), cardinality))
+
+    # Get   custom listView Adapter
     list_adapter = template.render(package_name=package,
                                    container_class=c_class,
                                    string_array=c_code,
                                    imports=imports,
-                                   children=children_position)
+                                   children=children_position,
+                                   not_multiple_condition=not_multiple)
 
     # WRITE CUSTOM LISTVIEW ADAPTER
     template_filename = get_property(TEMPLATES_SECTION,
@@ -132,8 +138,8 @@ def get_children_position(child_level, position, c_activity_template,
     """
     children_position = []
     # For every child of this container get its position and its class name
-    for child_pos, child_code in position[p_schema_code.lower()].iteritems():
-        c_schema_code  = child_code.lower()
+    for child_pos, child in position.iteritems():
+        c_schema_code  = child.lower()
         child_filename = instantiate_filename(child_level,
                                               c_activity_template,
                                               c_schema_code,
@@ -186,7 +192,7 @@ def get_expandable_methods(environment, c_class, c_code):
 
 
 def get_children(environment, package, activities_filenames, tree_level,
-                 activity_name, position, imports, container, children_layout,
+                 activity_name, position, unique, imports, container, children_layout,
                  layout_id, parent_schema, parent_code):
 
     init_children = ""
@@ -201,10 +207,10 @@ def get_children(environment, package, activities_filenames, tree_level,
     # Get the position for every child. Render strings and
     # activities should be at same position.
     child_tree_level = str(tree_level + 1)
-    children_position = get_children_position(child_tree_level,
-                                              position,
-                                              c_activity_template,
-                                              container_name)
+    children_position= get_children_position(child_tree_level,
+                                             position,
+                                             c_activity_template,
+                                             container_name)
 
     # Get a list of attributes that shown as text fields 
     # to recover the information written by the user
@@ -233,7 +239,7 @@ def get_children(environment, package, activities_filenames, tree_level,
                                                   c_code)
         # Write expandableListView custom adapter
         write_listAdapter(environment, package, c_class, c_code,
-                          children_position, imports)
+                          children_position, imports, unique)
 
         imports.append(Template(IMPORT_CUSTOM).
                        safe_substitute(PACKAGE=package,
@@ -273,8 +279,9 @@ def get_activity_name(activity_filename):
 
 def write_activity_file(environment, ontology_id, package,
                         activities_filenames, activity_filename, activity_name,
-                        container, children, position, parent_schema,
-                        parent_code, report_class, app_classname):
+                        container, children, position, cardinality,
+                        parent_schema, parent_code, report_class,
+                        app_classname):
     """ Write activity file for given container and its children """
     imports = []
     tree_level = container.tree_level
@@ -295,6 +302,7 @@ def write_activity_file(environment, ontology_id, package,
         # Get a list of attributes that will be shown as spinners.
         spinners = get_spinners(container.attributes)
 
+
         # Get a list of attributes that will be shown as text fields.
         etext_list=get_edit_fields(container.attributes)
         # Get data model package and include it in imports.
@@ -310,13 +318,20 @@ def write_activity_file(environment, ontology_id, package,
         if children:
             children_layout = get_children_settings(ontology_id,
                                                     str(tree_level))
-            # If there are children, will be a listview or
+            container_key = container.get_schema_code().lower()
+            card = cardinality[container_key]
+            #TODO: This is done for all children it should be done only 
+            # when there is a listadapter 
+            unique = [k for k,v in card.iteritems() if v == 1]
+            # If there are children, willb e a listview or
             # an expandable listview to load
             init, attributes, methods = get_children(environment,
                                                      package,
                                                      activities_filenames,
                                                      tree_level, activity_name,
-                                                     position, imports,
+                                                     position[container_key],
+                                                     unique,
+                                                     imports,
                                                      container,
                                                      children_layout,
                                                      layout_id,
