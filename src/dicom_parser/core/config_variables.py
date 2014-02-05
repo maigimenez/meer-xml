@@ -125,6 +125,8 @@ GROUP_CLASS = '_Group'
 GROUP_STRING = '\tString type;'
 INTERFACE_IDENTIFIER='	public String get_snomed_ct_118522005();'
 GETTERS_SETTERS = 'Getters and Setters'
+ADD_ARRAY = 'Add array'
+INIT_METHOD= 'Init'
 
 # XML FILETYPES
 STRINGS = 'Strings'

@@ -3,7 +3,8 @@ from core.config import get_model_file, get_property
 from core.config_variables import (CHILD_CLASS, GROUP_CLASS, GROUP_STRING,
                                    MODEL_TEMPLATES_SECTION, CLASS_TEMPLATE,
                                    NUM, TEXT, CODE, INTERFACE_IDENTIFIER,
-                                   GETTERS_SETTERS, TYPE_JAVA)
+                                   GETTERS_SETTERS, TYPE_JAVA, INIT_METHOD,
+                                   ADD_ARRAY)
 from core.java_types import (ARRAY, BOOL, DATE, INT, STRING, IMPORT_DATE,
                              IMPORT_ARRAY, INTERFACE, CLASS)
 from os.path import isfile
@@ -253,13 +254,26 @@ def get_children(environment, children, imports, parent_class,
         template = environment.get_template(template_name)
 
         render_template = ""
-        #Children with multiple items.
+        #Children with multiple items. Array 
         if (child.value.properties.max_cardinality == -1 ):
             type_name = Template(ARRAY).safe_substitute(CLASS=child_class_name)
             render_template = template.render(type=type_name,
                                               variable=attribute_variable)
+            # Default getters and setters 
             methods.append(getters_setters_template.render(
                 type=attribute_variable, variable_type=type_name))
+            # Append method. 
+            append_method_template_name = get_property(MODEL_TEMPLATES_SECTION,
+                                                       ADD_ARRAY)
+            append_method_template = environment.get_template(
+                append_method_template_name)
+            #print type_name, attribute_variable
+            append_render_template = append_method_template.render(
+                type=child_class_name,
+                variable=attribute_variable)
+            methods.append(append_render_template)
+            #print render_template
+            #print
             if(not import_array):
                 imports.append(IMPORT_ARRAY)
                 import_array = True
