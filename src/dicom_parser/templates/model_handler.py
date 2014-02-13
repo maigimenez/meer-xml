@@ -34,7 +34,7 @@ def get_parent_class(flat_tree, container):
 
     Keyword Arguments:
     flat_tree -- hash table where its stored containers and children
-                 withot its model created.
+                 without its model created.
     container -- we want to know its parent
     parent_code -- return parent's code (default None)
     parent_schema -- return parent's schema (default None)
