@@ -34,7 +34,7 @@ public class {{string_array}}_ListAdapter extends BaseExpandableListAdapter {
 	public {{ string_array }}_ListAdapter (Context context, ArrayList<{{ container_class }}_Group> children){
 		this.context = context;
 		this.groups = children;
-	}
+	}  
 	
 	public long getChildId(int groupPosition, int childPosition) {
 		return childPosition;

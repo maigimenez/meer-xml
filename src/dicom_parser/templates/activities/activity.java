@@ -54,11 +54,24 @@ public class {{ activity_name }} extends Activity {
         spinner_{{spinner_id}}.setAdapter(adapter_{{ spinner_id }});
         {% endfor -%}
 
-
     }
 
     {% if childview %}
 {{ setChildren }}
     {% endif %}
 
+   public void onBackPressed() {
+        saveState();
+	    super.onBackPressed();	
+	}
+
+   {{ saveStateMethod }}
+
+    private void saveState(){
+        // EditText
+        {%- for etext_id in etext_list %}
+        etext_{{ etext_id }} = (EditText) findViewById(R.id.etext_{{etext_id}});
+        report.set_{{ etext_id }}(etext_{{ etext_id }}.getText().toString());
+        {%- endfor %}
+    }
 }

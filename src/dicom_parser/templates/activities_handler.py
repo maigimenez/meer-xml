@@ -280,11 +280,17 @@ def get_activity_name(activity_filename):
 def write_activity_file(environment, ontology_id, package,
                         activities_filenames, activity_filename, activity_name,
                         container, children, position, cardinality,
-                        parent_schema, parent_code, report_class,
+                        parent, report_class,
                         app_classname):
     """ Write activity file for given container and its children """
     imports = []
     tree_level = container.tree_level
+    
+    if parent:
+        parent_code = parent.get_code()
+        parent_schema = parent.get_schema()
+    else:
+        parent_code, parent_schema = None, None
 
     # Don't overwrite activities
     if (not isfile(activity_filename)):
@@ -299,12 +305,22 @@ def write_activity_file(environment, ontology_id, package,
         # with the activity filename.
         layout_id = activity_filename.split('/')[-1].split('.')[0].lower()
 
+        # If you are at third level you will need to know if its parent its
+        # an array or not. 
+        if parent and container.get_level() == 3:
+            print parent.get_meaning(), parent.get_attributes()
+            print container.get_meaning(),container.get_code()
+            if container.is_multilple():
+                print container.properties.is_multilple()
+            print
+
         # Get a list of attributes that will be shown as spinners.
         spinners = get_spinners(container.attributes)
 
 
         # Get a list of attributes that will be shown as text fields.
         etext_list=get_edit_fields(container.attributes)
+        print etext_list
         # Get data model package and include it in imports.
         model_package = get_property(ANDROID_PACKAGES, PACKAGE_MODEL)
         imports.append(Template(IMPORT_CUSTOM).
@@ -343,6 +359,7 @@ def write_activity_file(environment, ontology_id, package,
                                      ACTIVITY)
         template = environment.get_template(template_name)
 
+        
         #Write the template
         activity_file.write(template.render(imports=imports,
                                             package_name=package,

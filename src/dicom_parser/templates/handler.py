@@ -40,7 +40,7 @@ def write_strings(language_code, report):
     # Get and open current language file
     for language in languages:
         strings_filename[language] = get_filepath(STRINGS, language)
-        strings_files[language] = open(strings_filename[language], 'w')
+        strings_files[language] = open(strings_filename[language], 'w') 
         strings_files[language].write(
             u'<?xml version=\"1.0\" encoding=\"utf-8\"?>\n')
         strings_files[language].write(u'<resources>')
@@ -113,6 +113,7 @@ def write_model(java_filenames, report, language_code):
     expandables = []
     flat_tree = {}
 
+    written = []
     #Write model for every container.
     for container, children in report.report.depthFirstChildren():
         imports = []
@@ -190,7 +191,7 @@ def write_model(java_filenames, report, language_code):
 
 
 def write_activities(activities_filenames, report):
-    flat = report.get_flat_data()
+    flat = report.get_flat_data() 
 
     #Get the ontology id of the report
     ontology_id = report.get_ontology()
@@ -214,13 +215,27 @@ def write_activities(activities_filenames, report):
                                 cardinality=cardinality)
     report_class = report_root.lower().capitalize()
     app_classname = report_class+'_Application'
+    old_container = None
 
+    aux_dict = {}
     #Write layout for every file
-    for container, children in flat.iteritems():
-        activity = {}
+    for container, children in report.report.depthFirstChildren():
+        actual_level = container.get_level()
+    #for container, children in flat.iteritems():
+        parent_container = None
+        if len(children):
+            aux_dict[container.get_level()] = container
 
-        # Get this container's parent code and Schema
-        parent_code, parent_schema = get_parent_code_schema(flat, container)
+        activity = {}
+        # Get this container's parent
+        parent = None
+        if actual_level is not 1:
+            parent = aux_dict[actual_level - 1]
+        if parent:
+            parent_code = parent.get_code()
+            parent_schema = parent.get_schema()
+        else:
+            parent_code, parent_schema = None, None
 
         activity_filename = get_activity_filename(activities_filenames, flat,
                                                   container, parent_code,
@@ -243,9 +258,11 @@ def write_activities(activities_filenames, report):
         write_activity_file(environment, ontology_id, package,
                             activities_filenames, activity_filename,
                             activity_name, container, children, position,
-                            cardinality, parent_schema, parent_code,
+                            cardinality, parent,
                             report_class, app_classname)
-    
+        old_container = container
+        #print type(old_container)
+
     activity = write_application(package, report_class)
     activities.append(activity)
     write_manifest(package, activities, '.'+app_classname)
