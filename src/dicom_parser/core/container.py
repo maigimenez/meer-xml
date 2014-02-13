@@ -33,11 +33,17 @@ class Container(object):
 
     def has_code(self, code):
         return self.concept.get_schema_code() == code
+
+    def get_attributes(self):
+        return self.attributes
     
     def get_max_cardinality(self):
         if self.properties:
             return self.properties.max_cardinality
         return None
+
+    def is_multilple(self):
+        return self.properties.is_multilple()
 
     def __str__(self):
         meaning = self.concept.meaning.values()[0]

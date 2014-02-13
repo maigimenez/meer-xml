@@ -11,6 +11,12 @@ class Property(object):
         self.max_cardinality = max_value
         self.min_cardinality = min_value
 
+    def is_unique(self):
+        return self.max_cardinality == 1 and self.min_cardinality == 1
+    
+    def is_multilple(self):
+        return self.max_cardinality == -1
+
     def __repr__(self):
         return "max:{0} - min:{1} | condition:{2} ? {3} | default = {4} ".format(self.max_cardinality, self.min_cardinality, self.condition, self.xquery, self.default_value)
 
